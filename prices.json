@@ -1,0 +1,573 @@
+{
+  "currency": "UZS",
+  "location": "Tashkent",
+  "updated_at": "2025-01-26",
+  "items": {
+    "potato": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 4990, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 5500, "source": "Havas", "date": "2025-01-25" },
+        { "price": 6000, "source": "Chorsu Market", "date": "2025-01-26" },
+        { "price": 8500, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "onion": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 2800, "source": "Havas", "date": "2025-01-25" },
+        { "price": 3490, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 4000, "source": "Oloy Market", "date": "2025-01-26" }
+      ]
+    },
+    "carrot": {
+        "unit": "kg",
+        "default_qty": 1,
+        "quotes": [
+            { "price": 4500, "source": "Chorsu Market", "date": "2025-01-26"},
+            { "price": 5990, "source": "Korzinka", "date": "2025-01-24"}
+        ]
+    },
+    "water_montella_033": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 3500, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 3000, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "water_borjomi_033_can": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 12000, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 11500, "source": "Magnum", "date": "2025-01-22" }
+      ]
+    },
+    "water_tassay_glass_250": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 8500, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 9000, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "water_sparkling_1l": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 5500, "source": "Nestle (Korzinka)", "date": "2025-01-24" },
+        { "price": 4500, "source": "Family (Havas)", "date": "2025-01-25" },
+        { "price": 4200, "source": "Hydrolife (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "soda_cola_500": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 7500, "source": "Coca-Cola (Korzinka)", "date": "2025-01-24" },
+        { "price": 7000, "source": "Pepsi (Havas)", "date": "2025-01-25" }
+      ]
+    },
+    "soda_cola_1l": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 11000, "source": "Coca-Cola (Makro)", "date": "2025-01-23" },
+        { "price": 10500, "source": "Pepsi (Korzinka)", "date": "2025-01-24" }
+      ]
+    },
+    "soda_cola_1_5l": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 14500, "source": "Coca-Cola (Korzinka)", "date": "2025-01-24" },
+        { "price": 13500, "source": "Pepsi (Havas)", "date": "2025-01-25" },
+        { "price": 14000, "source": "Fanta (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "eggs_1pc": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 1800, "source": "Chorsu Market (loose)", "date": "2025-01-26" },
+        { "price": 2200, "source": "Local Store", "date": "2025-01-25" }
+      ]
+    },
+    "eggs_10pcs": {
+      "unit": "pack",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 16500, "source": "Havas", "date": "2025-01-25" },
+        { "price": 18900, "source": "Korzinka", "date": "2025-01-24" }
+      ]
+    },
+    "eggs_15pcs": {
+      "unit": "pack",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 24000, "source": "Makro", "date": "2025-01-23" },
+        { "price": 27500, "source": "Korzinka (Premium)", "date": "2025-01-24" }
+      ]
+    },
+    "sunflower_oil_1l": {
+      "unit": "liter",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 16500, "source": "Oleina (Havas)", "date": "2025-01-25" },
+        { "price": 19500, "source": "Zolotaya Semechka (Korzinka)", "date": "2025-01-24" },
+        { "price": 18000, "source": "Щедрое лето (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "milk_nestle_200": {
+      "unit": "pack",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 8500, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 7900, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "milk_nestle_1l": {
+      "unit": "pack",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 18500, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 17900, "source": "Magnum", "date": "2025-01-22" }
+      ]
+    },
+    "tvorog": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 45000, "source": "Chorsu Market (fresh)", "date": "2025-01-26" },
+        { "price": 32000, "source": "BioSut (pack 400g scaled to kg)", "date": "2025-01-24" }
+      ]
+    },
+    "kaymak": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 85000, "source": "Chorsu Market", "date": "2025-01-26" },
+        { "price": 95000, "source": "Oloy Market", "date": "2025-01-26" }
+      ]
+    },
+    "katyk": {
+      "unit": "liter",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 12000, "source": "Musaffo (Korzinka)", "date": "2025-01-24" },
+        { "price": 9500, "source": "Local Brand (Havas)", "date": "2025-01-25" }
+      ]
+    },
+    "syrok_curd_snack": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 5500, "source": "Korovka (Korzinka)", "date": "2025-01-24" },
+        { "price": 6500, "source": "Chudo (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "brynza": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 65000, "source": "Chorsu Market", "date": "2025-01-26" },
+        { "price": 89000, "source": "Packaged (Korzinka)", "date": "2025-01-24" }
+      ]
+    },
+    "jam_maheev_pouch": {
+      "unit": "300g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 18500, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 16900, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "condensed_milk_can": {
+      "unit": "380g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 22000, "source": "Alekseevskoe (Korzinka)", "date": "2025-01-24" },
+        { "price": 15000, "source": "Local Brand (Havas)", "date": "2025-01-25" }
+      ]
+    },
+    "condensed_milk_boiled": {
+      "unit": "380g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 24000, "source": "Alekseevskoe (Korzinka)", "date": "2025-01-24" },
+        { "price": 19000, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "meat_beef": {
+        "unit": "kg",
+        "default_qty": 1,
+        "quotes": [
+            { "price": 95000, "source": "Chorsu Market", "date": "2025-01-26" },
+            { "price": 115000, "source": "Korzinka", "date": "2025-01-24" }
+        ]
+    },
+    "meat_lamb": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 120000, "source": "Chorsu Market", "date": "2025-01-26" },
+        { "price": 145000, "source": "Korzinka (Packaged)", "date": "2025-01-24" }
+      ]
+    },
+    "chicken_fillet": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 58000, "source": "Havas", "date": "2025-01-25" },
+        { "price": 64990, "source": "Korzinka", "date": "2025-01-24" }
+      ]
+    },
+    "chicken_legs": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 38000, "source": "Havas", "date": "2025-01-25" },
+        { "price": 42000, "source": "Korzinka", "date": "2025-01-24" }
+      ]
+    },
+    "chicken_wings": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 35000, "source": "Makro", "date": "2025-01-23" },
+        { "price": 45000, "source": "Korzinka (Marinated)", "date": "2025-01-24" }
+      ]
+    },
+    "chicken_mince": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 48000, "source": "Havas", "date": "2025-01-25" },
+        { "price": 55000, "source": "Korzinka", "date": "2025-01-24" }
+      ]
+    },
+    "fish_salmon_fillet": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 380000, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 350000, "source": "Fish House / Glotr", "date": "2025-01-22" }
+      ]
+    },
+    "fish_som": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 65000, "source": "Chorsu Market", "date": "2025-01-26" },
+        { "price": 75000, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "caviar_red_salmon": {
+      "unit": "100g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 145000, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 120000, "source": "Magnum", "date": "2025-01-22" }
+      ]
+    },
+    "canned_corn": {
+      "unit": "340g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 14500, "source": "Bonduelle (Korzinka)", "date": "2025-01-24" },
+        { "price": 9500, "source": "Havas Brand", "date": "2025-01-25" }
+      ]
+    },
+    "canned_peas": {
+      "unit": "400g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 13000, "source": "Bonduelle (Korzinka)", "date": "2025-01-24" },
+        { "price": 8500, "source": "Havas Brand", "date": "2025-01-25" }
+      ]
+    },
+    "juice_pack_1l": {
+      "unit": "liter",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 13500, "source": "Bliss (Havas)", "date": "2025-01-25" },
+        { "price": 18500, "source": "J7 (Korzinka)", "date": "2025-01-24" },
+        { "price": 12000, "source": "Dena (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "instant_noodle_bigbon": {
+      "unit": "pack",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 8500, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 8000, "source": "Havas", "date": "2025-01-25" }
+      ]
+    },
+    "instant_noodle_rollton": {
+      "unit": "pack",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 4500, "source": "Havas", "date": "2025-01-25" },
+        { "price": 5000, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "chocolate_bar": {
+      "unit": "90g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 14500, "source": "Alpen Gold (Korzinka)", "date": "2025-01-24" },
+        { "price": 28000, "source": "Milka (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "snack_snickers": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 7500, "source": "Standard (Korzinka)", "date": "2025-01-24" },
+        { "price": 11500, "source": "Super (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "snack_protein_bar": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 28000, "source": "Bombbar (SportFood)", "date": "2025-01-24" },
+        { "price": 18000, "source": "Local Brand (Korzinka)", "date": "2025-01-24" }
+      ]
+    },
+    "hygiene_toilet_paper": {
+      "unit": "pack_4",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 12000, "source": "Papia (Havas)", "date": "2025-01-25" },
+        { "price": 22000, "source": "Zewa (Korzinka)", "date": "2025-01-24" }
+      ]
+    },
+    "hygiene_paper_towels": {
+      "unit": "pack_2",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 16000, "source": "Selpak (Korzinka)", "date": "2025-01-24" },
+        { "price": 14500, "source": "Havas Brand", "date": "2025-01-25" }
+      ]
+    },
+    "hygiene_wet_wipes": {
+      "unit": "pack_large",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 12000, "source": "Local 60pcs (Havas)", "date": "2025-01-25" },
+        { "price": 18000, "source": "Huggies (Korzinka)", "date": "2025-01-24" }
+      ]
+    },
+    "hygiene_toothpaste": {
+      "unit": "100ml",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 24000, "source": "Colgate (Korzinka)", "date": "2025-01-24" },
+        { "price": 32000, "source": "Splat (Makro)", "date": "2025-01-23" }
+      ]
+    },
+    "hygiene_shampoo": {
+      "unit": "400ml",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 45000, "source": "Head & Shoulders (Korzinka)", "date": "2025-01-24" },
+        { "price": 38000, "source": "Schauma (Havas)", "date": "2025-01-25" }
+      ]
+    },
+    "hygiene_shower_gel": {
+      "unit": "250ml",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 32000, "source": "Fa/Nivea (Makro)", "date": "2025-01-23" },
+        { "price": 42000, "source": "Old Spice (Korzinka)", "date": "2025-01-24" }
+      ]
+    },
+    "hygiene_laundry_powder": {
+      "unit": "3kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 65000, "source": "Persil (Korzinka)", "date": "2025-01-24" },
+        { "price": 45000, "source": "Mif (Havas)", "date": "2025-01-25" }
+      ]
+    },
+    "household_trash_bags": {
+      "unit": "roll",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 12000, "source": "30L (Korzinka)", "date": "2025-01-24" },
+        { "price": 8500, "source": "30L (Havas)", "date": "2025-01-25" }
+      ]
+    },
+    "household_sanfor": {
+      "unit": "piece",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 22000, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 19500, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "sport_protein_whey": {
+      "unit": "900g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 450000, "source": "Optimum Nutrition (SportFood)", "date": "2025-01-24" },
+        { "price": 320000, "source": "Scitec (ProRun)", "date": "2025-01-24" }
+      ]
+    },
+    "sport_creatine": {
+      "unit": "300g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 240000, "source": "ON/Universal (SportFood)", "date": "2025-01-24" }
+      ]
+    },
+    "dried_fruit_mango": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 130000, "source": "Chorsu Market", "date": "2025-01-26" },
+        { "price": 180000, "source": "Korzinka (Packaged)", "date": "2025-01-24" }
+      ]
+    },
+    "pastry_puff": {
+      "unit": "pack",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 18000, "source": "Korzinka (Frozen)", "date": "2025-01-24" },
+        { "price": 15000, "source": "Makro", "date": "2025-01-23" }
+      ]
+    },
+    "halva": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 40000, "source": "Chorsu Market", "date": "2025-01-26" },
+        { "price": 55000, "source": "Korzinka (Packaged)", "date": "2025-01-24" }
+      ]
+    },
+    "butter_82": {
+      "unit": "200g",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 28000, "source": "President (Korzinka)", "date": "2025-01-24" },
+        { "price": 19500, "source": "Anchor (Havas)", "date": "2025-01-25" }
+      ]
+    },
+    "salt": {
+      "unit": "kg",
+      "default_qty": 1,
+      "quotes": [
+        { "price": 3000, "source": "Korzinka", "date": "2025-01-24" },
+        { "price": 2000, "source": "Havas", "date": "2025-01-25" }
+      ]
+    }
+  },
+  "synonyms": {
+    "ru": {
+      "картошка": "potato",
+      "картофель": "potato",
+      "лук": "onion",
+      "морковь": "carrot",
+      "вода монтелла": "water_montella_033",
+      "боржоми": "water_borjomi_033_can",
+      "тассай стекло": "water_tassay_glass_250",
+      "вода с газом 1л": "water_sparkling_1l",
+      "кола 0.5": "soda_cola_500",
+      "кола 1.5": "soda_cola_1_5l",
+      "пепси": "soda_cola_1_5l",
+      "яйцо": "eggs_1pc",
+      "яйца 10": "eggs_10pcs",
+      "яйца 15": "eggs_15pcs",
+      "масло подсолнечное": "sunflower_oil_1l",
+      "молоко нестле маленькое": "milk_nestle_200",
+      "молоко нестле": "milk_nestle_1l",
+      "творог": "tvorog",
+      "каймак": "kaymak",
+      "катык": "katyk",
+      "сырок": "syrok_curd_snack",
+      "брынза": "brynza",
+      "джем": "jam_maheev_pouch",
+      "сгущенка": "condensed_milk_can",
+      "вареная сгущенка": "condensed_milk_boiled",
+      "говядина": "meat_beef",
+      "баранина": "meat_lamb",
+      "куриное филе": "chicken_fillet",
+      "куриные ножки": "chicken_legs",
+      "крылышки": "chicken_wings",
+      "фарш куриный": "chicken_mince",
+      "лосось": "fish_salmon_fillet",
+      "сом": "fish_som",
+      "икра": "caviar_red_salmon",
+      "кукуруза консервированная": "canned_corn",
+      "горошек": "canned_peas",
+      "сок": "juice_pack_1l",
+      "доширак": "instant_noodle_rollton",
+      "роллтон": "instant_noodle_rollton",
+      "биг бон": "instant_noodle_bigbon",
+      "шоколадка": "chocolate_bar",
+      "сникерс": "snack_snickers",
+      "протеиновый батончик": "snack_protein_bar",
+      "туалетная бумага": "hygiene_toilet_paper",
+      "бумажные полотенца": "hygiene_paper_towels",
+      "влажные салфетки": "hygiene_wet_wipes",
+      "зубная паста": "hygiene_toothpaste",
+      "шампунь": "hygiene_shampoo",
+      "гель для душа": "hygiene_shower_gel",
+      "порошок": "hygiene_laundry_powder",
+      "мусорные пакеты": "household_trash_bags",
+      "санфор": "household_sanfor",
+      "протеин": "sport_protein_whey",
+      "креатин": "sport_creatine",
+      "манго сушеное": "dried_fruit_mango",
+      "слоеное тесто": "pastry_puff",
+      "халва": "halva",
+      "масло сливочное": "butter_82",
+      "соль": "salt"
+    },
+    "uz": {
+      "kartoshka": "potato",
+      "piyoz": "onion",
+      "sabzi": "carrot",
+      "suv montella": "water_montella_033",
+      "borjomi": "water_borjomi_033_can",
+      "gazli suv": "water_sparkling_1l",
+      "kola": "soda_cola_1_5l",
+      "tuxum": "eggs_1pc",
+      "yog'": "sunflower_oil_1l",
+      "sut nestle": "milk_nestle_1l",
+      "tvorog": "tvorog",
+      "qaymoq": "kaymak",
+      "qatiq": "katyk",
+      "pishloq": "syrok_curd_snack",
+      "murabbo": "jam_maheev_pouch",
+      "quyuklashtirilgan sut": "condensed_milk_can",
+      "mol go'shti": "meat_beef",
+      "qo'y go'shti": "meat_lamb",
+      "tovuq filesi": "chicken_fillet",
+      "tovuq oyog'i": "chicken_legs",
+      "tovuq qanoti": "chicken_wings",
+      "baliq losos": "fish_salmon_fillet",
+      "baliq laqqa": "fish_som",
+      "ikra": "caviar_red_salmon",
+      "jo'xori": "canned_corn",
+      "no'xat": "canned_peas",
+      "sharbat": "juice_pack_1l",
+      "shokolad": "chocolate_bar",
+      "snickers": "snack_snickers",
+      "hojatxona qog'ozi": "hygiene_toilet_paper",
+      "salfetka": "hygiene_wet_wipes",
+      "tish pastasi": "hygiene_toothpaste",
+      "shampun": "hygiene_shampoo",
+      "kir yuvish kukuni": "hygiene_laundry_powder",
+      "oqsil": "sport_protein_whey",
+      "qoqoq xamir": "pastry_puff",
+      "halva": "halva",
+      "saryog'": "butter_82",
+      "tuz": "salt"
+    }
+  }
+}

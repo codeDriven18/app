@@ -1,0 +1,3482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bozorlik AI — Умный помощник для покупок</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        /* ===== ORANGE THEME VARIABLES ===== */
+        :root {
+            --primary: #FF6B35; /* Основной оранжевый */
+            --primary-gradient: linear-gradient(135deg, #FF6B35 0%, #FF8B3D 100%);
+            --primary-light: #FF8B5C;
+            --primary-dark: #E55A2B;
+            --secondary: #10B981;
+            --secondary-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+
+            --background: #FFFFFF;
+            --surface: #FFF5F0;
+            --surface-elevated: #FFFFFF;
+            --surface-hover: #FFE8E0;
+
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF;
+            --text-on-primary: #FFFFFF;
+
+            --border: #FFD9CC;
+            --border-hover: #FFB399;
+            --border-active: #FF6B35;
+
+            --shadow-sm: 0 1px 2px 0 rgba(255, 107, 53, 0.1);
+            --shadow: 0 4px 6px -1px rgba(255, 107, 53, 0.1), 0 2px 4px -1px rgba(255, 107, 53, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(255, 107, 53, 0.1), 0 4px 6px -2px rgba(255, 107, 53, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(255, 107, 53, 0.1), 0 10px 10px -5px rgba(255, 107, 53, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(255, 107, 53, 0.25);
+            --shadow-inner: inset 0 2px 4px 0 rgba(255, 107, 53, 0.06);
+
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --radius-full: 9999px;
+
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+            --z-dropdown: 100;
+            --z-sticky: 200;
+            --z-modal: 300;
+            --z-popover: 400;
+            --z-tooltip: 500;
+        }
+
+        /* ===== DARK THEME - BLACK & ORANGE ===== */
+        body.dark {
+            --primary: #FF6B35;
+            --primary-gradient: linear-gradient(135deg, #FF6B35 0%, #FF8B3D 100%);
+            --primary-light: #FF8B5C;
+            --primary-dark: #E55A2B;
+
+            --background: #000000; /* ЧИСТЫЙ ЧЕРНЫЙ вместо темно-синего */
+            --surface: #111111;
+            --surface-elevated: #222222;
+            --surface-hover: #333333;
+
+            --text-primary: #FFFFFF;
+            --text-secondary: #AAAAAA;
+            --text-tertiary: #666666;
+            --text-on-primary: #FFFFFF;
+
+            --border: #333333;
+            --border-hover: #444444;
+            --border-active: #FF6B35;
+
+            --shadow-sm: 0 1px 2px 0 rgba(255, 107, 53, 0.2);
+            --shadow: 0 4px 6px -1px rgba(255, 107, 53, 0.2), 0 2px 4px -1px rgba(255, 107, 53, 0.1);
+            --shadow-md: 0 10px 15px -3px rgba(255, 107, 53, 0.2), 0 4px 6px -2px rgba(255, 107, 53, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(255, 107, 53, 0.2), 0 10px 10px -5px rgba(255, 107, 53, 0.1);
+            --shadow-xl: 0 25px 50px -12px rgba(255, 107, 53, 0.3);
+        }
+
+        /* ===== APP CONTAINER ===== */
+        #app {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: var(--background);
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== ORANGE BACKGROUND PATTERNS ===== */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255, 139, 61, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body.dark .bg-pattern {
+            background:
+                radial-gradient(circle at 15% 50%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255, 139, 61, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--surface-elevated);
+            padding: var(--spacing) var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: var(--z-sticky);
+            backdrop-filter: blur(10px);
+            background: rgba(var(--surface-elevated-rgb), 0.95);
+            transition: var(--transition);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing);
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            background: var(--primary-gradient);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-on-primary);
+            font-weight: 800;
+            font-size: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-text h1 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .header-text p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--surface-hover);
+            color: var(--primary);
+            border-color: var(--border-hover);
+            transform: translateY(-1px);
+        }
+
+        .icon-btn.active {
+            background: var(--primary);
+            color: var(--text-on-primary);
+            border-color: var(--primary);
+        }
+
+        .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 18px;
+            height: 18px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* ===== CHAT CONTAINER ===== */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            scroll-behavior: smooth;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== MESSAGES ===== */
+        .message {
+            max-width: 85%;
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.3s var(--transition);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .message.ai {
+            align-self: flex-start;
+        }
+
+        .message.user {
+            align-self: flex-end;
+        }
+
+        .message-bubble {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-xl);
+            position: relative;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-size: 15px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .message.ai .message-bubble {
+            background: var(--surface-elevated);
+            color: var(--text-primary);
+            border-bottom-left-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .message.user .message-bubble {
+            background: var(--primary-gradient);
+            color: var(--text-on-primary);
+            border-bottom-right-radius: var(--radius-sm);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: var(--spacing-xs);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .message.ai .message-time {
+            justify-content: flex-start;
+        }
+
+        .message.user .message-time {
+            justify-content: flex-end;
+        }
+
+        .message-time i {
+            font-size: 10px;
+        }
+
+        /* ===== SHOPPING LIST IN MESSAGE ===== */
+        .list-message {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .list-message:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .list-category {
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing);
+            background: var(--surface-elevated);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .list-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .category-total {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(255, 107, 53, 0.1);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        .list-items {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing);
+            padding: var(--spacing) var(--spacing-sm);
+            background: var(--background);
+            border-radius: var(--radius);
+            border: 1px solid transparent;
+            transition: var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .list-item:hover {
+            background: var(--surface-hover);
+            border-color: var(--border);
+        }
+
+        .list-item.purchased {
+            opacity: 0.7;
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .list-item.purchased .item-name {
+            text-decoration: line-through;
+            color: var(--text-tertiary);
+        }
+
+        .item-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .item-checkbox:hover {
+            border-color: var(--primary);
+        }
+
+        .item-checkbox.checked {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        .item-checkbox.checked::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-top: -1px;
+        }
+
+        .item-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--spacing);
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .item-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .item-price.estimated {
+            color: var(--secondary);
+        }
+
+        .item-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .item-quantity {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .item-source {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            background: var(--surface);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-weight: 500;
+        }
+
+        /* ===== INLINE EDITING CONTROLS ===== */
+        .item-actions {
+            display: none;
+            gap: var(--spacing-xs);
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .list-item:hover .item-actions {
+            display: flex;
+        }
+
+        .item-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-size: 12px;
+        }
+
+        .item-action-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
+
+        .item-action-btn.edit:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .item-action-btn.delete:hover {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* ===== INLINE EDIT MODE ===== */
+        .list-item.editing {
+            background: var(--surface-hover);
+            border-color: var(--primary);
+        }
+
+        .edit-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            width: 100%;
+        }
+
+        .edit-row {
+            display: flex;
+            gap: var(--spacing);
+            align-items: center;
+        }
+
+        .edit-input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--background);
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .edit-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .edit-btn {
+            padding: 6px 12px;
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .edit-btn.save {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .edit-btn.cancel {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        /* ===== ADD ITEM FORM ===== */
+        .add-item-form {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            margin-top: var(--spacing);
+            border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing);
+        }
+
+        .add-item-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .add-item-header i {
+            color: var(--primary);
+        }
+
+        .add-item-fields {
+            display: flex;
+            gap: var(--spacing);
+            align-items: flex-end;
+        }
+
+        .add-item-field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .add-item-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .add-item-input {
+            padding: 10px 12px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--background);
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .add-item-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+        }
+
+        .add-item-buttons {
+            display: flex;
+            gap: var(--spacing);
+        }
+
+        .add-btn {
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .add-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ===== LIST ACTIONS ===== */
+        .list-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition-slow);
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn.primary {
+            background: var(--primary-gradient);
+            color: var(--text-on-primary);
+            box-shadow: var(--shadow);
+        }
+
+        .action-btn.secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .action-btn.danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== INPUT AREA ===== */
+        .input-container {
+            background: var(--surface-elevated);
+            border-top: 1px solid var(--border);
+            padding: var(--spacing-md) var(--spacing-lg);
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+            z-index: var(--z-sticky);
+            backdrop-filter: blur(10px);
+            background: rgba(var(--surface-elevated-rgb), 0.95);
+        }
+
+        .text-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 14px 52px 14px 20px;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--border);
+            background: var(--background);
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .text-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .input-actions {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .input-action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius);
+            border: none;
+            background: var(--surface);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-size: 14px;
+        }
+
+        .input-action-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
+
+        .voice-btn, .send-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-xl);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 20px;
+            flex-shrink: 0;
+            box-shadow: var(--shadow);
+        }
+
+        .voice-btn {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+        }
+
+        .send-btn {
+            background: var(--primary-gradient);
+            color: var(--text-on-primary);
+        }
+
+        .voice-btn:hover {
+            background: var(--surface-hover);
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .voice-btn.recording {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+        }
+
+        /* ===== MODALS & OVERLAYS ===== */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: var(--z-modal);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface-elevated);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface);
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing);
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+        }
+
+        .modal-footer {
+            padding: var(--spacing-lg);
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing);
+        }
+
+        /* ===== ANALYTICS MODAL ===== */
+        .analytics-view {
+            display: none;
+        }
+
+        .analytics-view.active {
+            display: block;
+        }
+
+        .analytics-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .analytics-header h3 {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .analytics-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-card.total .stat-value {
+            color: var(--primary);
+        }
+
+        .stat-card.average .stat-value {
+            color: var(--secondary);
+        }
+
+        .stat-card.min .stat-value {
+            color: var(--info);
+        }
+
+        .stat-card.max .stat-value {
+            color: var(--warning);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .stat-date {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+
+        .back-button {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .back-button:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+
+        .chart-container {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            border: 1px solid var(--border);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing);
+        }
+
+        .radial-chart {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .radial-chart svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .radial-bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 8;
+        }
+
+        .radial-progress {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .radial-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .radial-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .radial-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing);
+        }
+
+        .history-item {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .history-item:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+
+        .history-date {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .history-details {
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: center;
+        }
+
+        .history-count {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: var(--surface-elevated);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        .history-amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .expense-details {
+            margin-top: var(--spacing-lg);
+        }
+
+        .expense-item {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            border: 1px solid var(--border);
+            margin-bottom: var(--spacing);
+        }
+
+        .expense-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .expense-amount {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .expense-date {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .expense-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .expense-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .expense-item-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .expense-item-quantity {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== LANGUAGE SELECTOR ===== */
+        .language-modal {
+            max-width: 400px;
+        }
+
+        .language-content {
+            text-align: center;
+            padding: var(--spacing-2xl);
+        }
+
+        .language-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: var(--spacing);
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .language-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-2xl);
+            line-height: 1.6;
+        }
+
+        .language-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .language-option {
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .language-option:hover {
+            border-color: var(--primary);
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+        }
+
+        .language-option.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--text-on-primary);
+        }
+
+        .language-flag {
+            font-size: 24px;
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing);
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding: var(--spacing);
+            align-self: flex-start;
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: var(--radius-full);
+            background: var(--primary);
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* ===== UTILITIES ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 { margin-top: var(--spacing-sm); }
+        .mt-2 { margin-top: var(--spacing-md); }
+        .mt-3 { margin-top: var(--spacing-lg); }
+        .mt-4 { margin-top: var(--spacing-xl); }
+
+        .mb-1 { margin-bottom: var(--spacing-sm); }
+        .mb-2 { margin-bottom: var(--spacing-md); }
+        .mb-3 { margin-bottom: var(--spacing-lg); }
+        .mb-4 { margin-bottom: var(--spacing-xl); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+
+            .chat-container {
+                padding: var(--spacing-md);
+            }
+
+            .input-container {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .list-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal {
+                width: 95%;
+                margin: var(--spacing);
+            }
+
+            .add-item-fields {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-header h2 {
+                font-size: 18px;
+            }
+
+            .text-input {
+                padding: 12px 48px 12px 16px;
+                font-size: 14px;
+            }
+        }
+
+        /* ===== SCROLLBAR STYLING ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-hover);
+        }
+    </style>
+</head>
+<body>
+    <!-- Orange Background Pattern -->
+    <div class="bg-pattern"></div>
+
+    <!-- Language Selector Modal -->
+    <div class="modal-backdrop" id="languageModal">
+        <div class="modal language-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-globe"></i> Выберите язык</h2>
+                <button class="modal-close" onclick="closeLanguageModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="language-content">
+                <div class="language-title">🌍 Выберите язык</div>
+                <div class="language-subtitle">Выберите предпочитаемый язык интерфейса. Язык можно изменить позже в настройках.</div>
+
+                <div class="language-options">
+                    <div class="language-option" data-lang="ru" onclick="setLanguage('ru')">
+                        <span class="language-flag">🇷🇺</span>
+                        <span>Русский</span>
+                    </div>
+                    <div class="language-option" data-lang="uz" onclick="setLanguage('uz')">
+                        <span class="language-flag">🇺🇿</span>
+                        <span>O'zbek</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div class="modal-backdrop" id="analyticsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-chart-line"></i> <span id="analyticsModalTitle">Аналитика расходов</span></h2>
+                <button class="modal-close" onclick="closeAnalytics()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-content">
+                <!-- Main Analytics View -->
+                <div class="analytics-view active" id="analyticsMainView">
+                    <div class="analytics-header">
+                        <h3>Ваши покупки</h3>
+                        <p>Обзор ваших расходов и статистика</p>
+                    </div>
+
+                    <div class="stats-grid" id="analyticsStats">
+                        <!-- Stats will be populated here -->
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-pie"></i> Распределение по категориям
+                        </div>
+                        <div class="radial-chart" id="categoryChart">
+                            <!-- Radial chart will be drawn here -->
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="chart-title">
+                            <i class="fas fa-history"></i> История покупок
+                        </div>
+                        <div class="history-list" id="historyList">
+                            <!-- History items will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Spent View -->
+                <div class="analytics-view" id="totalSpentView">
+                    <button class="back-button" onclick="showAnalyticsMainView()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+
+                    <div class="analytics-header">
+                        <h3>Всего потрачено</h3>
+                        <p>Детальная история всех расходов</p>
+                    </div>
+
+                    <div class="expense-details" id="totalSpentDetails">
+                        <!-- Expense details will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Average Check View -->
+                <div class="analytics-view" id="averageCheckView">
+                    <button class="back-button" onclick="showAnalyticsMainView()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+
+                    <div class="analytics-header">
+                        <h3>Средний чек</h3>
+                        <p>Статистика по вашим покупкам</p>
+                    </div>
+
+                    <div class="expense-details" id="averageCheckDetails">
+                        <!-- Average check details will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Minimum Expense View -->
+                <div class="analytics-view" id="minExpenseView">
+                    <button class="back-button" onclick="showAnalyticsMainView()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+
+                    <div class="analytics-header">
+                        <h3>Минимальный базар</h3>
+                        <p>Самый бюджетный список покупок</p>
+                    </div>
+
+                    <div class="expense-details" id="minExpenseDetails">
+                        <!-- Minimum expense details will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Maximum Expense View -->
+                <div class="analytics-view" id="maxExpenseView">
+                    <button class="back-button" onclick="showAnalyticsMainView()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+
+                    <div class="analytics-header">
+                        <h3>Максимальный базар</h3>
+                        <p>Самый дорогой список покупок</p>
+                    </div>
+
+                    <div class="expense-details" id="maxExpenseDetails">
+                        <!-- Maximum expense details will be populated here -->
+                    </div>
+                </div>
+
+                <!-- History Details View -->
+                <div class="analytics-view" id="historyDetailsView">
+                    <button class="back-button" onclick="showAnalyticsMainView()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+
+                    <div class="analytics-header">
+                        <h3>Детали покупки</h3>
+                        <p>Список купленных товаров</p>
+                    </div>
+
+                    <div class="expense-details" id="historyDetailsContent">
+                        <!-- History details will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="action-btn secondary" onclick="closeAnalytics()">
+                    <i class="fas fa-times"></i> Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Interface -->
+    <div id="app" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shopping-basket"></i>
+                </div>
+                <div class="header-text">
+                    <h1 id="appTitle">Bozorlik AI</h1>
+                    <p id="appSubtitle">Умный помощник для покупок</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="themeToggle" title="Сменить тему">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="icon-btn" id="analyticsToggle" title="Аналитика">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="badge" id="analyticsBadge" style="display: none;">0</span>
+                </button>
+                <button class="icon-btn" id="langToggle" title="Сменить язык">
+                    <i class="fas fa-globe"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat -->
+        <div class="chat-container" id="chatContainer">
+            <!-- Messages will be added here -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+            <div class="text-input-wrapper">
+                <input type="text" class="text-input" id="textInput"
+                       placeholder="Напишите список покупок..."
+                       autocomplete="off">
+                <div class="input-actions">
+                    <button class="input-action-btn" id="clearInput" title="Очистить">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="input-action-btn" id="attachBtn" title="Прикрепить">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="voice-btn" id="voiceBtn" title="Голосовой ввод">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button class="send-btn" id="sendBtn" title="Отправить">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <!-- Voice Recording Indicator -->
+        <div class="modal-backdrop" id="voiceRecordingModal">
+            <div class="modal" style="max-width: 300px;">
+                <div class="modal-content" style="text-align: center; padding: var(--spacing-xl);">
+                    <div style="width: 80px; height: 80px; margin: 0 auto var(--spacing-lg); background: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3 style="margin-bottom: var(--spacing); color: var(--text-primary);" id="voiceRecordingText">Говорите...</h3>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: var(--spacing-lg);">
+                        Запись голосового сообщения
+                    </p>
+                    <div style="display: flex; gap: var(--spacing);">
+                        <button class="action-btn danger" onclick="stopRecording()" style="flex: 1;">
+                            <i class="fas fa-stop"></i> Стоп
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit List Modal -->
+        <div class="modal-backdrop" id="editModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-edit"></i> Редактировать список</h2>
+                    <button class="modal-close" onclick="closeEditModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="modal-content">
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <p style="color: var(--text-secondary); margin-bottom: var(--spacing);">
+                            Говорите или пишите, что нужно изменить. Например:<br>
+                            • "Добавь 2 кг картошки"<br>
+                            • "Удали молоко из списка"<br>
+                            • "Замени колу на пепси"
+                        </p>
+                        <div class="text-input-wrapper">
+                            <input type="text" class="text-input" id="editInput"
+                                   placeholder="Что изменить в списке?"
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="action-btn secondary" onclick="closeEditModal()">
+                        <i class="fas fa-times"></i> Отмена
+                    </button>
+                    <button class="action-btn" onclick="sendEdit()" style="background: var(--secondary); color: white;">
+                        <i class="fas fa-check"></i> Применить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const API_URL = 'http://localhost:8000';
+        const DEFAULT_USER_ID = Math.floor(Math.random() * 1000000);
+
+        // Texts in different languages
+        const TEXTS = {
+            ru: {
+                appTitle: "Bozorlik AI",
+                appSubtitle: "Умный помощник для покупок",
+                welcome: "Привет! Я Bozorlik AI — ваш умный помощник для составления списков покупок. Напишите или скажите, что нужно купить!",
+                inputPlaceholder: "Напишите список покупок...",
+                voiceRecording: "Говорите...",
+                saveButtonText: "Сохранить",
+                shareButtonText: "Поделиться",
+                editButtonText: "Редактировать",
+                clearButtonText: "Очистить",
+                analyticsButtonText: "Аналитика",
+                saveSuccess: "✅ Список сохранен!",
+                shareSuccess: "✅ Ссылка скопирована!",
+                clearSuccess: "✅ Список очищен",
+                editSuccess: "✅ Список обновлен",
+                noListError: "❌ Сначала создайте список покупок",
+                voiceError: "❌ Ошибка при отправке голосового сообщения",
+                micError: "❌ Не удалось получить доступ к микрофону",
+                loading: "Обработка...",
+                currency: "сум",
+                bought: "Куплено",
+                estimated: "Примерно",
+                total: "Всего",
+                purchased: "Куплено",
+                items: "товаров",
+                analyticsTitle: "Аналитика расходов",
+                analyticsSubtitle: "Обзор ваших расходов и статистика",
+                totalSpent: "Всего потрачено",
+                averageSpent: "Средний чек",
+                minSpent: "Минимум",
+                maxSpent: "Максимум",
+                history: "История",
+                allPurchasedMessage: "🎉 Отлично! Все товары куплены. Хотите указать, сколько вы потратили на покупки?",
+                enterAmount: "Введите сумму:",
+                skip: "Пропустить",
+                submit: "Отправить",
+                expenseSaved: "✅ Сумма расходов сохранена!",
+                expenseSkipped: "Хорошо! Список покупок завершен. Вы можете посмотреть аналитику в любое время.",
+                back: "Назад",
+                totalSpentTitle: "Всего потрачено",
+                totalSpentSubtitle: "Детальная история всех расходов",
+                averageCheckTitle: "Средний чек",
+                averageCheckSubtitle: "Статистика по вашим покупкам",
+                minExpenseTitle: "Минимальный базар",
+                minExpenseSubtitle: "Самый бюджетный список покупок",
+                maxExpenseTitle: "Максимальный базар",
+                maxExpenseSubtitle: "Самый дорогой список покупок",
+                historyDetailsTitle: "Детали покупки",
+                historyDetailsSubtitle: "Список купленных товаров",
+                date: "Дата",
+                amount: "Сумма",
+                itemsCount: "Кол-во товаров",
+                productList: "Список товаров",
+                quantity: "Количество",
+                purchasedStatus: "Куплено",
+                notSpecified: "Не указано",
+                noExpenseHistory: "Нет истории расходов",
+                noShoppingHistory: "Нет истории покупок",
+                addItem: "Добавить товар",
+                itemName: "Название товара",
+                itemQuantity: "Количество",
+                add: "Добавить",
+                editItem: "Редактировать товар",
+                deleteItem: "Удалить товар",
+                save: "Сохранить",
+                cancel: "Отмена"
+            },
+            uz: {
+                appTitle: "Bozorlik AI",
+                appSubtitle: "Aqlli xaridlar yordamchisi",
+                welcome: "Salom! Men Bozorlik AI — xaridlar ro'yxatini tuzishda yordamchim. Nima xarid qilish kerakligini yozing yoki aytib bering!",
+                inputPlaceholder: "Xaridlar ro'yxatini yozing...",
+                voiceRecording: "Gapingiz...",
+                saveButtonText: "Saqlash",
+                shareButtonText: "Ulashish",
+                editButtonText: "Tahrirlash",
+                clearButtonText: "Tozalash",
+                analyticsButtonText: "Tahlil",
+                saveSuccess: "✅ Ro'yxat saqlandi!",
+                shareSuccess: "✅ Havola nusxalandi!",
+                clearSuccess: "✅ Ro'yxat tozalandi",
+                editSuccess: "✅ Ro'yxat yangilandi",
+                noListError: "❌ Avval xaridlar ro'yxatini yarating",
+                voiceError: "❌ Ovozli xabar yuborishda xatolik",
+                micError: "❌ Mikrofonga kirish imkoni yo'q",
+                loading: "Qayta ishlanmoqda...",
+                currency: "so'm",
+                bought: "Sotib olindi",
+                estimated: "Taxminan",
+                total: "Jami",
+                purchased: "Sotib olindi",
+                items: "tovarlar",
+                analyticsTitle: "Xarajatlar tahlili",
+                analyticsSubtitle: "Xarajatlaringizning umumiy ko'rinishi va statistikasi",
+                totalSpent: "Jami sarflangan",
+                averageSpent: "O'rtacha чек",
+                minSpent: "Minimum",
+                maxSpent: "Maksimum",
+                history: "Tarix",
+                allPurchasedMessage: "🎉 Ajoyib! Barcha tovarlar sotib olindi. Xaridlar uchun qancha sarflaganingizni ko'rsatmoqchimisiz?",
+                enterAmount: "Summani kiriting:",
+                skip: "O'tkazib yuborish",
+                submit: "Yuborish",
+                expenseSaved: "✅ Xarajatlar summasi saqlandi!",
+                expenseSkipped: "Mayli! Xaridlar ro'yxati yakunlandi. Siz har qanday vaqtda tahlilni ko'rishingiz mumkin.",
+                back: "Orqaga",
+                totalSpentTitle: "Jami sarflangan",
+                totalSpentSubtitle: "Barcha xarajatlarning batafsil tarixi",
+                averageCheckTitle: "O'rtacha чек",
+                averageCheckSubtitle: "Xaridlaringiz statistikasi",
+                minExpenseTitle: "Minimal bozor",
+                minExpenseSubtitle: "Eng arzon xaridlar ro'yxati",
+                maxExpenseTitle: "Maksimal bozor",
+                maxExpenseSubtitle: "Eng qimmat xaridlar ro'yxati",
+                historyDetailsTitle: "Xarid tafsilotlari",
+                historyDetailsSubtitle: "Sotib olingan tovarlar ro'yxati",
+                date: "Sana",
+                amount: "Summa",
+                itemsCount: "Tovarlar soni",
+                productList: "Tovarlar ro'yxati",
+                quantity: "Miqdor",
+                purchasedStatus: "Sotib olindi",
+                notSpecified: "Ko'rsatilmagan",
+                noExpenseHistory: "Xarajatlar tarixi yo'q",
+                noShoppingHistory: "Xaridlar tarixi yo'q",
+                addItem: "Tovar qo'shish",
+                itemName: "Tovar nomi",
+                itemQuantity: "Miqdor",
+                add: "Qo'shish",
+                editItem: "Tovar tahrirlash",
+                deleteItem: "Tovar o'chirish",
+                save: "Saqlash",
+                cancel: "Bekor qilish"
+            }
+        };
+
+        // ===== GLOBAL STATE =====
+        let state = {
+            userId: DEFAULT_USER_ID,
+            language: 'ru',
+            shoppingList: null,
+            isRecording: false,
+            mediaRecorder: null,
+            audioChunks: [],
+            websocket: null,
+            currentListId: null,
+            isDarkMode: false,
+            analytics: null,
+            currentAnalyticsView: 'main',
+            editingItem: null // Текущий редактируемый товар
+        };
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+        });
+
+        function initApp() {
+            // Check saved language
+            const savedLang = localStorage.getItem('bozorlik_language');
+            if (savedLang) {
+                setLanguage(savedLang, false);
+            } else {
+                // Show language selector
+                showLanguageModal();
+            }
+
+            // Check theme
+            const savedTheme = localStorage.getItem('bozorlik_theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                document.querySelector('#themeToggle i').classList.remove('fa-moon');
+                document.querySelector('#themeToggle i').classList.add('fa-sun');
+                state.isDarkMode = true;
+            }
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Connect WebSocket
+            connectWebSocket();
+
+            // Auto-focus input
+            setTimeout(() => {
+                const input = document.getElementById('textInput');
+                if (input) input.focus();
+            }, 500);
+        }
+
+        function setupEventListeners() {
+            // Send button
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+            // Clear input button
+            document.getElementById('clearInput').addEventListener('click', () => {
+                document.getElementById('textInput').value = '';
+            });
+
+            // Enter in input
+            document.getElementById('textInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Voice input
+            document.getElementById('voiceBtn').addEventListener('click', toggleVoiceRecording);
+
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Analytics toggle
+            document.getElementById('analyticsToggle').addEventListener('click', showAnalytics);
+
+            // Language toggle
+            document.getElementById('langToggle').addEventListener('click', showLanguageModal);
+
+            // Close modals on backdrop click
+            document.querySelectorAll('.modal-backdrop').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        if (this.id === 'languageModal') {
+                            closeLanguageModal();
+                        } else if (this.id === 'analyticsModal') {
+                            closeAnalytics();
+                        } else if (this.id === 'editModal') {
+                            closeEditModal();
+                        } else if (this.id === 'voiceRecordingModal') {
+                            stopRecording();
+                        }
+                    }
+                });
+            });
+
+            // Escape key to close modals
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeLanguageModal();
+                    closeAnalytics();
+                    closeEditModal();
+                    stopRecording();
+                    cancelEditing();
+                }
+            });
+
+            // Load analytics badge
+            updateAnalyticsBadge();
+        }
+
+        // ===== LANGUAGE MANAGEMENT =====
+        function setLanguage(lang, showWelcome = true) {
+            state.language = lang;
+            localStorage.setItem('bozorlik_language', lang);
+
+            // Update texts
+            updateTexts();
+
+            // Hide language selector
+            closeLanguageModal();
+
+            // Show main interface
+            document.getElementById('app').classList.remove('hidden');
+
+            // Set language on server
+            setServerLanguage(lang);
+
+            // Show welcome message
+            if (showWelcome) {
+                setTimeout(() => {
+                    addMessage(TEXTS[lang].welcome, false);
+                }, 300);
+            }
+
+            // Update language options
+            document.querySelectorAll('.language-option').forEach(option => {
+                if (option.dataset.lang === lang) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+        }
+
+        function updateTexts() {
+            const lang = state.language;
+            const texts = TEXTS[lang];
+
+            // Update all text elements
+            document.getElementById('appTitle').textContent = texts.appTitle;
+            document.getElementById('appSubtitle').textContent = texts.appSubtitle;
+            document.getElementById('textInput').placeholder = texts.inputPlaceholder;
+            document.getElementById('editInput').placeholder = lang === 'ru' ?
+                'Что изменить в списке?' : 'Ro\'yxatda nima o\'zgartirish kerak?';
+            document.getElementById('voiceRecordingText').textContent = texts.voiceRecording;
+            document.getElementById('analyticsModalTitle').textContent = texts.analyticsTitle;
+        }
+
+        function showLanguageModal() {
+            document.getElementById('languageModal').classList.add('active');
+        }
+
+        function closeLanguageModal() {
+            document.getElementById('languageModal').classList.remove('active');
+        }
+
+        // ===== THEME MANAGEMENT =====
+        function toggleTheme() {
+            state.isDarkMode = !state.isDarkMode;
+            document.body.classList.toggle('dark', state.isDarkMode);
+
+            const icon = document.querySelector('#themeToggle i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+
+            localStorage.setItem('bozorlik_theme', state.isDarkMode ? 'dark' : 'light');
+        }
+
+        // ===== MESSAGES =====
+        function addMessage(text, isUser = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${text}</div>
+                <div class="message-time">
+                    <i class="far fa-clock"></i>
+                    ${time}
+                </div>
+            `;
+
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            return messageDiv;
+        }
+
+        function showLoading() {
+            const chatContainer = document.getElementById('chatContainer');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.id = 'loadingIndicator';
+            loadingDiv.innerHTML = `
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span>${TEXTS[state.language].loading}</span>
+            `;
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideLoading() {
+            const loading = document.getElementById('loadingIndicator');
+            if (loading) loading.remove();
+        }
+
+        // ===== MESSAGE PROCESSING =====
+        async function sendMessage() {
+            const input = document.getElementById('textInput');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            // Add user message
+            addMessage(text, true);
+            input.value = '';
+
+            // Show loading indicator
+            showLoading();
+
+            try {
+                // Send to server
+                const response = await fetch(`${API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: state.userId,
+                        text: text,
+                        language: state.language,
+                        is_voice: false
+                    })
+                });
+
+                const data = await response.json();
+                hideLoading();
+
+                if (data.success) {
+                    if (data.type === 'shopping_list') {
+                        // Save list
+                        state.shoppingList = data.data;
+                        state.currentListId = data.data.list_id;
+
+                        // Format and show list with inline editing
+                        const formattedList = formatShoppingListForChat(data.data);
+                        addMessage(formattedList, false);
+
+                        // Update analytics badge
+                        updateAnalyticsBadge();
+                    } else {
+                        addMessage(data.message, false);
+                    }
+                } else {
+                    addMessage(`❌ ${data.error || 'Ошибка отправки сообщения'}`, false);
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Send message error:', error);
+                addMessage('❌ Ошибка соединения с сервером', false);
+            }
+        }
+
+        // ===== VOICE INPUT =====
+        async function toggleVoiceRecording() {
+            if (state.isRecording) {
+                stopRecording();
+                return;
+            }
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert(TEXTS[state.language].micError);
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 16000
+                    }
+                });
+
+                state.mediaRecorder = new MediaRecorder(stream);
+                state.audioChunks = [];
+
+                state.mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        state.audioChunks.push(event.data);
+                    }
+                };
+
+                state.mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(state.audioChunks, { type: 'audio/webm' });
+
+                    // Show loading
+                    showLoading();
+
+                    try {
+                        // Send voice to server
+                        const formData = new FormData();
+                        formData.append('user_id', state.userId);
+                        formData.append('language', state.language);
+                        formData.append('voice_file', audioBlob, 'voice.ogg');
+
+                        const response = await fetch(`${API_URL}/api/voice`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+                        hideLoading();
+
+                        if (data.success) {
+                            if (data.type === 'shopping_list') {
+                                // Save list
+                                state.shoppingList = data.data;
+                                state.currentListId = data.data.list_id;
+
+                                // Format and show list with inline editing
+                                const formattedList = formatShoppingListForChat(data.data);
+                                addMessage(formattedList, false);
+
+                                // Update analytics badge
+                                updateAnalyticsBadge();
+                            } else {
+                                addMessage(data.message, false);
+                            }
+                        } else {
+                            addMessage(`❌ ${data.error || TEXTS[state.language].voiceError}`, false);
+                        }
+                    } catch (error) {
+                        hideLoading();
+                        console.error('Voice send error:', error);
+                        addMessage(`❌ ${TEXTS[state.language].voiceError}`, false);
+                    }
+
+                    // Clean up
+                    stream.getTracks().forEach(track => track.stop());
+                    document.getElementById('voiceRecordingModal').classList.remove('active');
+                    state.isRecording = false;
+                };
+
+                // Start recording
+                state.mediaRecorder.start();
+                state.isRecording = true;
+                document.getElementById('voiceRecordingModal').classList.add('active');
+
+                // Auto-stop after 60 seconds
+                setTimeout(() => {
+                    if (state.isRecording) {
+                        stopRecording();
+                    }
+                }, 60000);
+
+            } catch (error) {
+                console.error('Microphone error:', error);
+                alert(TEXTS[state.language].micError);
+            }
+        }
+
+        function stopRecording() {
+            if (state.mediaRecorder && state.isRecording) {
+                state.mediaRecorder.stop();
+                state.isRecording = false;
+                document.getElementById('voiceRecordingModal').classList.remove('active');
+            }
+        }
+
+        // ===== INLINE EDITING FUNCTIONS =====
+        function startEditingItem(category, itemName, currentQuantity) {
+            cancelEditing(); // Cancel any existing editing
+
+            state.editingItem = { category, itemName, currentQuantity };
+
+            // Find the list item and switch to edit mode
+            document.querySelectorAll('.list-item').forEach(item => {
+                const itemNameElement = item.querySelector('.item-name');
+                if (itemNameElement && itemNameElement.textContent === itemName) {
+                    item.classList.add('editing');
+
+                    const itemContent = item.querySelector('.item-content');
+                    const originalContent = itemContent.innerHTML;
+
+                    itemContent.innerHTML = `
+                        <div class="edit-inputs">
+                            <div class="edit-row">
+                                <input type="text" class="edit-input item-name-input"
+                                       value="${itemName}" placeholder="${TEXTS[state.language].itemName}">
+                            </div>
+                            <div class="edit-row">
+                                <input type="text" class="edit-input item-quantity-input"
+                                       value="${currentQuantity || ''}" placeholder="${TEXTS[state.language].itemQuantity}">
+                                <div class="edit-buttons">
+                                    <button class="edit-btn save" onclick="saveEditedItem('${category}', '${itemName}')">
+                                        <i class="fas fa-check"></i> ${TEXTS[state.language].save}
+                                    </button>
+                                    <button class="edit-btn cancel" onclick="cancelEditing()">
+                                        <i class="fas fa-times"></i> ${TEXTS[state.language].cancel}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Focus on name input
+                    setTimeout(() => {
+                        const nameInput = item.querySelector('.item-name-input');
+                        if (nameInput) nameInput.focus();
+                    }, 10);
+
+                    // Store original content for cancel
+                    item.dataset.originalContent = originalContent;
+                }
+            });
+        }
+
+        async function saveEditedItem(oldCategory, oldItemName) {
+            if (!state.editingItem) return;
+
+            const itemElement = document.querySelector('.list-item.editing');
+            if (!itemElement) return;
+
+            const newName = itemElement.querySelector('.item-name-input').value.trim();
+            const newQuantity = itemElement.querySelector('.item-quantity-input').value.trim();
+
+            if (!newName) {
+                alert(state.language === 'ru' ? 'Введите название товара' : 'Tovar nomini kiriting');
+                return;
+            }
+
+            try {
+                // Send edit request to server
+                const response = await fetch(`${API_URL}/api/list/${state.userId}/edit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: state.userId,
+                        text: state.language === 'ru' ?
+                            `Замени ${oldItemName} на ${newName} ${newQuantity}` :
+                            `${oldItemName} ni ${newName} ${newQuantity} ga almashtir`,
+                        language: state.language
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local state
+                    state.shoppingList = data.data;
+
+                    // Refresh the shopping list display
+                    refreshShoppingListMessage();
+
+                    // Show success message
+                    addMessage(TEXTS[state.language].editSuccess, false);
+
+                    // Clear editing state
+                    state.editingItem = null;
+                } else {
+                    throw new Error(data.error || 'Edit failed');
+                }
+            } catch (error) {
+                console.error('Edit error:', error);
+                addMessage('❌ Ошибка редактирования товара', false);
+                cancelEditing();
+            }
+        }
+
+        function cancelEditing() {
+            if (state.editingItem) {
+                document.querySelectorAll('.list-item.editing').forEach(item => {
+                    if (item.dataset.originalContent) {
+                        item.querySelector('.item-content').innerHTML = item.dataset.originalContent;
+                    }
+                    item.classList.remove('editing');
+                    delete item.dataset.originalContent;
+                });
+                state.editingItem = null;
+            }
+        }
+
+        async function deleteItemFromList(category, itemName) {
+            if (!confirm(state.language === 'ru' ?
+                `Удалить "${itemName}" из списка?` :
+                `"${itemName}" ni ro'yxatdan o'chirishni xohlaysizmi?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/list/${state.userId}/edit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: state.userId,
+                        text: state.language === 'ru' ?
+                            `Удали ${itemName}` :
+                            `${itemName} ni o'chir`,
+                        language: state.language
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local state
+                    state.shoppingList = data.data;
+
+                    // Refresh the shopping list display
+                    refreshShoppingListMessage();
+
+                    // Show success message
+                    addMessage(state.language === 'ru' ? '✅ Товар удален' : '✅ Tovar o\'chirildi', false);
+                } else {
+                    throw new Error(data.error || 'Delete failed');
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                addMessage('❌ Ошибка удаления товара', false);
+            }
+        }
+
+        // ===== ADD ITEM FORM =====
+        function renderAddItemForm() {
+            const lang = state.language;
+            const texts = TEXTS[lang];
+
+            return `
+                <div class="add-item-form">
+                    <div class="add-item-header">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>${texts.addItem}</span>
+                    </div>
+                    <div class="add-item-fields">
+                        <div class="add-item-field">
+                            <label class="add-item-label">${texts.itemName}</label>
+                            <input type="text" class="add-item-input" id="newItemName"
+                                   placeholder="${texts.itemName}">
+                        </div>
+                        <div class="add-item-field">
+                            <label class="add-item-label">${texts.itemQuantity}</label>
+                            <input type="text" class="add-item-input" id="newItemQuantity"
+                                   placeholder="${texts.itemQuantity}">
+                        </div>
+                    </div>
+                    <div class="add-item-buttons">
+                        <button class="add-btn" onclick="addNewItem()">
+                            <i class="fas fa-plus"></i> ${texts.add}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function addNewItem() {
+            const itemNameInput = document.getElementById('newItemName');
+            const quantityInput = document.getElementById('newItemQuantity');
+
+            const itemName = itemNameInput.value.trim();
+            const quantity = quantityInput.value.trim();
+
+            if (!itemName) {
+                alert(state.language === 'ru' ? 'Введите название товара' : 'Tovar nomini kiriting');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/list/${state.userId}/edit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: state.userId,
+                        text: state.language === 'ru' ?
+                            `Добавь ${itemName} ${quantity}` :
+                            `${itemName} ${quantity} ni qo'sh`,
+                        language: state.language
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local state
+                    state.shoppingList = data.data;
+
+                    // Refresh the shopping list display
+                    refreshShoppingListMessage();
+
+                    // Clear inputs
+                    itemNameInput.value = '';
+                    quantityInput.value = '';
+
+                    // Show success message
+                    addMessage(state.language === 'ru' ? '✅ Товар добавлен' : '✅ Tovar qo\'shildi', false);
+                } else {
+                    throw new Error(data.error || 'Add failed');
+                }
+            } catch (error) {
+                console.error('Add item error:', error);
+                addMessage('❌ Ошибка добавления товара', false);
+            }
+        }
+
+        // ===== SHOPPING LIST FORMATTING =====
+        function formatShoppingListForChat(listData) {
+            const lang = state.language;
+            let html = `<div class="list-message">`;
+
+            if (listData.categories) {
+                for (const [category, items] of Object.entries(listData.categories)) {
+                    if (items && items.length > 0) {
+                        // Calculate category total
+                        const categoryTotal = items.reduce((sum, item) => sum + (item.estimated_price || 0), 0);
+
+                        html += `
+                            <div class="list-category">
+                                <div class="category-header">
+                                    <div class="category-title">
+                                        <div class="category-icon">
+                                            ${getCategoryIcon(category)}
+                                        </div>
+                                        <span>${category}</span>
+                                    </div>
+                                    <div class="category-total">${formatPrice(categoryTotal)}</div>
+                                </div>
+                                <div class="list-items">
+                        `;
+
+                        for (const item of items) {
+                            const priceText = item.estimated_price ?
+                                `<div class="item-price estimated">${formatPrice(item.estimated_price)}</div>` : '';
+
+                            const sourceText = item.price_info?.source ?
+                                `<div class="item-source">${item.price_info.source}</div>` : '';
+
+                            html += `
+                                <div class="list-item ${item.purchased ? 'purchased' : ''}">
+                                    <div class="item-checkbox ${item.purchased ? 'checked' : ''}"
+                                         onclick="togglePurchase('${category}', '${item.name}')">
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-header">
+                                            <div class="item-name">${item.name}</div>
+                                            ${priceText}
+                                        </div>
+                                        <div class="item-details">
+                                            <div class="item-quantity">${item.quantity || ''}</div>
+                                            ${sourceText}
+                                        </div>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="item-action-btn edit"
+                                                onclick="startEditingItem('${category}', '${item.name}', '${item.quantity || ''}')"
+                                                title="${TEXTS[lang].editItem}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="item-action-btn delete"
+                                                onclick="deleteItemFromList('${category}', '${item.name}')"
+                                                title="${TEXTS[lang].deleteItem}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        html += `</div></div>`;
+                    }
+                }
+            }
+
+            // Add list summary
+            const purchasedCount = listData.purchased_items || 0;
+            const totalCount = listData.total_items || 0;
+            const totalPrice = listData.total_estimated_price || 0;
+
+            html += `
+                <div style="margin-top: var(--spacing-lg); padding: var(--spacing); background: var(--surface-elevated); border-radius: var(--radius); border: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
+                        <span style="color: var(--text-secondary); font-size: 14px;">${TEXTS[lang].total}:</span>
+                        <span style="font-weight: 700; color: var(--text-primary);">${totalCount} ${TEXTS[lang].items}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
+                        <span style="color: var(--text-secondary); font-size: 14px;">${TEXTS[lang].purchased}:</span>
+                        <span style="font-weight: 700; color: var(--secondary);">${purchasedCount} ${TEXTS[lang].items}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary); font-size: 14px;">${TEXTS[lang].estimated}:</span>
+                        <span style="font-weight: 700; color: var(--primary);">${formatPrice(totalPrice)}</span>
+                    </div>
+                </div>
+            `;
+
+            // Add "Add Item" form
+            html += renderAddItemForm();
+
+            // Add action buttons
+            html += `
+                <div class="list-actions">
+                    <button class="action-btn secondary" onclick="openEditModal()">
+                        <i class="fas fa-edit"></i> ${TEXTS[lang].editButtonText}
+                    </button>
+                    <button class="action-btn danger" onclick="clearShoppingList()">
+                        <i class="fas fa-trash"></i> ${TEXTS[lang].clearButtonText}
+                    </button>
+                    <button class="action-btn primary" onclick="showAnalytics()">
+                        <i class="fas fa-chart-line"></i> ${TEXTS[lang].analyticsButtonText}
+                    </button>
+                </div>
+            </div>`;
+
+            return html;
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                '🥕': ['овощ', 'sabzavot'],
+                '🍎': ['фрукт', 'meva'],
+                '🥛': ['молок', 'sut'],
+                '🍖': ['мяс', 'go\'sht', 'рыб', 'baliq'],
+                '📦': ['бакалея', 'makaron', 'guruch'],
+                '🥤': ['напиток', 'ichimlik', 'вода', 'suv'],
+                '🧴': ['химия', 'kimyoviy', 'мыло', 'sovun'],
+                '📝': ['друг', 'boshqa']
+            };
+
+            for (const [icon, keywords] of Object.entries(icons)) {
+                if (keywords.some(keyword => category.toLowerCase().includes(keyword))) {
+                    return icon;
+                }
+            }
+            return '📝';
+        }
+
+        function formatPrice(price) {
+            if (!price) return '';
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ` ${TEXTS[state.language].currency}`;
+        }
+
+        // ===== SHOPPING LIST ACTIONS =====
+        async function togglePurchase(category, itemName) {
+            try {
+                const response = await fetch(`${API_URL}/api/list/${state.userId}/toggle`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        category: category,
+                        item_name: itemName
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local state
+                    state.shoppingList = data.data;
+
+                    // Refresh the message
+                    refreshShoppingListMessage();
+
+                    // Check if all items are purchased
+                    if (data.all_purchased && data.show_expense_prompt) {
+                        showExpensePrompt();
+                    }
+                }
+            } catch (error) {
+                console.error('Toggle purchase error:', error);
+            }
+        }
+
+        function showExpensePrompt() {
+            const lang = state.language;
+            const chatContainer = document.getElementById('chatContainer');
+
+            // Add message from AI
+            const aiMessage = addMessage(TEXTS[lang].allPurchasedMessage, false);
+
+            // Add expense prompt
+            setTimeout(() => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message ai';
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">
+                        <div style="margin-bottom: var(--spacing);">
+                            <strong>${TEXTS[lang].enterAmount}</strong>
+                        </div>
+                        <div style="margin-bottom: var(--spacing);">
+                            <p style="color: var(--text-secondary); font-size: 13px;">
+                                ${lang === 'ru' ?
+                                    'Можно использовать: "10к" (10,000), "10кк" (10,000,000), "10 тысяч"' :
+                                    'Ishlatish mumkin: "10к" (10,000), "10кк" (10,000,000), "10 ming"'}
+                            </p>
+                        </div>
+                        <div class="list-actions">
+                            <button class="action-btn primary" onclick="showExpenseInput()">
+                                <i class="fas fa-money-bill-wave"></i> ${TEXTS[lang].submit}
+                            </button>
+                            <button class="action-btn secondary" onclick="skipExpense()">
+                                <i class="fas fa-times"></i> ${TEXTS[lang].skip}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 500);
+        }
+
+        function showExpenseInput() {
+            const lang = state.language;
+            const amountText = prompt(TEXTS[lang].enterAmount + (lang === 'ru' ?
+                '\nПримеры: 10к (10,000), 10кк (10,000,000), 10 тысяч (10,000)' :
+                '\nNamunalar: 10к (10,000), 10кк (10,000,000), 10 ming (10,000)'));
+
+            if (amountText) {
+                const amount = parseAmount(amountText);
+                if (amount > 0) {
+                    addExpense(amount);
+                } else {
+                    alert(lang === 'ru' ?
+                        'Некорректная сумма. Пожалуйста, введите число' :
+                        'Noto\'g\'ri summa. Iltimos, raqam kiriting');
+                }
+            }
+        }
+
+        function parseAmount(text) {
+            // Убираем пробелы и приводим к нижнему регистру
+            let cleanText = text.toLowerCase().replace(/\s+/g, '');
+
+            // Парсим специальные форматы
+            // 10кк = 10,000,000 (10 миллионов)
+            if (cleanText.includes('кк')) {
+                const numPart = parseFloat(cleanText.replace('кк', ''));
+                return !isNaN(numPart) ? numPart * 1000000 : 0;
+            }
+
+            // 10к = 10,000 (10 тысяч)
+            if (cleanText.includes('к')) {
+                const numPart = parseFloat(cleanText.replace('к', ''));
+                return !isNaN(numPart) ? numPart * 1000 : 0;
+            }
+
+            // Русские текстовые форматы
+            if (cleanText.includes('миллион') || cleanText.includes('million')) {
+                const numPart = parseFloat(cleanText.replace(/[^\d.]/g, ''));
+                return !isNaN(numPart) ? numPart * 1000000 : 0;
+            }
+
+            if (cleanText.includes('тысяч') || cleanText.includes('ming')) {
+                const numPart = parseFloat(cleanText.replace(/[^\d.]/g, ''));
+                return !isNaN(numPart) ? numPart * 1000 : 0;
+            }
+
+            // Стандартный парсинг чисел
+            const num = parseFloat(cleanText.replace(/[^\d.]/g, ''));
+            return !isNaN(num) ? num : 0;
+        }
+
+        async function addExpense(amount) {
+            try {
+                const response = await fetch(`${API_URL}/api/expense`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: state.userId,
+                        amount: amount,
+                        currency: 'UZS',
+                        list_id: state.currentListId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    addMessage(TEXTS[state.language].expenseSaved, false);
+
+                    // Update analytics
+                    updateAnalyticsBadge();
+                    if (state.analytics) {
+                        loadAnalytics();
+                    }
+
+                    // Clear shopping list
+                    state.shoppingList = null;
+                    state.currentListId = null;
+                }
+            } catch (error) {
+                console.error('Add expense error:', error);
+            }
+        }
+
+        function skipExpense() {
+            addMessage(TEXTS[state.language].expenseSkipped, false);
+
+            // Update analytics
+            updateAnalyticsBadge();
+
+            // Clear shopping list
+            state.shoppingList = null;
+            state.currentListId = null;
+        }
+
+        function openEditModal() {
+            if (!state.shoppingList) {
+                alert(TEXTS[state.language].noListError);
+                return;
+            }
+
+            document.getElementById('editModal').classList.add('active');
+            document.getElementById('editInput').focus();
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+            document.getElementById('editInput').value = '';
+        }
+
+        async function sendEdit() {
+            const text = document.getElementById('editInput').value.trim();
+
+            if (!text) {
+                closeEditModal();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/list/${state.userId}/edit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: state.userId,
+                        text: text,
+                        language: state.language
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local state
+                    state.shoppingList = data.data;
+
+                    // Refresh the message
+                    refreshShoppingListMessage();
+
+                    // Show success message
+                    addMessage(TEXTS[state.language].editSuccess, false);
+                } else {
+                    addMessage(`❌ ${data.error || 'Ошибка редактирования'}`, false);
+                }
+
+                closeEditModal();
+            } catch (error) {
+                console.error('Edit error:', error);
+                addMessage('❌ Ошибка соединения с сервером', false);
+                closeEditModal();
+            }
+        }
+
+        async function clearShoppingList() {
+            if (!state.shoppingList) {
+                alert(TEXTS[state.language].noListError);
+                return;
+            }
+
+            if (!confirm(state.language === 'ru' ?
+                'Вы уверены, что хотите очистить список? Это действие нельзя отменить.' :
+                'Rostan ham ro\'yxatni tozalamoqchimisiz? Bu harakatni bekor qilib bo\'lmaydi.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/list/${state.userId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Clear local state
+                    state.shoppingList = null;
+                    state.currentListId = null;
+
+                    // Remove shopping list message
+                    const chatContainer = document.getElementById('chatContainer');
+                    const messages = chatContainer.querySelectorAll('.message');
+                    if (messages.length > 0) {
+                        messages[messages.length - 1].remove();
+                    }
+
+                    // Show success message
+                    addMessage(TEXTS[state.language].clearSuccess, false);
+                }
+            } catch (error) {
+                console.error('Clear list error:', error);
+                addMessage('❌ Ошибка очистки списка', false);
+            }
+        }
+
+        function refreshShoppingListMessage() {
+            const chatContainer = document.getElementById('chatContainer');
+            const messages = chatContainer.querySelectorAll('.message');
+
+            // Remove the last message (should be the shopping list)
+            if (messages.length > 0) {
+                messages[messages.length - 1].remove();
+            }
+
+            // Add updated shopping list
+            if (state.shoppingList) {
+                const formattedList = formatShoppingListForChat(state.shoppingList);
+                addMessage(formattedList, false);
+            }
+        }
+
+        // ===== ANALYTICS =====
+        async function showAnalytics() {
+            await loadAnalytics();
+            document.getElementById('analyticsModal').classList.add('active');
+            showAnalyticsMainView();
+        }
+
+        function closeAnalytics() {
+            document.getElementById('analyticsModal').classList.remove('active');
+            showAnalyticsMainView();
+        }
+
+        function showAnalyticsMainView() {
+            state.currentAnalyticsView = 'main';
+            document.querySelectorAll('.analytics-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById('analyticsMainView').classList.add('active');
+            document.getElementById('analyticsModalTitle').textContent = TEXTS[state.language].analyticsTitle;
+        }
+
+        function showTotalSpentView() {
+            state.currentAnalyticsView = 'totalSpent';
+            document.querySelectorAll('.analytics-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById('totalSpentView').classList.add('active');
+            document.getElementById('analyticsModalTitle').textContent = TEXTS[state.language].totalSpentTitle;
+            renderTotalSpentDetails();
+        }
+
+        function showAverageCheckView() {
+            state.currentAnalyticsView = 'averageCheck';
+            document.querySelectorAll('.analytics-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById('averageCheckView').classList.add('active');
+            document.getElementById('analyticsModalTitle').textContent = TEXTS[state.language].averageCheckTitle;
+            renderAverageCheckDetails();
+        }
+
+        function showMinExpenseView() {
+            state.currentAnalyticsView = 'minExpense';
+            document.querySelectorAll('.analytics-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById('minExpenseView').classList.add('active');
+            document.getElementById('analyticsModalTitle').textContent = TEXTS[state.language].minExpenseTitle;
+            renderMinExpenseDetails();
+        }
+
+        function showMaxExpenseView() {
+            state.currentAnalyticsView = 'maxExpense';
+            document.querySelectorAll('.analytics-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById('maxExpenseView').classList.add('active');
+            document.getElementById('analyticsModalTitle').textContent = TEXTS[state.language].maxExpenseTitle;
+            renderMaxExpenseDetails();
+        }
+
+        function showHistoryDetailsView(listId) {
+            state.currentAnalyticsView = 'historyDetails';
+            document.querySelectorAll('.analytics-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById('historyDetailsView').classList.add('active');
+            document.getElementById('analyticsModalTitle').textContent = TEXTS[state.language].historyDetailsTitle;
+            renderHistoryDetails(listId);
+        }
+
+        async function loadAnalytics() {
+            try {
+                const response = await fetch(`${API_URL}/api/analytics/${state.userId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    state.analytics = data.data;
+                    renderAnalytics();
+                }
+            } catch (error) {
+                console.error('Load analytics error:', error);
+            }
+        }
+
+        function renderAnalytics() {
+            const analytics = state.analytics;
+            const lang = state.language;
+
+            if (!analytics || analytics.total_lists === 0) {
+                document.getElementById('analyticsStats').innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: var(--spacing); opacity: 0.5;"></i>
+                        <h3 style="margin-bottom: var(--spacing-sm);">${lang === 'ru' ? 'Нет данных' : 'Ma\'lumot yo\'q'}</h3>
+                        <p>${lang === 'ru' ? 'Создайте свой первый список покупок, чтобы увидеть аналитику' : 'Tahlilni ko\'rish uchun birinchi xaridlar ro\'yxatingizni yarating'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render stats cards with click handlers
+            document.getElementById('analyticsStats').innerHTML = `
+                <div class="stat-card total" onclick="showTotalSpentView()">
+                    <div class="stat-value">${formatPrice(analytics.total_spent)}</div>
+                    <div class="stat-label">${TEXTS[lang].totalSpent}</div>
+                    <div class="stat-date">${analytics.total_lists} ${lang === 'ru' ? 'списков' : 'ro\'yxat'}</div>
+                </div>
+                <div class="stat-card average" onclick="showAverageCheckView()">
+                    <div class="stat-value">${formatPrice(analytics.average_spent)}</div>
+                    <div class="stat-label">${TEXTS[lang].averageSpent}</div>
+                </div>
+                <div class="stat-card min" onclick="showMinExpenseView()">
+                    <div class="stat-value">${formatPrice(analytics.min_spent)}</div>
+                    <div class="stat-label">${TEXTS[lang].minSpent}</div>
+                    <div class="stat-date">${analytics.min_date ? new Date(analytics.min_date).toLocaleDateString() : TEXTS[lang].notSpecified}</div>
+                </div>
+                <div class="stat-card max" onclick="showMaxExpenseView()">
+                    <div class="stat-value">${formatPrice(analytics.max_spent)}</div>
+                    <div class="stat-label">${TEXTS[lang].maxSpent}</div>
+                    <div class="stat-date">${analytics.max_date ? new Date(analytics.max_date).toLocaleDateString() : TEXTS[lang].notSpecified}</div>
+                </div>
+            `;
+
+            // Render category chart
+            renderCategoryChart(analytics.category_breakdown);
+
+            // Render history
+            renderHistory(analytics.history);
+        }
+
+        function renderCategoryChart(categoryBreakdown) {
+            const container = document.getElementById('categoryChart');
+            if (!categoryBreakdown || Object.keys(categoryBreakdown).length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-chart-pie" style="font-size: 48px; opacity: 0.5;"></i>
+                        <p style="margin-top: var(--spacing);">${state.language === 'ru' ? 'Нет данных по категориям' : 'Kategoriyalar bo\'yicha ma\'lumot yo\'q'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const totalItems = Object.values(categoryBreakdown).reduce((a, b) => a + b, 0);
+
+            container.innerHTML = `
+                <svg viewBox="0 0 100 100">
+                    <circle class="radial-bg" cx="50" cy="50" r="45" />
+                    <circle class="radial-progress" cx="50" cy="50" r="45"
+                            style="stroke-dashoffset: ${565.48 * (1 - totalItems / Math.max(totalItems, 1))}" />
+                </svg>
+                <div class="radial-text">
+                    <div class="radial-value">${totalItems}</div>
+                    <div class="radial-label">${state.language === 'ru' ? 'товаров' : 'tovarlar'}</div>
+                </div>
+            `;
+        }
+
+        function renderHistory(history) {
+            const container = document.getElementById('historyList');
+            const lang = state.language;
+
+            if (!history || history.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-history" style="font-size: 24px; opacity: 0.5; margin-bottom: var(--spacing);"></i>
+                        <p>${lang === 'ru' ? 'История покупок пуста' : 'Xaridlar tarixi bo\'sh'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = history.map(item => `
+                <div class="history-item" onclick="showHistoryDetailsView('${item.list_id}')">
+                    <div class="history-date">
+                        ${new Date(item.date).toLocaleDateString()}
+                    </div>
+                    <div class="history-details">
+                        <span class="history-count">${item.items_count} ${lang === 'ru' ? 'товаров' : 'tovarlar'}</span>
+                        ${item.final_amount ? `
+                            <span class="history-amount">${formatPrice(item.final_amount)}</span>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function renderTotalSpentDetails() {
+            const container = document.getElementById('totalSpentDetails');
+            const lang = state.language;
+
+            try {
+                const response = await fetch(`${API_URL}/api/analytics/${state.userId}/expenses`);
+                const data = await response.json();
+
+                if (data.success && data.data.length > 0) {
+                    container.innerHTML = data.data.map(expense => `
+                        <div class="expense-item">
+                            <div class="expense-header">
+                                <div class="expense-date">${new Date(expense.date).toLocaleDateString()}</div>
+                                <div class="expense-amount">${formatPrice(expense.amount)}</div>
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 14px;">
+                                ${expense.items_count} ${lang === 'ru' ? 'товаров' : 'tovarlar'}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                            <i class="fas fa-money-bill-wave" style="font-size: 48px; opacity: 0.5; margin-bottom: var(--spacing);"></i>
+                            <h3 style="margin-bottom: var(--spacing-sm);">${TEXTS[lang].noExpenseHistory}</h3>
+                            <p>${lang === 'ru' ? 'Укажите сумму расходов при завершении списка покупок' : 'Xaridlar ro\'yxatini yakunlaganda xarajatlar summasini ko\'rsating'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Load expense history error:', error);
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--danger);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: var(--spacing);"></i>
+                        <p>${lang === 'ru' ? 'Ошибка загрузки истории расходов' : 'Xarajatlar tarixini yuklashda xatolik'}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderAverageCheckDetails() {
+            const container = document.getElementById('averageCheckDetails');
+            const lang = state.language;
+            const analytics = state.analytics;
+
+            if (!analytics || analytics.total_lists === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-calculator" style="font-size: 48px; opacity: 0.5; margin-bottom: var(--spacing);"></i>
+                        <h3 style="margin-bottom: var(--spacing-sm);">${TEXTS[lang].noShoppingHistory}</h3>
+                        <p>${lang === 'ru' ? 'Создайте свой первый список покупок' : 'Birinchi xaridlar ro\'yxatingizni yarating'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const spentEntries = analytics.history.filter(h => h.final_amount !== null && h.final_amount !== undefined);
+
+            if (spentEntries.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-money-bill-wave" style="font-size: 48px; opacity: 0.5; margin-bottom: var(--spacing);"></i>
+                        <h3 style="margin-bottom: var(--spacing-sm);">${TEXTS[lang].noExpenseHistory}</h3>
+                        <p>${lang === 'ru' ? 'Укажите сумму расходов при завершении списка покупок' : 'Xaridlar ro\'yxatini yakunlaganda xarajatlar summasini ko\'rsating'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const amounts = spentEntries.map(h => h.final_amount);
+            const minAmount = Math.min(...amounts);
+            const maxAmount = Math.max(...amounts);
+            const averageAmount = amounts.reduce((a, b) => a + b, 0) / amounts.length;
+
+            container.innerHTML = `
+                <div class="expense-item">
+                    <div class="expense-header">
+                        <div>${TEXTS[lang].averageSpent}</div>
+                        <div class="expense-amount">${formatPrice(averageAmount)}</div>
+                    </div>
+                    <div style="margin-top: var(--spacing);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
+                            <span style="color: var(--text-secondary);">${TEXTS[lang].minSpent}:</span>
+                            <span style="font-weight: 600; color: var(--info);">${formatPrice(minAmount)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-secondary);">${TEXTS[lang].maxSpent}:</span>
+                            <span style="font-weight: 600; color: var(--warning);">${formatPrice(maxAmount)}</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: var(--spacing-lg); color: var(--text-secondary); font-size: 14px; text-align: center;">
+                    ${lang === 'ru' ? 'На основе' : 'Asosida'} ${spentEntries.length} ${lang === 'ru' ? 'завершенных списков покупок' : 'yakunlangan xaridlar ro\'yxati'}
+                </div>
+            `;
+        }
+
+        function renderMinExpenseDetails() {
+            const container = document.getElementById('minExpenseDetails');
+            const lang = state.language;
+            const analytics = state.analytics;
+
+            if (!analytics || !analytics.min_list) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-chart-line" style="font-size: 48px; opacity: 0.5; margin-bottom: var(--spacing);"></i>
+                        <h3 style="margin-bottom: var(--spacing-sm);">${TEXTS[lang].noExpenseHistory}</h3>
+                        <p>${lang === 'ru' ? 'Укажите сумму расходов при завершении списка покупок' : 'Xaridlar ro\'yxatini yakunlaganda xarajatlar summasini ko\'rsating'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const minList = analytics.min_list;
+
+            container.innerHTML = `
+                <div class="expense-item">
+                    <div class="expense-header">
+                        <div class="expense-date">${new Date(minList.date).toLocaleDateString()}</div>
+                        <div class="expense-amount">${formatPrice(minList.final_amount)}</div>
+                    </div>
+                    <div style="margin-top: var(--spacing);">
+                        <div style="color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                            ${minList.items_count} ${lang === 'ru' ? 'товаров' : 'tovarlar'}
+                        </div>
+                        <div class="items-list">
+                            ${minList.items && minList.items.length > 0 ? minList.items.map(item => `
+                                <div class="expense-list-item">
+                                    <div class="expense-item-name">${item.name}</div>
+                                    <div class="expense-item-quantity">${item.quantity || ''}</div>
+                                </div>
+                            `).join('') : `
+                                <div style="color: var(--text-tertiary); text-align: center; padding: var(--spacing);">
+                                    ${lang === 'ru' ? 'Список товаров недоступен' : 'Tovarlar ro\'yxati mavjud emas'}
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMaxExpenseDetails() {
+            const container = document.getElementById('maxExpenseDetails');
+            const lang = state.language;
+            const analytics = state.analytics;
+
+            if (!analytics || !analytics.max_list) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-chart-line" style="font-size: 48px; opacity: 0.5; margin-bottom: var(--spacing);"></i>
+                        <h3 style="margin-bottom: var(--spacing-sm);">${TEXTS[lang].noExpenseHistory}</h3>
+                        <p>${lang === 'ru' ? 'Укажите сумму расходов при завершении списка покупок' : 'Xaridlar ro\'yxatini yakunlaganda xarajatlar summasini ko\'rsating'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const maxList = analytics.max_list;
+
+            container.innerHTML = `
+                <div class="expense-item">
+                    <div class="expense-header">
+                        <div class="expense-date">${new Date(maxList.date).toLocaleDateString()}</div>
+                        <div class="expense-amount">${formatPrice(maxList.final_amount)}</div>
+                    </div>
+                    <div style="margin-top: var(--spacing);">
+                        <div style="color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                            ${maxList.items_count} ${lang === 'ru' ? 'товаров' : 'tovarlar'}
+                        </div>
+                        <div class="items-list">
+                            ${maxList.items && maxList.items.length > 0 ? maxList.items.map(item => `
+                                <div class="expense-list-item">
+                                    <div class="expense-item-name">${item.name}</div>
+                                    <div class="expense-item-quantity">${item.quantity || ''}</div>
+                                </div>
+                            `).join('') : `
+                                <div style="color: var(--text-tertiary); text-align: center; padding: var(--spacing);">
+                                    ${lang === 'ru' ? 'Список товаров недоступен' : 'Tovarlar ro\'yxati mavjud emas'}
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function renderHistoryDetails(listId) {
+            const container = document.getElementById('historyDetailsContent');
+            const lang = state.language;
+
+            try {
+                const response = await fetch(`${API_URL}/api/analytics/${state.userId}/list/${listId}`);
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    const listData = data.data;
+
+                    container.innerHTML = `
+                        <div class="expense-item">
+                            <div class="expense-header">
+                                <div class="expense-date">${new Date(listData.date).toLocaleDateString()}</div>
+                                ${listData.final_amount ? `
+                                    <div class="expense-amount">${formatPrice(listData.final_amount)}</div>
+                                ` : `
+                                    <div style="color: var(--text-secondary);">${TEXTS[lang].notSpecified}</div>
+                                `}
+                            </div>
+                            <div style="margin-top: var(--spacing);">
+                                <div style="color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                                    ${listData.items_count} ${lang === 'ru' ? 'товаров' : 'tovarlar'}
+                                </div>
+                                <div class="items-list">
+                                    ${listData.items && listData.items.length > 0 ? listData.items.map(item => `
+                                        <div class="expense-list-item">
+                                            <div>
+                                                <div class="expense-item-name">${item.name}</div>
+                                                <div style="font-size: 12px; color: var(--text-tertiary);">
+                                                    ${item.quantity || ''} ${item.purchased ? ` • ${TEXTS[lang].purchasedStatus}` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('') : `
+                                        <div style="color: var(--text-tertiary); text-align: center; padding: var(--spacing);">
+                                            ${lang === 'ru' ? 'Список товаров недоступен' : 'Tovarlar ro\'yxati mavjud emas'}
+                                        </div>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                            <i class="fas fa-exclamation-circle" style="font-size: 48px; opacity: 0.5; margin-bottom: var(--spacing);"></i>
+                            <h3 style="margin-bottom: var(--spacing-sm);">${lang === 'ru' ? 'Список не найден' : 'Ro\'yxat topilmadi'}</h3>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Load list details error:', error);
+                container.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--danger);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: var(--spacing);"></i>
+                        <p>${lang === 'ru' ? 'Ошибка загрузки деталей списка' : 'Ro\'yxat tafsilotlarini yuklashda xatolik'}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function updateAnalyticsBadge() {
+            try {
+                const response = await fetch(`${API_URL}/api/analytics/${state.userId}`);
+                const data = await response.json();
+
+                if (data.success && data.data.total_lists > 0) {
+                    const badge = document.getElementById('analyticsBadge');
+                    badge.textContent = data.data.total_lists;
+                    badge.style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Update analytics badge error:', error);
+            }
+        }
+
+        // ===== WebSocket =====
+        function connectWebSocket() {
+            try {
+                const wsUrl = API_URL.replace('http', 'ws') + `/ws/${state.userId}`;
+                state.websocket = new WebSocket(wsUrl);
+
+                state.websocket.onopen = () => {
+                    console.log('WebSocket connected');
+                };
+
+                state.websocket.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        console.log('WebSocket message:', data);
+                    } catch (error) {
+                        console.error('WebSocket parse error:', error);
+                    }
+                };
+
+                state.websocket.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+
+                state.websocket.onclose = () => {
+                    console.log('WebSocket disconnected');
+                    // Try to reconnect after 5 seconds
+                    setTimeout(connectWebSocket, 5000);
+                };
+            } catch (error) {
+                console.error('WebSocket connection error:', error);
+            }
+        }
+
+        // ===== API INTERACTION =====
+        async function setServerLanguage(lang) {
+            try {
+                const formData = new FormData();
+                formData.append('user_id', state.userId);
+                formData.append('language', lang);
+
+                await fetch(`${API_URL}/api/set-language`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } catch (error) {
+                console.error('Set language error:', error);
+            }
+        }
+
+        // ===== GLOBAL FUNCTIONS =====
+        window.setLanguage = setLanguage;
+        window.togglePurchase = togglePurchase;
+        window.startEditingItem = startEditingItem;
+        window.saveEditedItem = saveEditedItem;
+        window.cancelEditing = cancelEditing;
+        window.deleteItemFromList = deleteItemFromList;
+        window.addNewItem = addNewItem;
+        window.openEditModal = openEditModal;
+        window.closeEditModal = closeEditModal;
+        window.sendEdit = sendEdit;
+        window.clearShoppingList = clearShoppingList;
+        window.showExpenseInput = showExpenseInput;
+        window.skipExpense = skipExpense;
+        window.parseAmount = parseAmount;
+        window.showAnalytics = showAnalytics;
+        window.closeAnalytics = closeAnalytics;
+        window.showLanguageModal = showLanguageModal;
+        window.closeLanguageModal = closeLanguageModal;
+        window.stopRecording = stopRecording;
+        window.showAnalyticsMainView = showAnalyticsMainView;
+        window.showTotalSpentView = showTotalSpentView;
+        window.showAverageCheckView = showAverageCheckView;
+        window.showMinExpenseView = showMinExpenseView;
+        window.showMaxExpenseView = showMaxExpenseView;
+        window.showHistoryDetailsView = showHistoryDetailsView;
+    </script>
+</body>
+</html>
