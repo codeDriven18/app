@@ -1761,7 +1761,7 @@
 
     <script>
         // ===== CONFIGURATION =====
-        const API_URL = 'http://localhost:8000';
+        const API_URL = 'https://app-ckdk.onrender.com';
         const DEFAULT_USER_ID = Math.floor(Math.random() * 1000000);
 
         // Texts in different languages
@@ -3405,7 +3405,7 @@
         // ===== WebSocket =====
         function connectWebSocket() {
             try {
-                const wsUrl = API_URL.replace('http', 'ws') + `/ws/${state.userId}`;
+                const wsUrl = API_URL.replace('https', 'wss').replace('http', 'ws') + `/ws/${state.userId}`;
                 state.websocket = new WebSocket(wsUrl);
 
                 state.websocket.onopen = () => {

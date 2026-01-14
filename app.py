@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Body, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from pydantic import BaseModel
 import httpx
 import openai
@@ -1143,22 +1143,32 @@ app.add_middleware(
 
 
 # ===== API ENDPOINTS =====
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root():
-    return JSONResponse(content={
-        "status": "online",
-        "service": "Bozorlik AI",
-        "version": "2.2.0",
-        "features": [
-            "Умные списки покупок",
-            "Точные цены из базы данных",
-            "Голосовой ввод (рус/узб)",
-            "Редактирование списков",
-            "Расширенная аналитика",
-            "История покупок",
-            "Inline редактирование в списке"
-        ]
-    })
+    """Serve the front-end HTML page"""
+    try:
+        html_file = "index.html"
+        if os.path.exists(html_file):
+            with open(html_file, "r", encoding="utf-8") as f:
+                return HTMLResponse(content=f.read())
+        else:
+            return JSONResponse(content={
+                "status": "online",
+                "service": "Bozorlik AI",
+                "version": "2.2.0",
+                "features": [
+                    "Умные списки покупок",
+                    "Точные цены из базы данных",
+                    "Голосовой ввод (рус/узб)",
+                    "Редактирование списков",
+                    "Расширенная аналитика",
+                    "История покупок",
+                    "Inline редактирование в списке"
+                ]
+            })
+    except Exception as e:
+        logger.error(f"Error serving HTML: {e}")
+        return JSONResponse(content={"status": "online", "service": "Bozorlik AI"})
 
 
 @app.get("/health")
