@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: bozorlik-ai-web
+    env: python
+    region: oregon
+    buildCommand: "./build.sh"
+    startCommand: "uvicorn app:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        value: postgresql://bushstep:9zhog9hAMrwCnpzuDewkt0zAGQ1lQ6qn@dpg-d5r8vhkhg0os73crbds0-a.oregon-postgres.render.com/postgresql_ldlv
