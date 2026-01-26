@@ -7,3 +7,4 @@ python-multipart==0.0.21
 python-dotenv==1.0.1
 pydantic==2.11.10
 websockets==14.1
+asyncpg==0.29.0

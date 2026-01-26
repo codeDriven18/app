@@ -18,6 +18,9 @@ import httpx
 import openai
 import aiohttp
 
+# Import database module
+from database import init_db, close_db, get_db
+
 # ===== ЗАГРУЗКА ПЕРЕМЕННЫХ ОКРУЖЕНИЯ =====
 load_dotenv()
 
@@ -25,11 +28,12 @@ load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 AISHA_API_KEY = os.getenv("AISHA_API_KEY")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://bushstep:9zhog9hAMrwCnpzuDewkt0zAGQ1lQ6qn@dpg-d5r8vhkhg0os73crbds0-a.oregon-postgres.render.com/postgresql_ldlv")
 
 AISHA_POST_URL = os.getenv("AISHA_POST_URL", "https://back.aisha.group/api/v2/stt/post/")
 AISHA_GET_URL = os.getenv("AISHA_GET_URL", "https://back.aisha.group/api/v2/stt/get/")
 
-# Файлы данных
+# Файлы данных (для обратной совместимости, но теперь используем PostgreSQL)
 LANGUAGES_FILE = "user_languages.json"
 EXPENSES_FILE = "shopping_expenses.json"
 SHARED_LISTS_FILE = "shared_lists.json"
@@ -419,66 +423,66 @@ websocket_connections: Dict[int, WebSocket] = {}
 
 # ===== ФУНКЦИИ ДЛЯ АНАЛИТИКИ =====
 def load_user_history():
-    """Загружает историю пользователей из файла"""
+    """Загружает историю пользователей из файла (DEPRECATED - used for migration only)"""
     if os.path.exists(USER_HISTORY_FILE):
         try:
             with open(USER_HISTORY_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 for k, v in data.items():
                     user_history[int(k)] = v
-            logger.info(f"Загружено {len(user_history)} историй пользователей")
+            logger.info(f"Загружено {len(user_history)} историй пользователей из JSON (для миграции)")
         except Exception as e:
             logger.error(f"Error loading user history: {e}")
 
 
 def save_user_history():
-    """Сохраняет историю пользователей в файл"""
-    try:
-        with open(USER_HISTORY_FILE, "w", encoding="utf-8") as f:
-            json.dump({str(k): v for k, v in user_history.items()},
-                      f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        logger.error(f"Error saving user history: {e}")
+    """Сохраняет историю пользователей в файл (DEPRECATED - now using PostgreSQL)"""
+    # Keeping for backward compatibility, but database is primary storage
+    pass
 
 
-def add_to_user_history(user_id: int, list_data: Dict, final_amount: Optional[float] = None):
-    """Добавляет список в историю пользователя"""
-    if user_id not in user_history:
-        user_history[user_id] = []
-
+async def add_to_user_history(user_id: int, list_data: Dict, final_amount: Optional[float] = None):
+    """Добавляет список в историю пользователя (теперь используем PostgreSQL)"""
     # Преобразуем список в читаемый формат
     items_list = []
     for category, items in list_data.get("categories", {}).items():
         for item in items:
-            items_list.append({
-                "name": item.get("name", ""),
-                "quantity": item.get("quantity", ""),
-                "purchased": item.get("purchased", False)
-            })
+            item_str = f"{item.get('name', '')} - {item.get('quantity', '')}"
+            items_list.append(item_str)
+    
+    # Сохраняем в PostgreSQL
+    try:
+        db = await get_db()
+        await db.add_user_history(user_id, list_data, items_list, final_amount)
+    except Exception as e:
+        logger.error(f"Error saving user history to database: {e}")
+        # Fallback to in-memory storage
+        if user_id not in user_history:
+            user_history[user_id] = []
+        
+        history_entry = {
+            "list_id": list_data.get("list_id", secrets.token_hex(8)),
+            "date": datetime.now().isoformat(),
+            "items_count": list_data.get("total_items", 0),
+            "estimated_price": list_data.get("total_estimated_price", 0),
+            "final_amount": final_amount,
+            "items": [{"name": item.get("name", ""), "quantity": item.get("quantity", ""), "purchased": item.get("purchased", False)} for category, items in list_data.get("categories", {}).items() for item in items],
+            "purchased_items": list_data.get("purchased_items", 0),
+            "categories": {k: len(v) for k, v in list_data.get("categories", {}).items()}
+        }
+        user_history[user_id].append(history_entry)
 
-    history_entry = {
-        "list_id": list_data.get("list_id", secrets.token_hex(8)),
-        "date": datetime.now().isoformat(),
-        "items_count": list_data.get("total_items", 0),
-        "estimated_price": list_data.get("total_estimated_price", 0),
-        "final_amount": final_amount,
-        "items": items_list,
-        "purchased_items": list_data.get("purchased_items", 0),
-        "categories": {k: len(v) for k, v in list_data.get("categories", {}).items()}
-    }
 
-    user_history[user_id].append(history_entry)
-
-    # Сохраняем только последние 100 записей
-    if len(user_history[user_id]) > 100:
-        user_history[user_id] = user_history[user_id][-100:]
-
-    save_user_history()
-
-
-def get_user_analytics(user_id: int) -> Dict:
-    """Получает аналитику пользователя"""
-    if user_id not in user_history or not user_history[user_id]:
+async def get_user_analytics(user_id: int) -> Dict:
+    """Получает аналитику пользователя (теперь используем PostgreSQL)"""
+    try:
+        db = await get_db()
+        history = await db.get_user_history(user_id, limit=100)
+    except Exception as e:
+        logger.error(f"Error getting user history from database: {e}")
+        history = user_history.get(user_id, [])
+    
+    if not history:
         return {
             "total_lists": 0,
             "total_spent": 0,
@@ -493,8 +497,6 @@ def get_user_analytics(user_id: int) -> Dict:
             "category_breakdown": {},
             "monthly_trend": {}
         }
-
-    history = user_history[user_id]
 
     # Рассчитываем статистику по тратам
     spent_entries = [h for h in history if h.get("final_amount") is not None]
@@ -511,22 +513,25 @@ def get_user_analytics(user_id: int) -> Dict:
     # Анализ по категориям
     category_breakdown = {}
     for entry in history:
-        if "categories" in entry:
-            for category, count in entry["categories"].items():
+        list_data = entry.get("list_data", {})
+        if "categories" in list_data:
+            for category, items in list_data["categories"].items():
                 if category not in category_breakdown:
                     category_breakdown[category] = 0
-                category_breakdown[category] += count
+                category_breakdown[category] += len(items) if isinstance(items, list) else items
 
     # Месячный тренд
     monthly_trend = {}
     for entry in history:
-        date = datetime.fromisoformat(entry["date"])
-        month_key = date.strftime("%Y-%m")
-        if month_key not in monthly_trend:
-            monthly_trend[month_key] = {"count": 0, "spent": 0}
-        monthly_trend[month_key]["count"] += 1
-        if entry.get("final_amount") is not None:
-            monthly_trend[month_key]["spent"] += entry["final_amount"]
+        date_str = entry.get("created_at", entry.get("date", ""))
+        if date_str:
+            date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+            month_key = date.strftime("%Y-%m")
+            if month_key not in monthly_trend:
+                monthly_trend[month_key] = {"count": 0, "spent": 0}
+            monthly_trend[month_key]["count"] += 1
+            if entry.get("final_amount") is not None:
+                monthly_trend[month_key]["spent"] += entry["final_amount"]
 
     return {
         "total_lists": len(history),
@@ -534,8 +539,8 @@ def get_user_analytics(user_id: int) -> Dict:
         "average_spent": total_spent / len(spent_entries) if spent_entries else 0,
         "min_spent": min_spent_entry["final_amount"] if min_spent_entry else 0,
         "max_spent": max_spent_entry["final_amount"] if max_spent_entry else 0,
-        "min_date": min_spent_entry["date"] if min_spent_entry else None,
-        "max_date": max_spent_entry["date"] if max_spent_entry else None,
+        "min_date": min_spent_entry.get("created_at", min_spent_entry.get("date")) if min_spent_entry else None,
+        "max_date": max_spent_entry.get("created_at", max_spent_entry.get("date")) if max_spent_entry else None,
         "min_list": min_spent_entry if min_spent_entry else None,
         "max_list": max_spent_entry if max_spent_entry else None,
         "history": history[-20:],  # Последние 20 записей
@@ -544,7 +549,7 @@ def get_user_analytics(user_id: int) -> Dict:
     }
 
 
-def get_expense_history(user_id: int) -> List[Dict]:
+async def get_expense_history(user_id: int) -> List[Dict]:
     """Получает историю расходов пользователя"""
     if user_id not in user_history:
         return []
@@ -1065,44 +1070,41 @@ def get_category_keywords(category_name: str, lang: str = "ru") -> List[str]:
 
 # ===== ЗАГРУЗКА И СОХРАНЕНИЕ ДАННЫХ =====
 def load_languages():
+    """Load user languages (DEPRECATED - used for migration only)"""
     if os.path.exists(LANGUAGES_FILE):
         try:
             with open(LANGUAGES_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 for k, v in data.items():
                     user_languages[int(k)] = v
-            logger.info(f"Загружено {len(user_languages)} языков пользователей")
+            logger.info(f"Загружено {len(user_languages)} языков пользователей из JSON (для миграции)")
         except Exception as e:
             logger.error(f"Error loading languages: {e}")
 
 
 def save_languages():
-    try:
-        with open(LANGUAGES_FILE, "w", encoding="utf-8") as f:
-            json.dump({str(k): v for k, v in user_languages.items()},
-                      f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        logger.error(f"Error saving languages: {e}")
+    """Save user languages (DEPRECATED - now using PostgreSQL)"""
+    # Keeping for backward compatibility, but database is primary storage
+    pass
 
 
 def load_shared_lists():
+    """Load shared lists (DEPRECATED - used for migration only)"""
     if os.path.exists(SHARED_LISTS_FILE):
         try:
             with open(SHARED_LISTS_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 for list_id, list_data in data.items():
                     shared_lists[list_id] = list_data
-            logger.info(f"Загружено {len(shared_lists)} общих списков")
+            logger.info(f"Загружено {len(shared_lists)} общих списков из JSON (для миграции)")
         except Exception as e:
             logger.error(f"Error loading shared lists: {e}")
 
 
 def save_shared_lists():
-    try:
-        with open(SHARED_LISTS_FILE, "w", encoding="utf-8") as f:
-            json.dump(shared_lists, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        logger.error(f"Error saving shared lists: {e}")
+    """Save shared lists (DEPRECATED - now using PostgreSQL)"""
+    # Keeping for backward compatibility, but database is primary storage
+    pass
 
 
 # ===== LIFESPAN MANAGER =====
@@ -1110,18 +1112,28 @@ def save_shared_lists():
 async def lifespan(app: FastAPI):
     """Lifespan event handler for FastAPI"""
     # Startup
-    logger.info("Запуск Bozorlik AI Web Backend...")
+    logger.info("🚀 Запуск Bozorlik AI Web Backend...")
+    
+    # Initialize PostgreSQL connection
+    try:
+        await init_db(DATABASE_URL)
+        logger.info("✅ PostgreSQL database connected successfully")
+    except Exception as e:
+        logger.error(f"❌ Failed to connect to PostgreSQL: {e}")
+        raise
+    
+    # Load legacy JSON data for migration (if exists)
     load_languages()
     load_shared_lists()
     load_user_history()
-    logger.info("Bozorlik AI Web Backend успешно запущен")
+    
+    logger.info("✅ Bozorlik AI Web Backend успешно запущен")
     yield
+    
     # Shutdown
-    logger.info("Завершение работы Bozorlik AI Web Backend...")
-    save_languages()
-    save_shared_lists()
-    save_user_history()
-    logger.info("Данные сохранены")
+    logger.info("🔄 Завершение работы Bozorlik AI Web Backend...")
+    await close_db()
+    logger.info("✅ Database connections closed")
 
 
 # ===== ИНИЦИАЛИЗАЦИЯ APP =====
@@ -1200,10 +1212,16 @@ async def chat_message(chat_request: ChatMessage):
                 content={"success": False, "error": "Пустое сообщение"}
             )
 
-        # Устанавливаем язык пользователя
-        if user_id not in user_languages:
+        # Устанавливаем язык пользователя в PostgreSQL
+        try:
+            db = await get_db()
+            current_lang = await db.get_user_language(user_id)
+            if not current_lang or current_lang != lang:
+                await db.set_user_language(user_id, lang)
+        except Exception as e:
+            logger.error(f"Error setting user language: {e}")
+            # Fallback to in-memory
             user_languages[user_id] = lang
-            save_languages()
 
         # Обрабатываем сообщение
         response_text = await format_list_with_gpt(text, lang)
@@ -1407,9 +1425,9 @@ async def clear_shopping_list(user_id: int):
     """Очистить список покупок пользователя"""
     try:
         if user_id in user_data:
-            # Сохраняем в историю перед удалением
+            # Сохраняем в историю перед удалением (PostgreSQL)
             list_data = user_data[user_id].get("list_data", {})
-            add_to_user_history(user_id, list_data)
+            await add_to_user_history(user_id, list_data)
 
             # Удаляем список
             del user_data[user_id]
@@ -1439,17 +1457,21 @@ async def add_expense(expense_request: ExpenseRequest):
         user_id = expense_request.user_id
 
         if user_id not in user_data:
-            # Проверяем, есть ли активный список
-            if user_id in user_history and user_history[user_id]:
-                # Берем последний список из истории
-                last_list = user_history[user_id][-1]
-                add_to_user_history(user_id, last_list, expense_request.amount)
+            # Проверяем, есть ли активный список в истории (PostgreSQL)
+            try:
+                db = await get_db()
+                history = await db.get_user_history(user_id, limit=1)
+                if history:
+                    last_list = history[0]
+                    await add_to_user_history(user_id, last_list.get('list_data', {}), expense_request.amount)
 
-                return JSONResponse(content={
-                    "success": True,
-                    "message": "Сумма расходов сохранена для последнего списка",
-                    "analytics_available": True
-                })
+                    return JSONResponse(content={
+                        "success": True,
+                        "message": "Сумма расходов сохранена для последнего списка",
+                        "analytics_available": True
+                    })
+            except Exception as e:
+                logger.error(f"Error accessing history: {e}")
 
             return JSONResponse(
                 status_code=404,
@@ -1460,7 +1482,7 @@ async def add_expense(expense_request: ExpenseRequest):
         list_data = user_data[user_id].get("list_data", {})
 
         # Добавляем в историю
-        add_to_user_history(user_id, list_data, expense_request.amount)
+        await add_to_user_history(user_id, list_data, expense_request.amount)
 
         # Очищаем текущий список
         if user_id in user_data:
@@ -1505,7 +1527,7 @@ async def parse_amount_endpoint(text: str = Body(..., embed=True)):
 async def get_analytics(user_id: int):
     """Получить аналитику пользователя"""
     try:
-        analytics = get_user_analytics(user_id)
+        analytics = await get_user_analytics(user_id)
 
         return JSONResponse(content={
             "success": True,
@@ -1581,14 +1603,27 @@ async def share_list(share_request: ShareRequest):
         if not list_id or list_id == "new":
             list_id = secrets.token_hex(8)
 
-        # Сохраняем в общих списках
-        shared_lists[list_id] = {
-            "list_data": user_data[user_id].get("list_data", {}),
-            "owner_id": user_id,
-            "created_at": datetime.now().isoformat(),
-            "lang": user_languages.get(user_id, "ru"),
-        }
-        save_shared_lists()
+        # Получаем язык пользователя
+        try:
+            db = await get_db()
+            lang = await db.get_user_language(user_id)
+        except Exception:
+            lang = user_languages.get(user_id, "ru")
+
+        # Сохраняем в PostgreSQL
+        list_data = user_data[user_id].get("list_data", {})
+        try:
+            db = await get_db()
+            await db.create_shared_list(list_id, user_id, list_data, [user_id])
+        except Exception as e:
+            logger.error(f"Error saving shared list to database: {e}")
+            # Fallback to in-memory storage
+            shared_lists[list_id] = {
+                "list_data": list_data,
+                "owner_id": user_id,
+                "created_at": datetime.now().isoformat(),
+                "lang": lang,
+            }
 
         # Отмечаем как общий
         user_data[user_id]["is_shared"] = True
@@ -1673,8 +1708,14 @@ async def set_language(user_id: int = Form(...), language: str = Form(...)):
                 content={"success": False, "error": "Неподдерживаемый язык"}
             )
 
-        user_languages[user_id] = language
-        save_languages()
+        # Сохраняем язык в PostgreSQL
+        try:
+            db = await get_db()
+            await db.set_user_language(user_id, language)
+        except Exception as e:
+            logger.error(f"Error saving language to database: {e}")
+            # Fallback to in-memory
+            user_languages[user_id] = language
 
         return JSONResponse(content={
             "success": True,
