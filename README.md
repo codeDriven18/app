@@ -6,6 +6,7 @@ A web-based AI shopping assistant that helps users create smart shopping lists w
 
 - Smart shopping lists with AI-powered suggestions
 - Real-time price database with 57+ products
+- PostgreSQL-first storage (Render-hosted default)
 - Voice input support (Russian/Uzbek)
 - List editing and management
 - Purchase analytics and history
@@ -45,6 +46,7 @@ pip install -r requirements.txt
      - `TELEGRAM_BOT_TOKEN`: Your Telegram bot token
      - `OPENAI_API_KEY`: Your OpenAI API key
      - `AISHA_API_KEY`: Your Aisha API key
+  - `DATABASE_URL`: PostgreSQL connection string (Render credentials provided by default)
 
 ```bash
 cp .env.example .env

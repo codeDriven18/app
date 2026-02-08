@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Bozorlik AI — Умный помощник для покупок</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,6 +19,11 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            touch-action: manipulation;
+        }
+
+        input, button, select, textarea {
+            font-size: 16px;
         }
 
         /* ===== ORANGE THEME VARIABLES ===== */
@@ -1761,7 +1766,7 @@
 
     <script>
         // ===== CONFIGURATION =====
-        const API_URL = 'https://app-ckdk.onrender.com';
+        const API_URL = window.BOZORLIK_API_URL || window.location.origin;
         const DEFAULT_USER_ID = Math.floor(Math.random() * 1000000);
 
         // Texts in different languages
@@ -1915,7 +1920,10 @@
             isDarkMode: false,
             analytics: null,
             currentAnalyticsView: 'main',
-            editingItem: null // Текущий редактируемый товар
+            editingItem: null, // Текущий редактируемый товар
+            shareId: null,
+            pendingShareId: null,
+            sharedOwner: null
         };
 
         // ===== INITIALIZATION =====
@@ -1924,6 +1932,20 @@
         });
 
         function initApp() {
+            // Stable user id to persist data on backend
+            const savedUserId = localStorage.getItem('bozorlik_user_id');
+            if (savedUserId) {
+                state.userId = parseInt(savedUserId, 10);
+            } else {
+                state.userId = Math.floor(100000000 + Math.random() * 900000000);
+                localStorage.setItem('bozorlik_user_id', state.userId);
+            }
+
+            const shareFromUrl = getShareIdFromUrl();
+            if (shareFromUrl) {
+                state.pendingShareId = shareFromUrl;
+            }
+
             // Check saved language
             const savedLang = localStorage.getItem('bozorlik_language');
             if (savedLang) {
@@ -2048,6 +2070,11 @@
                     option.classList.remove('active');
                 }
             });
+
+            if (state.pendingShareId) {
+                loadSharedList(state.pendingShareId);
+                state.pendingShareId = null;
+            }
         }
 
         function updateTexts() {
@@ -2631,6 +2658,9 @@
                     <button class="action-btn secondary" onclick="openEditModal()">
                         <i class="fas fa-edit"></i> ${TEXTS[lang].editButtonText}
                     </button>
+                    <button class="action-btn" onclick="shareShoppingList()" style="background: var(--primary); color: white;">
+                        <i class="fas fa-share-alt"></i> ${TEXTS[lang].shareButtonText}
+                    </button>
                     <button class="action-btn danger" onclick="clearShoppingList()">
                         <i class="fas fa-trash"></i> ${TEXTS[lang].clearButtonText}
                     </button>
@@ -2666,6 +2696,77 @@
         function formatPrice(price) {
             if (!price) return '';
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ` ${TEXTS[state.language].currency}`;
+        }
+
+        // ===== SHARING =====
+        async function shareShoppingList() {
+            if (!state.shoppingList) {
+                alert(TEXTS[state.language].noListError);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/share`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: state.userId,
+                        list_id: state.currentListId || 'new'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const shareId = data.list_id || (data.share_url ? data.share_url.split('/').pop() : null);
+                    const absoluteUrl = shareId ? `${window.location.origin}/shared/${shareId}` : `${window.location.origin}${data.share_url}`;
+
+                    if (navigator.clipboard && absoluteUrl) {
+                        await navigator.clipboard.writeText(absoluteUrl);
+                    }
+
+                    addMessage(`${TEXTS[state.language].shareSuccess} ${absoluteUrl || ''}`, false);
+                } else {
+                    addMessage('❌ Не удалось создать ссылку для доступа', false);
+                }
+            } catch (error) {
+                console.error('Share list error:', error);
+                addMessage('❌ Ошибка при создании ссылки', false);
+            }
+        }
+
+        async function loadSharedList(shareId) {
+            if (!shareId) return;
+
+            showLoading();
+            try {
+                const response = await fetch(`${API_URL}/api/shared/${shareId}?viewer_id=${state.userId}`);
+                const data = await response.json();
+                hideLoading();
+
+                if (data.success && data.data && data.data.list_data) {
+                    state.shareId = shareId;
+                    state.shoppingList = data.data.list_data;
+                    state.currentListId = data.data.list_data.list_id;
+                    state.sharedOwner = data.data.owner_id;
+
+                    // If shared list has a language, adopt it for UI strings
+                    if (data.data.list_data.language && data.data.list_data.language !== state.language) {
+                        setLanguage(data.data.list_data.language, false);
+                    }
+
+                    const formattedList = formatShoppingListForChat(data.data.list_data);
+                    addMessage(formattedList, false);
+                } else {
+                    addMessage('❌ Список по ссылке не найден', false);
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Load shared list error:', error);
+                addMessage('❌ Ошибка загрузки общего списка', false);
+            }
         }
 
         // ===== SHOPPING LIST ACTIONS =====
@@ -3451,6 +3552,20 @@
             }
         }
 
+        function getShareIdFromUrl() {
+            const pathMatch = window.location.pathname.match(/\/shared\/([A-Za-z0-9\-]+)/);
+            if (pathMatch && pathMatch[1]) {
+                return decodeURIComponent(pathMatch[1]);
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('share')) {
+                return params.get('share');
+            }
+
+            return null;
+        }
+
         // ===== GLOBAL FUNCTIONS =====
         window.setLanguage = setLanguage;
         window.togglePurchase = togglePurchase;
@@ -3477,6 +3592,9 @@
         window.showMinExpenseView = showMinExpenseView;
         window.showMaxExpenseView = showMaxExpenseView;
         window.showHistoryDetailsView = showHistoryDetailsView;
+        window.shareShoppingList = shareShoppingList;
+        window.loadSharedList = loadSharedList;
+        window.getShareIdFromUrl = getShareIdFromUrl;
     </script>
 </body>
 </html>

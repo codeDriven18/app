@@ -16,6 +16,7 @@ from fastapi.responses import JSONResponse, HTMLResponse
 from pydantic import BaseModel
 import httpx
 import openai
+from openai import AsyncOpenAI
 import aiohttp
 
 # Import database module
@@ -43,6 +44,7 @@ PRICES_FILE = "prices.json"
 # ===== ИНИЦИАЛИЗАЦИЯ OpenAI =====
 openai.api_key = OPENAI_API_KEY
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
+async_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 # ===== ЛОГИРОВАНИЕ =====
 logging.basicConfig(level=logging.INFO)
@@ -421,6 +423,42 @@ user_history: Dict[int, List] = {}
 websocket_connections: Dict[int, WebSocket] = {}
 
 
+# ===== HELPERS FOR PERSISTENCE =====
+async def hydrate_user_state_from_db(user_id: int) -> Optional[Dict[str, Any]]:
+    """Load active list from PostgreSQL into in-memory cache"""
+    try:
+        db = await get_db()
+        active = await db.get_active_list(user_id)
+        if not active:
+            return None
+
+        list_data = active.get("list_data") or {}
+        categories = list_data.get("categories", {}) if isinstance(list_data, dict) else {}
+
+        user_state = {
+            "categories": categories,
+            "list_data": list_data,
+            "last_message": "",
+            "last_response": "",
+            "created_at": active.get("updated_at") or datetime.now().isoformat(),
+            "is_shared": active.get("status") == "shared",
+        }
+
+        user_data[user_id] = user_state
+        return user_state
+    except Exception as e:
+        logger.error(f"Error hydrating user state from DB: {e}")
+        return None
+
+
+async def get_active_user_state(user_id: int) -> Optional[Dict[str, Any]]:
+    """Return cached state or load from DB"""
+    if user_id in user_data and user_data[user_id].get("list_data"):
+        return user_data[user_id]
+
+    return await hydrate_user_state_from_db(user_id)
+
+
 # ===== ФУНКЦИИ ДЛЯ АНАЛИТИКИ =====
 def load_user_history():
     """Загружает историю пользователей из файла (DEPRECATED - used for migration only)"""
@@ -662,7 +700,7 @@ async def format_list_with_gpt(text: str, lang: str = "ru") -> str:
         # Добавляем инструкцию по ценам в промпт
         enhanced_prompt = SYSTEM_PROMPTS[lang]
 
-        completion = client.chat.completions.create(
+        completion = await async_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": enhanced_prompt},
@@ -689,7 +727,7 @@ async def detect_edit_changes(text: str, lang: str = "ru") -> List[Dict]:
         elif any(word in text.lower() for word in ["добавь", "удали", "замени", "продукт"]):
             edit_lang = "ru"
 
-        completion = client.chat.completions.create(
+        completion = await async_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT_EDIT[edit_lang]},
@@ -748,7 +786,7 @@ async def transcribe_voice_ru(file_path: str) -> str:
     """Транскрибирует голосовое сообщение на русском через Whisper-1"""
     try:
         with open(file_path, "rb") as audio_file:
-            transcript = client.audio.transcriptions.create(
+            transcript = await async_client.audio.transcriptions.create(
                 model="whisper-1",
                 file=audio_file,
                 language="ru"
@@ -911,7 +949,11 @@ def parse_shopping_list(text: str, lang: str = "ru") -> Dict[str, List[Dict]]:
     return categories
 
 
-def format_shopping_list_for_json(categories: Dict[str, List[Dict]]) -> Dict:
+def format_shopping_list_for_json(
+    categories: Dict[str, List[Dict]],
+    current_list_id: Optional[str] = None,
+    language: Optional[str] = None
+) -> Dict:
     """Форматирует список покупок для JSON ответа"""
     result = {
         "categories": {},
@@ -919,9 +961,10 @@ def format_shopping_list_for_json(categories: Dict[str, List[Dict]]) -> Dict:
         "total_items": 0,
         "purchased_items": 0,
         "total_estimated_price": 0,
-        "list_id": secrets.token_hex(8),
+        "list_id": current_list_id or secrets.token_hex(8),
         "created_at": datetime.now().isoformat(),
-        "all_purchased": False
+        "all_purchased": False,
+        "language": language or "ru"
     }
 
     for category, items in categories.items():
@@ -1183,6 +1226,12 @@ async def root():
         return JSONResponse(content={"status": "online", "service": "Bozorlik AI"})
 
 
+@app.get("/shared/{share_id}", response_class=HTMLResponse)
+async def shared_page(share_id: str):
+    """Serve the same front-end for shared links"""
+    return await root()
+
+
 @app.get("/health")
 async def health_check():
     return JSONResponse(content={
@@ -1215,9 +1264,7 @@ async def chat_message(chat_request: ChatMessage):
         # Устанавливаем язык пользователя в PostgreSQL
         try:
             db = await get_db()
-            current_lang = await db.get_user_language(user_id)
-            if not current_lang or current_lang != lang:
-                await db.set_user_language(user_id, lang)
+            await db.upsert_user(user_id, language=lang)
         except Exception as e:
             logger.error(f"Error setting user language: {e}")
             # Fallback to in-memory
@@ -1229,7 +1276,7 @@ async def chat_message(chat_request: ChatMessage):
         # Если это список покупок, парсим его
         if any(emoji in response_text for emoji in ["🥕", "🍎", "🥛", "🍖", "📦", "🥤", "🧴", "📝"]):
             categories = parse_shopping_list(response_text, lang)
-            list_json = format_shopping_list_for_json(categories)
+            list_json = format_shopping_list_for_json(categories, language=lang)
 
             # Сохраняем в user_data
             user_data[user_id] = {
@@ -1240,6 +1287,19 @@ async def chat_message(chat_request: ChatMessage):
                 "created_at": datetime.now().isoformat(),
                 "is_shared": False,
             }
+
+            # Persist active list in PostgreSQL
+            try:
+                db = await get_db()
+                await db.save_active_list(
+                    list_id=list_json.get("list_id"),
+                    user_id=user_id,
+                    language=lang,
+                    list_data=list_json,
+                    status="active"
+                )
+            except Exception as e:
+                logger.error(f"Error saving active list to database: {e}")
 
             return JSONResponse(content={
                 "success": True,
@@ -1323,14 +1383,16 @@ async def voice_message(
 async def edit_shopping_list(user_id: int, edit_request: EditRequest):
     """Редактирование списка покупок"""
     try:
-        if user_id not in user_data:
+        user_state = await get_active_user_state(user_id)
+
+        if not user_state:
             return JSONResponse(
                 status_code=404,
                 content={"success": False, "error": "Список покупок не найден"}
             )
 
         # Получаем текущие категории
-        current_categories = user_data[user_id].get("categories", {})
+        current_categories = user_state.get("categories", {})
 
         # Определяем изменения
         changes = await detect_edit_changes(edit_request.text, edit_request.language)
@@ -1347,7 +1409,24 @@ async def edit_shopping_list(user_id: int, edit_request: EditRequest):
 
         # Обновляем данные пользователя
         user_data[user_id]["categories"] = updated_categories
-        user_data[user_id]["list_data"] = format_shopping_list_for_json(updated_categories)
+        user_data[user_id]["list_data"] = format_shopping_list_for_json(
+            updated_categories,
+            current_list_id=user_state.get("list_data", {}).get("list_id"),
+            language=user_state.get("list_data", {}).get("language", edit_request.language)
+        )
+
+        # Persist changes
+        try:
+            db = await get_db()
+            await db.save_active_list(
+                list_id=user_data[user_id]["list_data"].get("list_id"),
+                user_id=user_id,
+                language=edit_request.language,
+                list_data=user_data[user_id]["list_data"],
+                status="active"
+            )
+        except Exception as e:
+            logger.error(f"Error saving edited list: {e}")
 
         return JSONResponse(content={
             "success": True,
@@ -1368,7 +1447,9 @@ async def edit_shopping_list(user_id: int, edit_request: EditRequest):
 async def toggle_purchase(user_id: int, item_data: Dict = Body(...)):
     """Переключение статуса покупки товара"""
     try:
-        if user_id not in user_data:
+        user_state = await get_active_user_state(user_id)
+
+        if not user_state:
             return JSONResponse(
                 status_code=404,
                 content={"success": False, "error": "Список покупок не найден"}
@@ -1384,7 +1465,7 @@ async def toggle_purchase(user_id: int, item_data: Dict = Body(...)):
             )
 
         # Находим и обновляем товар
-        categories = user_data[user_id].get("categories", {})
+        categories = user_state.get("categories", {})
 
         if category in categories:
             for item in categories[category]:
@@ -1393,11 +1474,28 @@ async def toggle_purchase(user_id: int, item_data: Dict = Body(...)):
                     break
 
         # Обновляем список
-        user_data[user_id]["list_data"] = format_shopping_list_for_json(categories)
+        user_data[user_id]["list_data"] = format_shopping_list_for_json(
+            categories,
+            current_list_id=user_state.get("list_data", {}).get("list_id"),
+            language=user_state.get("list_data", {}).get("language", item_data.get("language", "ru"))
+        )
 
         # Проверяем, все ли товары куплены
         list_data = user_data[user_id]["list_data"]
         all_purchased = list_data.get("all_purchased", False)
+
+        # Persist updated list
+        try:
+            db = await get_db()
+            await db.save_active_list(
+                list_id=list_data.get("list_id"),
+                user_id=user_id,
+                language=item_data.get("language", "ru"),
+                list_data=list_data,
+                status="active"
+            )
+        except Exception as e:
+            logger.error(f"Error saving toggled list: {e}")
 
         response_data = {
             "success": True,
@@ -1424,13 +1522,23 @@ async def toggle_purchase(user_id: int, item_data: Dict = Body(...)):
 async def clear_shopping_list(user_id: int):
     """Очистить список покупок пользователя"""
     try:
-        if user_id in user_data:
+        user_state = await get_active_user_state(user_id)
+
+        if user_state:
             # Сохраняем в историю перед удалением (PostgreSQL)
-            list_data = user_data[user_id].get("list_data", {})
+            list_data = user_state.get("list_data", {})
             await add_to_user_history(user_id, list_data)
 
-            # Удаляем список
-            del user_data[user_id]
+            # Помечаем завершенным в базе
+            try:
+                db = await get_db()
+                await db.mark_list_completed(list_data.get("list_id"))
+            except Exception as e:
+                logger.error(f"Error marking list completed: {e}")
+
+            # Удаляем из кеша
+            if user_id in user_data:
+                del user_data[user_id]
 
             return JSONResponse(content={
                 "success": True,
@@ -1456,7 +1564,9 @@ async def add_expense(expense_request: ExpenseRequest):
     try:
         user_id = expense_request.user_id
 
-        if user_id not in user_data:
+        user_state = await get_active_user_state(user_id)
+
+        if not user_state:
             # Проверяем, есть ли активный список в истории (PostgreSQL)
             try:
                 db = await get_db()
@@ -1479,7 +1589,7 @@ async def add_expense(expense_request: ExpenseRequest):
             )
 
         # Получаем данные текущего списка
-        list_data = user_data[user_id].get("list_data", {})
+        list_data = user_state.get("list_data", {})
 
         # Добавляем в историю
         await add_to_user_history(user_id, list_data, expense_request.amount)
@@ -1487,6 +1597,12 @@ async def add_expense(expense_request: ExpenseRequest):
         # Очищаем текущий список
         if user_id in user_data:
             del user_data[user_id]
+
+        try:
+            db = await get_db()
+            await db.mark_list_completed(list_data.get("list_id"))
+        except Exception as e:
+            logger.error(f"Error completing list after expense: {e}")
 
         return JSONResponse(content={
             "success": True,
@@ -1593,15 +1709,17 @@ async def share_list(share_request: ShareRequest):
         user_id = share_request.user_id
         list_id = share_request.list_id
 
-        if user_id not in user_data:
+        user_state = await get_active_user_state(user_id)
+        if not user_state:
             return JSONResponse(
                 status_code=404,
                 content={"success": False, "error": "Список покупок не найден"}
             )
 
-        # Создаем новый ID для общего списка
+        # Создаем новый ID для общего списка: userId + random slug
         if not list_id or list_id == "new":
-            list_id = secrets.token_hex(8)
+            random_suffix = ''.join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(6))
+            list_id = f"{user_id}-{random_suffix}"
 
         # Получаем язык пользователя
         try:
@@ -1611,7 +1729,8 @@ async def share_list(share_request: ShareRequest):
             lang = user_languages.get(user_id, "ru")
 
         # Сохраняем в PostgreSQL
-        list_data = user_data[user_id].get("list_data", {})
+        list_data = user_state.get("list_data", {})
+        list_data["list_id"] = list_id
         try:
             db = await get_db()
             await db.create_shared_list(list_id, user_id, list_data, [user_id])
@@ -1628,6 +1747,20 @@ async def share_list(share_request: ShareRequest):
         # Отмечаем как общий
         user_data[user_id]["is_shared"] = True
 
+        # Синхронизируем активный список как shared
+        try:
+            db = await get_db()
+            await db.save_active_list(
+                list_id=list_id,
+                user_id=user_id,
+                language=lang,
+                list_data=list_data,
+                status="shared",
+                shared_slug=list_id
+            )
+        except Exception as e:
+            logger.error(f"Error persisting shared list status: {e}")
+
         share_url = f"/shared/{list_id}"
 
         return JSONResponse(content={
@@ -1639,6 +1772,66 @@ async def share_list(share_request: ShareRequest):
 
     except Exception as e:
         logger.error(f"Ошибка в share_list: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={"success": False, "error": "Internal server error"}
+        )
+
+
+@app.get("/api/shared/{share_id}")
+async def get_shared_list_data(share_id: str, viewer_id: Optional[int] = Query(None)):
+    """Получить общий список по ссылке"""
+    try:
+        db = await get_db()
+        shared = await db.get_shared_list(share_id)
+
+        if not shared:
+            return JSONResponse(status_code=404, content={"success": False, "error": "Список не найден"})
+
+        # Регистрируем участника
+        if viewer_id:
+            try:
+                await db.add_participant_to_list(share_id, viewer_id)
+            except Exception:
+                pass
+        list_payload = shared.get("list_data", {})
+
+        # Клонируем список для участника, чтобы он мог продолжить работу
+        if viewer_id and list_payload:
+            try:
+                cloned = json.loads(json.dumps(list_payload))
+                cloned_id = f"{share_id}-u{viewer_id}"
+                cloned["list_id"] = cloned_id
+                cloned.setdefault("language", "ru")
+
+                user_data[viewer_id] = {
+                    "categories": cloned.get("categories", {}),
+                    "list_data": cloned,
+                    "last_message": "",
+                    "last_response": "",
+                    "created_at": datetime.now().isoformat(),
+                    "is_shared": True,
+                }
+
+                await db.save_active_list(
+                    list_id=cloned_id,
+                    user_id=viewer_id,
+                    language=cloned.get("language", "ru"),
+                    list_data=cloned,
+                    status="active",
+                    shared_slug=share_id
+                )
+
+                shared["list_data"] = cloned
+            except Exception as e:
+                logger.error(f"Error cloning shared list for viewer: {e}")
+
+        return JSONResponse(content={
+            "success": True,
+            "data": shared
+        })
+    except Exception as e:
+        logger.error(f"Ошибка получения общего списка: {e}")
         return JSONResponse(
             status_code=500,
             content={"success": False, "error": "Internal server error"}
@@ -1711,7 +1904,7 @@ async def set_language(user_id: int = Form(...), language: str = Form(...)):
         # Сохраняем язык в PostgreSQL
         try:
             db = await get_db()
-            await db.set_user_language(user_id, language)
+            await db.upsert_user(user_id, language=language)
         except Exception as e:
             logger.error(f"Error saving language to database: {e}")
             # Fallback to in-memory
@@ -1787,11 +1980,28 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
                             user_data[user_id] = {}
 
                         user_data[user_id]["categories"] = categories
-                        user_data[user_id]["list_data"] = format_shopping_list_for_json(categories)
+                        user_data[user_id]["list_data"] = format_shopping_list_for_json(
+                            categories,
+                            current_list_id=user_data[user_id].get("list_data", {}).get("list_id"),
+                            language=lang
+                        )
                         user_data[user_id]["last_message"] = text
                         user_data[user_id]["last_response"] = response
                         user_data[user_id]["created_at"] = datetime.now().isoformat()
                         user_data[user_id]["is_shared"] = False
+
+                        try:
+                            db = await get_db()
+                            await db.upsert_user(user_id, language=lang)
+                            await db.save_active_list(
+                                list_id=user_data[user_id]["list_data"].get("list_id"),
+                                user_id=user_id,
+                                language=lang,
+                                list_data=user_data[user_id]["list_data"],
+                                status="active"
+                            )
+                        except Exception as e:
+                            logger.error(f"WebSocket persistence error: {e}")
 
                         await manager.send_personal_message(user_id, {
                             "type": "shopping_list",
@@ -1825,11 +2035,27 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
                                     item["purchased"] = not item.get("purchased", False)
                                     break
 
-                        user_data[user_id]["list_data"] = format_shopping_list_for_json(categories)
+                        user_data[user_id]["list_data"] = format_shopping_list_for_json(
+                            categories,
+                            current_list_id=user_data[user_id].get("list_data", {}).get("list_id"),
+                            language=user_data[user_id].get("list_data", {}).get("language", "ru")
+                        )
 
                         # Проверяем, все ли товары куплены
                         list_data = user_data[user_id]["list_data"]
                         all_purchased = list_data.get("all_purchased", False)
+
+                        try:
+                            db = await get_db()
+                            await db.save_active_list(
+                                list_id=list_data.get("list_id"),
+                                user_id=user_id,
+                                language=user_data[user_id].get("language", "ru"),
+                                list_data=list_data,
+                                status="active"
+                            )
+                        except Exception as e:
+                            logger.error(f"WebSocket toggle persistence error: {e}")
 
                         response = {
                             "type": "list_updated",

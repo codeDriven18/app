@@ -46,6 +46,17 @@ class Database:
         async with self.pool.acquire() as conn:
             # Create tables if they don't exist
             await conn.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id BIGINT PRIMARY KEY,
+                    phone VARCHAR(32),
+                    username VARCHAR(100),
+                    language VARCHAR(10) NOT NULL DEFAULT 'ru',
+                    last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            await conn.execute("""
                 CREATE TABLE IF NOT EXISTS user_languages (
                     user_id BIGINT PRIMARY KEY,
                     language VARCHAR(10) NOT NULL DEFAULT 'ru',
@@ -72,6 +83,58 @@ class Database:
             await conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_user_history_created_at 
                 ON user_history(created_at DESC)
+            """)
+
+            await conn.execute("""
+                CREATE TABLE IF NOT EXISTS shopping_lists (
+                    list_id VARCHAR(120) PRIMARY KEY,
+                    user_id BIGINT NOT NULL,
+                    language VARCHAR(10) NOT NULL DEFAULT 'ru',
+                    status VARCHAR(20) NOT NULL DEFAULT 'active',
+                    shared_slug VARCHAR(120),
+                    list_data JSONB NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # Ensure shopping_lists has all columns for older deployments
+            try:
+                shopping_cols = await conn.fetch("""
+                    SELECT column_name FROM information_schema.columns
+                    WHERE table_name = 'shopping_lists'
+                """)
+                col_names = {row['column_name'] for row in shopping_cols}
+
+                if 'status' not in col_names:
+                    await conn.execute("ALTER TABLE shopping_lists ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'active'")
+                if 'shared_slug' not in col_names:
+                    await conn.execute("ALTER TABLE shopping_lists ADD COLUMN shared_slug VARCHAR(120)")
+                if 'language' not in col_names:
+                    await conn.execute("ALTER TABLE shopping_lists ADD COLUMN language VARCHAR(10) NOT NULL DEFAULT 'ru'")
+                if 'list_data' not in col_names:
+                    await conn.execute("ALTER TABLE shopping_lists ADD COLUMN list_data JSONB NOT NULL DEFAULT '{}'::jsonb")
+                if 'updated_at' not in col_names:
+                    await conn.execute("ALTER TABLE shopping_lists ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+                if 'created_at' not in col_names:
+                    await conn.execute("ALTER TABLE shopping_lists ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+            except Exception as e:
+                logger.error(f"Error aligning shopping_lists schema: {e}")
+
+            await conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_shopping_lists_user_status
+                ON shopping_lists(user_id, status)
+            """)
+
+            await conn.execute("""
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_shopping_lists_shared_slug
+                ON shopping_lists(shared_slug)
+                WHERE shared_slug IS NOT NULL
+            """)
+
+            await conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_shopping_lists_updated
+                ON shopping_lists(updated_at DESC)
             """)
             
             # Check if shared_lists table exists and its structure
@@ -163,6 +226,35 @@ class Database:
                 user_id
             )
             return row['language'] if row else 'ru'
+
+    async def upsert_user(self, user_id: int, language: Optional[str] = None, phone: Optional[str] = None,
+                          username: Optional[str] = None):
+        """Create or update user profile and language preference"""
+        async with self.pool.acquire() as conn:
+            await conn.execute(
+                """
+                INSERT INTO users (user_id, phone, username, language, last_seen)
+                VALUES ($1, $2, $3, COALESCE($4, 'ru'), CURRENT_TIMESTAMP)
+                ON CONFLICT (user_id) DO UPDATE
+                SET phone = COALESCE($2, users.phone),
+                    username = COALESCE($3, users.username),
+                    language = COALESCE($4, users.language),
+                    last_seen = CURRENT_TIMESTAMP
+                """,
+                user_id, phone, username, language
+            )
+
+            # Keep user_languages table in sync for backward compatibility
+            if language:
+                await conn.execute(
+                    """
+                    INSERT INTO user_languages (user_id, language, updated_at)
+                    VALUES ($1, $2, CURRENT_TIMESTAMP)
+                    ON CONFLICT (user_id)
+                    DO UPDATE SET language = $2, updated_at = CURRENT_TIMESTAMP
+                    """,
+                    user_id, language
+                )
     
     async def set_user_language(self, user_id: int, language: str):
         """Set user's preferred language"""
@@ -173,6 +265,16 @@ class Database:
                 ON CONFLICT (user_id) 
                 DO UPDATE SET language = $2, updated_at = CURRENT_TIMESTAMP
             """, user_id, language)
+
+            await conn.execute(
+                """
+                INSERT INTO users (user_id, language, last_seen)
+                VALUES ($1, $2, CURRENT_TIMESTAMP)
+                ON CONFLICT (user_id) DO UPDATE
+                SET language = $2, last_seen = CURRENT_TIMESTAMP
+                """,
+                user_id, language
+            )
     
     async def get_all_user_languages(self) -> Dict[int, str]:
         """Get all user languages"""
@@ -237,6 +339,76 @@ class Database:
                 })
             
             return result
+
+    # ===== ACTIVE LISTS =====
+
+    async def save_active_list(
+        self,
+        list_id: str,
+        user_id: int,
+        language: str,
+        list_data: Dict,
+        status: str = "active",
+        shared_slug: Optional[str] = None
+    ):
+        """Upsert active shopping list for a user"""
+        async with self.pool.acquire() as conn:
+            await conn.execute(
+                """
+                INSERT INTO shopping_lists (list_id, user_id, language, status, shared_slug, list_data, updated_at)
+                VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+                ON CONFLICT (list_id) DO UPDATE
+                SET language = EXCLUDED.language,
+                    status = EXCLUDED.status,
+                    shared_slug = EXCLUDED.shared_slug,
+                    list_data = EXCLUDED.list_data,
+                    updated_at = CURRENT_TIMESTAMP
+                """,
+                list_id,
+                user_id,
+                language,
+                status,
+                shared_slug,
+                json.dumps(list_data)
+            )
+
+    async def get_active_list(self, user_id: int) -> Optional[Dict]:
+        """Return latest active list for user"""
+        async with self.pool.acquire() as conn:
+            row = await conn.fetchrow(
+                """
+                SELECT list_id, language, status, shared_slug, list_data, updated_at
+                FROM shopping_lists
+                WHERE user_id = $1 AND status = 'active'
+                ORDER BY updated_at DESC
+                LIMIT 1
+                """,
+                user_id
+            )
+
+            if not row:
+                return None
+
+            return {
+                "list_id": row["list_id"],
+                "language": row["language"],
+                "status": row["status"],
+                "shared_slug": row["shared_slug"],
+                "list_data": json.loads(row["list_data"]),
+                "updated_at": row["updated_at"].isoformat() if row["updated_at"] else None,
+            }
+
+    async def mark_list_completed(self, list_id: str):
+        """Mark list as completed"""
+        async with self.pool.acquire() as conn:
+            await conn.execute(
+                """
+                UPDATE shopping_lists
+                SET status = 'completed', updated_at = CURRENT_TIMESTAMP
+                WHERE list_id = $1
+                """,
+                list_id
+            )
     
     # ===== SHARED LISTS =====
     
@@ -290,6 +462,19 @@ class Database:
                     """, list_id, owner_id, json.dumps(list_data), participants or [owner_id])
                 except:
                     pass
+
+        # Keep shopping_lists table in sync for quick retrieval
+        try:
+            await self.save_active_list(
+                list_id=list_id,
+                user_id=owner_id,
+                language=list_data.get("language", "ru"),
+                list_data=list_data,
+                status="shared",
+                shared_slug=list_id
+            )
+        except Exception as e:
+            logger.error(f"Error syncing shared list into shopping_lists: {e}")
     
     async def get_shared_list(self, list_id: str) -> Optional[Dict]:
         """Get shared list by ID"""
@@ -301,8 +486,29 @@ class Database:
             """, list_id)
             
             if not row:
-                return None
-            
+                # Fallback to shopping_lists table
+                row = await conn.fetchrow(
+                    """
+                    SELECT list_id, user_id AS owner_id, list_data, created_at, updated_at, shared_slug
+                    FROM shopping_lists
+                    WHERE list_id = $1 OR shared_slug = $1
+                    LIMIT 1
+                    """,
+                    list_id
+                )
+
+                if not row:
+                    return None
+
+                return {
+                    'list_id': row['list_id'],
+                    'owner_id': row['owner_id'],
+                    'list_data': json.loads(row['list_data']),
+                    'participants': [],
+                    'created_at': row['created_at'].isoformat() if row['created_at'] else None,
+                    'updated_at': row['updated_at'].isoformat() if row['updated_at'] else None
+                }
+
             return {
                 'list_id': row['list_id'],
                 'owner_id': row['owner_id'],
