@@ -50,11 +50,43 @@ class Database:
                     user_id BIGINT PRIMARY KEY,
                     phone VARCHAR(32),
                     username VARCHAR(100),
+                    first_name VARCHAR(120),
+                    last_name VARCHAR(120),
                     language VARCHAR(10) NOT NULL DEFAULT 'ru',
+                    is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
                     last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+
+            try:
+                user_cols = await conn.fetch("""
+                    SELECT column_name FROM information_schema.columns
+                    WHERE table_name = 'users'
+                """)
+                col_names = {row['column_name'] for row in user_cols}
+
+                if 'phone' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN phone VARCHAR(32)")
+                if 'username' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN username VARCHAR(100)")
+                if 'first_name' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN first_name VARCHAR(120)")
+                if 'last_name' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN last_name VARCHAR(120)")
+                if 'language' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN language VARCHAR(10) NOT NULL DEFAULT 'ru'")
+                if 'is_blocked' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN is_blocked BOOLEAN NOT NULL DEFAULT FALSE")
+                if 'last_seen' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+                if 'created_at' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+                if 'updated_at' not in col_names:
+                    await conn.execute("ALTER TABLE users ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+            except Exception as e:
+                logger.error(f"Error aligning users schema: {e}")
 
             await conn.execute("""
                 CREATE TABLE IF NOT EXISTS user_languages (
@@ -227,21 +259,33 @@ class Database:
             )
             return row['language'] if row else 'ru'
 
-    async def upsert_user(self, user_id: int, language: Optional[str] = None, phone: Optional[str] = None,
-                          username: Optional[str] = None):
+    async def upsert_user(
+        self,
+        user_id: int,
+        language: Optional[str] = None,
+        phone: Optional[str] = None,
+        username: Optional[str] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        is_blocked: Optional[bool] = None,
+    ):
         """Create or update user profile and language preference"""
         async with self.pool.acquire() as conn:
             await conn.execute(
                 """
-                INSERT INTO users (user_id, phone, username, language, last_seen)
-                VALUES ($1, $2, $3, COALESCE($4, 'ru'), CURRENT_TIMESTAMP)
+                INSERT INTO users (user_id, phone, username, first_name, last_name, language, is_blocked, last_seen, updated_at)
+                VALUES ($1, $2, $3, $4, $5, COALESCE($6, 'ru'), COALESCE($7, FALSE), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
                 ON CONFLICT (user_id) DO UPDATE
                 SET phone = COALESCE($2, users.phone),
                     username = COALESCE($3, users.username),
-                    language = COALESCE($4, users.language),
-                    last_seen = CURRENT_TIMESTAMP
+                    first_name = COALESCE($4, users.first_name),
+                    last_name = COALESCE($5, users.last_name),
+                    language = COALESCE($6, users.language),
+                    is_blocked = COALESCE($7, users.is_blocked),
+                    last_seen = CURRENT_TIMESTAMP,
+                    updated_at = CURRENT_TIMESTAMP
                 """,
-                user_id, phone, username, language
+                user_id, phone, username, first_name, last_name, language, is_blocked
             )
 
             # Keep user_languages table in sync for backward compatibility
@@ -268,10 +312,10 @@ class Database:
 
             await conn.execute(
                 """
-                INSERT INTO users (user_id, language, last_seen)
-                VALUES ($1, $2, CURRENT_TIMESTAMP)
+                INSERT INTO users (user_id, language, last_seen, updated_at)
+                VALUES ($1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
                 ON CONFLICT (user_id) DO UPDATE
-                SET language = $2, last_seen = CURRENT_TIMESTAMP
+                SET language = $2, last_seen = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
                 """,
                 user_id, language
             )

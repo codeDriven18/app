@@ -67,6 +67,40 @@ The server will start on `http://localhost:8000`
 uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
+## Database
+
+### Run PostgreSQL locally
+
+```bash
+docker run --name bozorlik-postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=bozorlik -d postgres:16
+```
+
+Set `DATABASE_URL` in `.env`:
+
+```bash
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/bozorlik
+```
+
+### Run migrations
+
+```bash
+psql "$DATABASE_URL" -f migrations/001_users.sql
+```
+
+### users table
+
+- `user_id` (BIGINT, PK) Telegram user id
+- `username` (VARCHAR)
+- `first_name` (VARCHAR)
+- `last_name` (VARCHAR)
+- `language` (VARCHAR)
+- `created_at` (TIMESTAMP)
+- `updated_at` (TIMESTAMP)
+- `last_seen` (TIMESTAMP, optional)
+- `is_blocked` (BOOLEAN, optional)
+
+On each Mini App request, pass `tg.initDataUnsafe.user` as `telegram_user` in the JSON payload so the backend UPSERTs the user record.
+
 ## API Endpoints
 
 - `GET /` - Serves the front-end HTML interface
@@ -83,6 +117,7 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 app/
 ├── app.py                  # Main FastAPI application
+├── miniapp.js               # Telegram Mini App share helper
 ├── index (2).html          # Front-end interface
 ├── prices.json             # Product price database
 ├── requirements.txt        # Python dependencies

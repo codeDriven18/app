@@ -11,6 +11,7 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Body, WebSocket, WebSocketDisconnect
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, HTMLResponse
 from pydantic import BaseModel
@@ -52,28 +53,45 @@ logger = logging.getLogger(__name__)
 
 
 # ===== МОДЕЛИ ДАННЫХ =====
+class TelegramUser(BaseModel):
+    id: int
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    language_code: Optional[str] = None
+    is_bot: Optional[bool] = None
+
+    class Config:
+        extra = "allow"
+
+
 class ChatMessage(BaseModel):
     user_id: int
     text: str
     language: str = "ru"
     is_voice: bool = False
+    telegram_user: Optional[TelegramUser] = None
 
 
 class ShoppingListRequest(BaseModel):
     user_id: int
     text: str
     language: str = "ru"
+    telegram_user: Optional[TelegramUser] = None
 
 
 class ShareRequest(BaseModel):
     user_id: int
     list_id: str
+    list_data: Optional[Dict] = None
+    telegram_user: Optional[TelegramUser] = None
 
 
 class EditRequest(BaseModel):
     user_id: int
     text: str
     language: str = "ru"
+    telegram_user: Optional[TelegramUser] = None
 
 
 class VoiceRequest(BaseModel):
@@ -87,6 +105,7 @@ class ExpenseRequest(BaseModel):
     currency: str = "UZS"
     list_id: Optional[str] = None
     date: Optional[str] = None
+    telegram_user: Optional[TelegramUser] = None
 
 
 # ===== УЛУЧШЕННЫЙ КЛАСС ДЛЯ ЦЕН =====
@@ -421,6 +440,62 @@ user_languages: Dict[int, str] = {}
 shared_lists: Dict[str, Dict] = {}
 user_history: Dict[int, List] = {}
 websocket_connections: Dict[int, WebSocket] = {}
+
+
+def normalize_telegram_user(user_data: Optional[Any]) -> Optional[TelegramUser]:
+    if not user_data:
+        return None
+    if isinstance(user_data, TelegramUser):
+        return user_data
+    if isinstance(user_data, dict):
+        try:
+            return TelegramUser(**user_data)
+        except Exception:
+            return None
+    return None
+
+
+async def upsert_telegram_user(
+    telegram_user: Optional[Any],
+    fallback_user_id: Optional[int] = None,
+    language: Optional[str] = None
+):
+    user_payload = normalize_telegram_user(telegram_user)
+    user_id = user_payload.id if user_payload else fallback_user_id
+
+    if not user_id:
+        return
+
+    preferred_language = language or (user_payload.language_code if user_payload else None)
+
+    db = await get_db()
+    await db.upsert_user(
+        user_id,
+        language=preferred_language,
+        username=user_payload.username if user_payload else None,
+        first_name=user_payload.first_name if user_payload else None,
+        last_name=user_payload.last_name if user_payload else None,
+    )
+
+
+def parse_share_start_payload(start_payload: str) -> Tuple[Optional[int], Optional[str]]:
+    if not start_payload or not start_payload.startswith("share_"):
+        return None, None
+
+    parts = start_payload.split("_", 2)
+    if len(parts) != 3:
+        return None, None
+
+    try:
+        user_id = int(parts[1])
+    except ValueError:
+        user_id = None
+
+    payload = parts[2].strip()
+    if not payload:
+        return user_id, None
+
+    return user_id, payload
 
 
 # ===== HELPERS FOR PERSISTENCE =====
@@ -1187,6 +1262,8 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -1263,8 +1340,7 @@ async def chat_message(chat_request: ChatMessage):
 
         # Устанавливаем язык пользователя в PostgreSQL
         try:
-            db = await get_db()
-            await db.upsert_user(user_id, language=lang)
+            await upsert_telegram_user(chat_request.telegram_user, fallback_user_id=user_id, language=lang)
         except Exception as e:
             logger.error(f"Error setting user language: {e}")
             # Fallback to in-memory
@@ -1330,6 +1406,7 @@ async def chat_message(chat_request: ChatMessage):
 async def voice_message(
         user_id: int = Form(...),
         language: str = Form("ru"),
+    telegram_user: Optional[str] = Form(None),
         voice_file: UploadFile = File(...)
 ):
     """Обработка голосовых сообщений"""
@@ -1342,6 +1419,18 @@ async def voice_message(
         with open(temp_file, "wb") as f:
             content = await voice_file.read()
             f.write(content)
+
+        telegram_user_payload = None
+        if telegram_user:
+            try:
+                telegram_user_payload = json.loads(telegram_user)
+            except Exception as e:
+                logger.error(f"Error parsing telegram_user in voice: {e}")
+
+        try:
+            await upsert_telegram_user(telegram_user_payload, fallback_user_id=user_id, language=language)
+        except Exception as e:
+            logger.error(f"Error upserting Telegram user for voice: {e}")
 
         # Транскрибируем голос
         text = await transcribe_voice(temp_file, language)
@@ -1359,7 +1448,8 @@ async def voice_message(
             user_id=user_id,
             text=text,
             language=language,
-            is_voice=True
+            is_voice=True,
+            telegram_user=normalize_telegram_user(telegram_user_payload)
         )
 
         return await chat_message(chat_request)
@@ -1383,6 +1473,11 @@ async def voice_message(
 async def edit_shopping_list(user_id: int, edit_request: EditRequest):
     """Редактирование списка покупок"""
     try:
+        try:
+            await upsert_telegram_user(edit_request.telegram_user, fallback_user_id=user_id, language=edit_request.language)
+        except Exception as e:
+            logger.error(f"Error upserting Telegram user for edit: {e}")
+
         user_state = await get_active_user_state(user_id)
 
         if not user_state:
@@ -1447,6 +1542,11 @@ async def edit_shopping_list(user_id: int, edit_request: EditRequest):
 async def toggle_purchase(user_id: int, item_data: Dict = Body(...)):
     """Переключение статуса покупки товара"""
     try:
+        try:
+            await upsert_telegram_user(item_data.get("telegram_user"), fallback_user_id=user_id)
+        except Exception as e:
+            logger.error(f"Error upserting Telegram user for toggle: {e}")
+
         user_state = await get_active_user_state(user_id)
 
         if not user_state:
@@ -1563,6 +1663,11 @@ async def add_expense(expense_request: ExpenseRequest):
     """Добавить информацию о потраченной сумме"""
     try:
         user_id = expense_request.user_id
+
+        try:
+            await upsert_telegram_user(expense_request.telegram_user, fallback_user_id=user_id)
+        except Exception as e:
+            logger.error(f"Error upserting Telegram user for expense: {e}")
 
         user_state = await get_active_user_state(user_id)
 
@@ -1709,8 +1814,20 @@ async def share_list(share_request: ShareRequest):
         user_id = share_request.user_id
         list_id = share_request.list_id
 
+        try:
+            await upsert_telegram_user(share_request.telegram_user, fallback_user_id=user_id)
+        except Exception as e:
+            logger.error(f"Error upserting Telegram user for share: {e}")
+
         user_state = await get_active_user_state(user_id)
-        if not user_state:
+        list_data = None
+
+        if user_state:
+            list_data = user_state.get("list_data")
+        elif share_request.list_data:
+            list_data = share_request.list_data
+
+        if not list_data:
             return JSONResponse(
                 status_code=404,
                 content={"success": False, "error": "Список покупок не найден"}
@@ -1729,7 +1846,6 @@ async def share_list(share_request: ShareRequest):
             lang = user_languages.get(user_id, "ru")
 
         # Сохраняем в PostgreSQL
-        list_data = user_state.get("list_data", {})
         list_data["list_id"] = list_id
         try:
             db = await get_db()
@@ -1745,6 +1861,8 @@ async def share_list(share_request: ShareRequest):
             }
 
         # Отмечаем как общий
+        if user_id not in user_data:
+            user_data[user_id] = {}
         user_data[user_id]["is_shared"] = True
 
         # Синхронизируем активный список как shared
@@ -1765,6 +1883,7 @@ async def share_list(share_request: ShareRequest):
 
         return JSONResponse(content={
             "success": True,
+            "payload": list_id,
             "share_url": share_url,
             "list_id": list_id,
             "message": "Список доступен по ссылке"
@@ -1782,6 +1901,12 @@ async def share_list(share_request: ShareRequest):
 async def get_shared_list_data(share_id: str, viewer_id: Optional[int] = Query(None)):
     """Получить общий список по ссылке"""
     try:
+        parsed_user_id, parsed_payload = parse_share_start_payload(share_id)
+        if parsed_payload:
+            share_id = parsed_payload
+            if viewer_id is None and parsed_user_id:
+                viewer_id = parsed_user_id
+
         db = await get_db()
         shared = await db.get_shared_list(share_id)
 
@@ -1991,8 +2116,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
                         user_data[user_id]["is_shared"] = False
 
                         try:
+                            await upsert_telegram_user(message_data.get("telegram_user"), fallback_user_id=user_id, language=lang)
                             db = await get_db()
-                            await db.upsert_user(user_id, language=lang)
                             await db.save_active_list(
                                 list_id=user_data[user_id]["list_data"].get("list_id"),
                                 user_id=user_id,
