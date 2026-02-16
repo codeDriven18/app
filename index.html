@@ -1930,7 +1930,7 @@
 
         // ---------- CONFIGURATION ----------
         const CONFIG = {
-            API_URL: 'http://localhost:8000',
+            API_URL: window.BOZORLIK_API_URL || 'https://app-ckdk.onrender.com',
             DEFAULT_USER_ID: Math.floor(Math.random() * 1000000),
             CHART_COLORS: ['#f97316', '#fb923c', '#fdba74', '#fed7aa', '#ffedd5'],
             MAX_MESSAGES: 50,
