@@ -191,7 +191,7 @@
             height: 100%;
             width: 100%;
             overflow: hidden;
-            position: fixed;
+            position: relative;
             font-family: var(--font-family);
             background-color: var(--bg-primary);
             color: var(--text-primary);
@@ -244,7 +244,7 @@
             z-index: 1;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            height: 100%;
+            height: calc(100dvh - var(--bottom-nav-height) - var(--safe-area-bottom));
         }
 
         .main-container::-webkit-scrollbar {
