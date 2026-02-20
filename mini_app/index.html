@@ -191,7 +191,7 @@
             height: 100%;
             width: 100%;
             overflow: hidden;
-            position: relative;
+            position: fixed;
             font-family: var(--font-family);
             background-color: var(--bg-primary);
             color: var(--text-primary);
@@ -244,7 +244,7 @@
             z-index: 1;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            height: calc(100dvh - var(--bottom-nav-height) - var(--safe-area-bottom));
+            height: 100%;
         }
 
         .main-container::-webkit-scrollbar {
@@ -1721,35 +1721,6 @@
                         </div>
                     </div>
 
-                    <div class="settings-section">
-                        <div class="settings-header">
-                            <i class="fas fa-link"></i>
-                            <span data-i18n="profile.openShare">Shared list</span>
-                        </div>
-                        <div class="settings-list">
-                            <div class="settings-item">
-                                <div class="settings-item-left" style="flex: 1;">
-                                    <div class="settings-item-icon">
-                                        <i class="fas fa-share-alt"></i>
-                                    </div>
-                                    <div class="settings-item-content">
-                                        <div class="settings-item-title" data-i18n="profile.openShareTitle">Open shared list</div>
-                                        <div class="settings-item-subtitle" data-i18n="profile.openShareDesc">Paste link or share code</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: var(--space-2); padding: 0 var(--space-4) var(--space-4);">
-                                <input type="text" class="chat-input" id="sharedListInput"
-                                       data-i18n="profile.openSharePlaceholder"
-                                       placeholder="Share link or code"
-                                       style="flex: 1; padding: 12px;">
-                                <button class="empty-button" onclick="openSharedListManual()" style="padding: var(--space-3) var(--space-4); white-space: nowrap;">
-                                    <span data-i18n="action.open">Open</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- FAQ Section -->
                     <div class="settings-section">
                         <div class="settings-header">
@@ -1930,7 +1901,7 @@
 
         // ---------- CONFIGURATION ----------
         const CONFIG = {
-            API_URL: window.BOZORLIK_API_URL || 'https://app-ckdk.onrender.com',
+            API_URL: 'http://localhost:8000',
             DEFAULT_USER_ID: Math.floor(Math.random() * 1000000),
             CHART_COLORS: ['#f97316', '#fb923c', '#fdba74', '#fed7aa', '#ffedd5'],
             MAX_MESSAGES: 50,
@@ -1969,10 +1940,6 @@
                 'profile.languageDesc': 'Выберите язык интерфейса',
                 'profile.theme': 'Тема',
                 'profile.themeDesc': 'Тёмная / Светлая',
-                'profile.openShare': 'Общий список',
-                'profile.openShareTitle': 'Открыть общий список',
-                'profile.openShareDesc': 'Вставьте ссылку или код',
-                'profile.openSharePlaceholder': 'Ссылка или код',
                 'profile.faq': 'Часто задаваемые вопросы',
                 'profile.about': 'О проекте',
                 'faq.whatIs.title': 'Что такое Bozorlik AI?',
@@ -2011,7 +1978,6 @@
                 'action.save': 'Сохранить',
                 'action.cancel': 'Отмена',
                 'action.share': 'Поделиться',
-                'action.open': 'Открыть',
                 'action.clear': 'Очистить',
                 'currency': 'сум'
             },
@@ -2044,10 +2010,6 @@
                 'profile.languageDesc': 'Interfeys tilini tanlang',
                 'profile.theme': 'Mavzu',
                 'profile.themeDesc': 'Qorongʻi / Yorugʻ',
-                'profile.openShare': "Ulashilgan ro'yxat",
-                'profile.openShareTitle': "Ulashilgan ro'yxatni ochish",
-                'profile.openShareDesc': "Havola yoki kodni kiriting",
-                'profile.openSharePlaceholder': 'Havola yoki kod',
                 'profile.faq': 'Koʻp soʻraladigan savollar',
                 'profile.about': 'Loyiha haqida',
                 'faq.whatIs.title': 'Bozorlik AI nima?',
@@ -2086,7 +2048,6 @@
                 'action.save': 'Saqlash',
                 'action.cancel': 'Bekor qilish',
                 'action.share': 'Ulashish',
-                'action.open': 'Ochish',
                 'action.clear': 'Tozalash',
                 'currency': "so'm"
             }
@@ -2160,31 +2121,8 @@
             // Update profile with Telegram data
             updateProfileInfo();
 
-            // Handle share deep-link start param
-            await handleShareStartParam();
-
             // Hide loading states
             document.getElementById('app').style.display = 'block';
-        }
-
-        async function handleShareStartParam() {
-            const startParam = tg?.initDataUnsafe?.start_param;
-            if (!startParam || !startParam.startsWith('share_')) {
-                return;
-            }
-
-            const parts = startParam.split('_', 3);
-            if (parts.length !== 3) {
-                return;
-            }
-
-            const payload = parts[2]?.trim();
-            if (!payload) {
-                return;
-            }
-
-            await loadSharedList(payload);
-            switchTab('chat');
         }
 
         function loadPreferences() {
@@ -2880,8 +2818,7 @@
                         user_id: State.userId,
                         text: text,
                         language: State.language,
-                        is_voice: false,
-                        telegram_user: State.telegramUser || null
+                        is_voice: false
                     })
                 });
 
@@ -3007,11 +2944,7 @@
                 const response = await fetch(`${CONFIG.API_URL}/api/list/${State.userId}/toggle`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        category,
-                        item_name: itemName,
-                        telegram_user: State.telegramUser || null
-                    })
+                    body: JSON.stringify({ category, item_name: itemName })
                 });
 
                 const data = await response.json();
@@ -3094,8 +3027,7 @@
                         text: State.language === 'ru'
                             ? `Замени ${State.editingItem.itemName} на ${newName} ${newQuantity}`
                             : `${State.editingItem.itemName} ni ${newName} ${newQuantity} ga almashtir`,
-                        language: State.language,
-                        telegram_user: State.telegramUser || null
+                        language: State.language
                     })
                 });
 
@@ -3137,8 +3069,7 @@
                     body: JSON.stringify({
                         user_id: State.userId,
                         text: State.language === 'ru' ? `Удали ${itemName}` : `${itemName} ni o'chir`,
-                        language: State.language,
-                        telegram_user: State.telegramUser || null
+                        language: State.language
                     })
                 });
 
@@ -3177,27 +3108,7 @@
             }
         }
 
-        async function loadSharedList(payload) {
-            if (!payload) return;
-
-            try {
-                const response = await fetch(`${CONFIG.API_URL}/api/shared/${payload}?viewer_id=${State.userId}`);
-                const data = await response.json();
-
-                if (data.success && data.data && data.data.list_data) {
-                    State.shoppingList = data.data.list_data;
-                    State.currentListId = data.data.list_data.list_id;
-                    addMessage(formatShoppingList(data.data.list_data), false);
-                } else {
-                    showToast(I18N[State.language]['toast.error'] || 'Share not found', 'error');
-                }
-            } catch (error) {
-                console.error('Load shared list error:', error);
-                showToast(I18N[State.language]['toast.error'] || 'Share error', 'error');
-            }
-        }
-
-        async function shareShoppingList() {
+        window.shareShoppingList = async function() {
             if (!State.shoppingList) {
                 showToast(I18N[State.language]['noListError'] || 'No list to share', 'error');
                 return;
@@ -3209,42 +3120,21 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         user_id: State.userId,
-                        list_id: State.currentListId || 'new',
-                        telegram_user: State.telegramUser || null
+                        list_id: State.currentListId || 'new'
                     })
                 });
 
                 const data = await response.json();
 
                 if (data.success) {
-                    const payload = data.payload || data.list_id;
-                    if (!payload) {
-                        showToast(I18N[State.language]['toast.error'] || 'Share error', 'error');
-                        return;
-                    }
-
-                    const deepLink = `https://t.me/BozorlikAI_bot?start=share_${State.userId}_${payload}`;
-
-                    try {
-                        if (navigator.clipboard && navigator.clipboard.writeText) {
-                            await navigator.clipboard.writeText(deepLink);
-                        }
-                    } catch (error) {
-                        console.warn('Clipboard copy failed', error);
-                    }
-
-                    if (tg && typeof tg.openTelegramLink === 'function') {
-                        tg.openTelegramLink(deepLink);
-                    } else {
-                        window.open(deepLink, '_blank', 'noopener,noreferrer');
-                    }
-
+                    const shareUrl = `${window.location.origin}/shared/${data.list_id}`;
+                    navigator.clipboard.writeText(shareUrl);
                     showToast(I18N[State.language]['toast.copied']);
                 }
             } catch (error) {
                 console.error('Share error:', error);
             }
-        }
+        };
 
         window.clearShoppingList = async function() {
             if (!State.shoppingList) return;
@@ -3393,8 +3283,7 @@
                         user_id: State.userId,
                         amount: amount,
                         currency: 'UZS',
-                        list_id: State.currentListId,
-                        telegram_user: State.telegramUser || null
+                        list_id: State.currentListId
                     })
                 });
 
@@ -3513,9 +3402,6 @@
                 formData.append('user_id', State.userId);
                 formData.append('language', State.language);
                 formData.append('voice_file', audioBlob, 'voice.webm');
-                if (State.telegramUser) {
-                    formData.append('telegram_user', JSON.stringify(State.telegramUser));
-                }
 
                 const response = await fetch(`${CONFIG.API_URL}/api/voice`, {
                     method: 'POST',
@@ -3657,7 +3543,6 @@
         window.cancelEditing = cancelEditing;
         window.deleteItemFromList = deleteItemFromList;
         window.shareShoppingList = shareShoppingList;
-        window.openSharedListManual = openSharedListManual;
         window.clearShoppingList = clearShoppingList;
         window.submitExpense = submitExpense;
         window.viewAnalyticsFromExpense = viewAnalyticsFromExpense;

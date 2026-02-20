@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bozorlik AI — Oziq-ovqat xaridlari uchun AI yordamchi</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flag Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary: #FF6B35;
+            --primary-light: #FF8E53;
+            --primary-soft: #FFF3E8;
+            --text-dark: #111827;
+            --text-gray: #6B7280;
+            --text-light: #9CA3AF;
+            --bg-white: #FAFAFA;
+            --bg-light: #F5F5F7;
+            --bg-dark: #0F0F0F;
+            --bg-card-dark: #1A1A1A;
+            --border-light: #E5E7EB;
+            --border-dark: #333333;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --radius-full: 999px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            transition: background-color var(--transition), color var(--transition);
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: #F3F4F6;
+        }
+        .page-wrapper { min-height: 100vh; position: relative; }
+        .bg-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 142, 83, 0.05) 0%, transparent 50%);
+        }
+        body.dark-mode .bg-gradient {
+            background: radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 142, 83, 0.08) 0%, transparent 50%);
+        }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== ШАПКА САЙТА ===== */
+        header { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(250, 250, 250, 0.85); border-bottom: 1px solid var(--border-light); transition: all var(--transition); }
+        body.dark-mode header { background: rgba(15, 15, 15, 0.85); border-bottom: 1px solid var(--border-dark); }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .logo-icon img { width: 135%; height: 135%; object-fit: contain; }
+        .logo-text { font-size: 24px; font-weight: 700; color: var(--text-dark); }
+        body.dark-mode .logo-text { color: #F3F4F6; }
+        .logo-text span { background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .desktop-nav { display: flex; gap: 32px; }
+        @media (max-width: 1024px) { .desktop-nav { display: none; } }
+        .nav-link { font-size: 15px; font-weight: 500; color: var(--text-gray); text-decoration: none; padding: 8px 0; position: relative; transition: color var(--transition); }
+        body.dark-mode .nav-link { color: var(--text-light); }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 2px; transition: width var(--transition); }
+        .nav-link:hover { color: var(--text-dark); }
+        body.dark-mode .nav-link:hover { color: #F3F4F6; }
+        .nav-link:hover::after { width: 100%; }
+        .header-controls { display: flex; align-items: center; gap: 16px; }
+        .theme-toggle { width: 44px; height: 44px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: var(--bg-white); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--transition); }
+        body.dark-mode .theme-toggle { border-color: var(--border-dark); background: var(--bg-card-dark); }
+        .theme-toggle:hover { border-color: var(--primary); transform: translateY(-1px); }
+        .theme-icon { width: 20px; height: 20px; stroke: var(--text-gray); transition: stroke var(--transition); }
+        body.dark-mode .theme-icon { stroke: var(--text-light); }
+        .lang-switcher { display: flex; gap: 4px; padding: 4px; background: var(--bg-light); border-radius: var(--radius-md); }
+        @media (max-width: 1024px) { .lang-switcher { display: none; } }
+        body.dark-mode .lang-switcher { background: var(--bg-card-dark); }
+        .lang-btn { padding: 8px 16px; border: none; background: transparent; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; color: var(--text-gray); cursor: pointer; transition: all var(--transition); display: flex; align-items: center; gap: 8px; }
+        body.dark-mode .lang-btn { color: var(--text-light); }
+        .lang-btn.active { background: var(--bg-white); color: var(--primary); box-shadow: var(--shadow-sm); }
+        body.dark-mode .lang-btn.active { background: var(--bg-dark); color: var(--primary); }
+        .flag-icon { font-size: 16px; border-radius: 2px; overflow: hidden; }
+        .mobile-menu-btn { display: none; width: 44px; height: 44px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: var(--bg-white); flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; transition: all var(--transition); position: relative; z-index: 1001; }
+        @media (max-width: 1024px) { .mobile-menu-btn { display: flex; } }
+        body.dark-mode .mobile-menu-btn { border-color: var(--border-dark); background: var(--bg-card-dark); }
+        .mobile-menu-btn span { width: 20px; height: 2px; background: var(--text-gray); transition: all var(--transition); border-radius: 2px; }
+        body.dark-mode .mobile-menu-btn span { background: var(--text-light); }
+        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+        .mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(250, 250, 250, 0.95); backdrop-filter: blur(20px); z-index: 1000; padding: 32px; transition: all var(--transition); overflow-y: auto; transform: translateX(-100%); display: flex; flex-direction: column; }
+        body.dark-mode .mobile-menu { background: rgba(15, 15, 15, 0.95); }
+        .mobile-menu.active { transform: translateX(0); }
+        .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
+        body.dark-mode .mobile-menu-header { border-bottom-color: var(--border-dark); }
+        .mobile-logo { display: flex; align-items: center; gap: 12px; }
+        .mobile-logo-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; }
+        .mobile-logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .mobile-logo-text { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+        body.dark-mode .mobile-logo-text { color: #F3F4F6; }
+        .mobile-logo-text span { background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .mobile-menu-close { width: 44px; height: 44px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: var(--bg-white); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--transition); }
+        body.dark-mode .mobile-menu-close { border-color: var(--border-dark); background: var(--bg-card-dark); }
+        .mobile-menu-close:hover { border-color: var(--primary); transform: translateY(-1px); }
+        .mobile-menu-close i { font-size: 20px; color: var(--text-gray); }
+        body.dark-mode .mobile-menu-close i { color: var(--text-light); }
+        .mobile-menu-nav { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+        .mobile-nav-link { font-size: 18px; font-weight: 500; color: var(--text-dark); text-decoration: none; padding: 16px 0; transition: color var(--transition); border-bottom: 1px solid var(--border-light); }
+        body.dark-mode .mobile-nav-link { color: #F3F4F6; border-bottom-color: var(--border-dark); }
+        .mobile-nav-link:hover { color: var(--primary); }
+        .mobile-menu-controls { display: flex; flex-direction: column; gap: 24px; margin-top: auto; padding-top: 40px; border-top: 1px solid var(--border-light); }
+        body.dark-mode .mobile-menu-controls { border-top-color: var(--border-dark); }
+        .mobile-theme-switcher { display: flex; align-items: center; justify-content: space-between; }
+        .mobile-theme-switcher span { font-size: 16px; font-weight: 500; color: var(--text-dark); }
+        body.dark-mode .mobile-theme-switcher span { color: #F3F4F6; }
+        .mobile-theme-toggle { display: flex; gap: 8px; padding: 8px; background: var(--bg-light); border-radius: var(--radius-lg); }
+        body.dark-mode .mobile-theme-toggle { background: var(--bg-card-dark); }
+        .mobile-theme-btn { padding: 8px 16px; border: none; border-radius: var(--radius-md); background: transparent; font-size: 14px; font-weight: 500; color: var(--text-gray); cursor: pointer; transition: all var(--transition); display: flex; align-items: center; gap: 8px; }
+        body.dark-mode .mobile-theme-btn { color: var(--text-light); }
+        .mobile-theme-btn.active { background: var(--bg-white); color: var(--primary); }
+        body.dark-mode .mobile-theme-btn.active { background: var(--bg-dark); color: var(--primary); }
+        .mobile-lang-selector { position: relative; }
+        .mobile-lang-btn { width: 100%; padding: 16px; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: var(--radius-lg); font-size: 16px; font-weight: 500; color: var(--text-dark); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all var(--transition); }
+        body.dark-mode .mobile-lang-btn { background: var(--bg-card-dark); border-color: var(--border-dark); color: #F3F4F6; }
+        .mobile-lang-btn:hover { border-color: var(--primary); }
+        .mobile-lang-btn-content { display: flex; align-items: center; gap: 12px; }
+        .mobile-lang-flag { font-size: 20px; border-radius: 2px; overflow: hidden; }
+        .mobile-lang-dropdown { position: absolute; top: calc(100% + 8px); left: 0; width: 100%; background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 8px; display: none; flex-direction: column; gap: 4px; z-index: 100; box-shadow: var(--shadow-lg); }
+        body.dark-mode .mobile-lang-dropdown { background: var(--bg-card-dark); border-color: var(--border-dark); }
+        .mobile-lang-dropdown.active { display: flex; }
+        .mobile-lang-option { padding: 12px 16px; border: none; background: transparent; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; color: var(--text-gray); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all var(--transition); }
+        body.dark-mode .mobile-lang-option { color: var(--text-light); }
+        .mobile-lang-option:hover { background: var(--bg-light); color: var(--primary); }
+        body.dark-mode .mobile-lang-option:hover { background: var(--bg-dark); }
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; opacity: 0; visibility: hidden; transition: all var(--transition); }
+        .menu-overlay.active { opacity: 1; visibility: visible; }
+
+        /* ===== ГЛАВНАЯ СЕКЦИЯ (HERO) ===== */
+        .hero { padding: 120px 0 80px; }
+        @media (max-width: 768px) { .hero { padding: 100px 0 60px; } }
+        @media (max-width: 480px) { .hero { padding: 80px 0 40px; } }
+        .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+        @media (max-width: 1024px) { .hero-inner { grid-template-columns: 1fr; gap: 48px; } }
+        .hero-content { max-width: 560px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--primary-soft); border-radius: var(--radius-full); margin-bottom: 24px; }
+        body.dark-mode .hero-badge { background: rgba(255, 107, 53, 0.15); }
+        .hero-badge-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; }
+        .hero-badge-text { font-size: 14px; font-weight: 600; color: var(--primary); }
+        .hero-title { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em; }
+        @media (max-width: 1024px) { .hero-title { font-size: 48px; } }
+        @media (max-width: 768px) { .hero-title { font-size: 36px; } }
+        @media (max-width: 480px) { .hero-title { font-size: 28px; line-height: 1.2; } }
+        .hero-title span { background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .hero-subtitle { font-size: 18px; color: var(--text-gray); margin-bottom: 40px; max-width: 520px; }
+        @media (max-width: 768px) { .hero-subtitle { font-size: 16px; } }
+        body.dark-mode .hero-subtitle { color: var(--text-light); }
+        .hero-actions { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+        @media (max-width: 480px) { .hero-actions { flex-direction: column; } }
+        .btn-primary { padding: 16px 32px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border: none; border-radius: var(--radius-lg); font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all var(--transition); box-shadow: 0 12px 32px rgba(255, 107, 53, 0.25); }
+        @media (max-width: 480px) { .btn-primary { padding: 14px 24px; font-size: 15px; } }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(255, 107, 53, 0.35); }
+        .btn-secondary { padding: 16px 32px; background: transparent; color: var(--text-dark); border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all var(--transition); }
+        @media (max-width: 480px) { .btn-secondary { padding: 14px 24px; font-size: 15px; } }
+        body.dark-mode .btn-secondary { color: #F3F4F6; border-color: var(--border-dark); }
+        .btn-secondary:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+        @media (max-width: 480px) { .hero-stats { flex-direction: row; justify-content: space-between; gap: 20px; } }
+        .stat-item { display: flex; flex-direction: column; gap: 4px; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--primary); }
+        @media (max-width: 480px) { .stat-value { font-size: 20px; } }
+        .stat-label { font-size: 14px; color: var(--text-gray); white-space: nowrap; }
+        @media (max-width: 480px) { .stat-label { font-size: 12px; } }
+        body.dark-mode .stat-label { color: var(--text-light); }
+        .hero-visual { position: relative; }
+        .hero-card { background: var(--bg-white); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+        @media (max-width: 480px) { .hero-card { padding: 20px; } }
+        body.dark-mode .hero-card { background: var(--bg-card-dark); }
+        .hero-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+        .card-content { padding: 24px; background: var(--bg-light); border-radius: var(--radius-lg); margin-bottom: 24px; }
+        @media (max-width: 480px) { .card-content { padding: 20px; } }
+        body.dark-mode .card-content { background: rgba(255, 255, 255, 0.05); }
+        .card-title { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--text-dark); }
+        @media (max-width: 480px) { .card-title { font-size: 18px; } }
+        body.dark-mode .card-title { color: #F3F4F6; }
+        .card-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .card-list-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text-gray); }
+        @media (max-width: 480px) { .card-list-item { font-size: 14px; gap: 10px; } }
+        body.dark-mode .card-list-item { color: var(--text-light); }
+        .card-list-icon { width: 24px; height: 24px; background: var(--primary-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        @media (max-width: 480px) { .card-list-icon { width: 20px; height: 20px; } }
+        body.dark-mode .card-list-icon { background: rgba(255, 107, 53, 0.2); }
+        .card-list-icon i { font-size: 12px; color: var(--primary); }
+        .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 12px; }
+        body.dark-mode .card-footer { border-top-color: var(--border-dark); }
+        .card-label { font-size: 14px; color: var(--text-gray); }
+        body.dark-mode .card-label { color: var(--text-light); }
+        .card-status { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-light); border-radius: var(--radius-full); }
+        body.dark-mode .card-status { background: rgba(255, 255, 255, 0.05); }
+        .status-dot { width: 8px; height: 8px; background: #10B981; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .status-text { font-size: 14px; font-weight: 500; color: #10B981; }
+
+        /* ===== ОСНОВНЫЕ СЕКЦИИ ===== */
+        section { padding: 80px 0; }
+        @media (max-width: 768px) { section { padding: 60px 0; } }
+        @media (max-width: 480px) { section { padding: 40px 0; } }
+        .section-header { text-align: center; max-width: 720px; margin: 0 auto 64px; }
+        @media (max-width: 768px) { .section-header { margin-bottom: 48px; } }
+        .section-label { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 16px; }
+        .section-title { font-size: 40px; font-weight: 700; margin-bottom: 20px; line-height: 1.2; }
+        @media (max-width: 768px) { .section-title { font-size: 32px; } }
+        @media (max-width: 480px) { .section-title { font-size: 28px; } }
+        .section-subtitle { font-size: 18px; color: var(--text-gray); }
+        @media (max-width: 768px) { .section-subtitle { font-size: 16px; } }
+        body.dark-mode .section-subtitle { color: var(--text-light); }
+
+        /* ===== СЕКЦИЯ "ПРОБЛЕМА И РЕШЕНИЕ" ===== */
+        .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        @media (max-width: 1024px) { .problem-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .problem-grid { grid-template-columns: 1fr; } }
+        .problem-card, .solution-card { background: var(--bg-white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md); transition: transform var(--transition); }
+        @media (max-width: 480px) { .problem-card, .solution-card { padding: 24px; } }
+        body.dark-mode .problem-card, body.dark-mode .solution-card { background: var(--bg-card-dark); }
+        .problem-card:hover, .solution-card:hover { transform: translateY(-4px); }
+        .card-icon { width: 56px; height: 56px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; }
+        .problem-card .card-icon { background: linear-gradient(135deg, #FEE2E2, #FECACA); }
+        .solution-card .card-icon { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); }
+        .card-icon i { font-size: 24px; }
+        .problem-card .card-icon i { color: #DC2626; }
+        .solution-card .card-icon i { color: #059669; }
+        .card-content h3 { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--text-dark); }
+        @media (max-width: 480px) { .card-content h3 { font-size: 18px; } }
+        body.dark-mode .card-content h3 { color: #F3F4F6; }
+        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .feature-list li { display: flex; align-items: flex-start; gap: 12px; color: var(--text-gray); font-size: 15px; }
+        @media (max-width: 480px) { .feature-list li { font-size: 14px; } }
+        body.dark-mode .feature-list li { color: var(--text-light); }
+        .feature-list li::before { content: ''; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+
+        /* ===== СЕКЦИЯ FAQ ===== */
+        .faq-section { background: var(--bg-light); }
+        body.dark-mode .faq-section { background: rgba(255, 255, 255, 0.03); }
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: var(--bg-white); border-radius: var(--radius-lg); margin-bottom: 16px; box-shadow: var(--shadow-md); transition: all var(--transition); overflow: hidden; }
+        body.dark-mode .faq-item { background: var(--bg-card-dark); }
+        .faq-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .faq-question { font-size: 18px; font-weight: 700; color: var(--text-dark); padding: 20px 32px 20px 72px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all var(--transition); position: relative; }
+        @media (max-width: 480px) { .faq-question { font-size: 16px; padding: 16px 24px 16px 60px; } }
+        body.dark-mode .faq-question { color: #F3F4F6; }
+        .faq-question:hover { color: var(--primary); }
+        .faq-question::before { content: '?'; position: absolute; left: 32px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; background: var(--primary-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary); font-size: 16px; flex-shrink: 0; }
+        @media (max-width: 480px) { .faq-question::before { left: 24px; } }
+        body.dark-mode .faq-question::before { background: rgba(255, 107, 53, 0.2); }
+        .faq-toggle { width: 24px; height: 24px; position: relative; flex-shrink: 0; margin-left: 16px; transition: transform var(--transition); }
+        .faq-toggle::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 12px; height: 12px; border-right: 2px solid var(--text-gray); border-bottom: 2px solid var(--text-gray); transform-origin: center; transition: all var(--transition); }
+        body.dark-mode .faq-toggle::before { border-color: var(--text-light); }
+        .faq-item.active .faq-question { color: var(--primary); }
+        .faq-item.active .faq-toggle::before { transform: translate(-50%, -50%) rotate(-135deg); }
+        .faq-answer { font-size: 16px; line-height: 1.6; color: var(--text-gray); padding: 0 32px 0 72px; max-height: 0; overflow: hidden; transition: all var(--transition); }
+        @media (max-width: 480px) { .faq-answer { font-size: 14px; padding: 0 24px 0 60px; } }
+        body.dark-mode .faq-answer { color: var(--text-light); }
+        .faq-item.active .faq-answer { padding-bottom: 24px; max-height: 500px; }
+
+        /* ===== СЕКЦИЯ CTA ===== */
+        .cta-section { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius-xl); padding: 80px; text-align: center; position: relative; overflow: hidden; }
+        @media (max-width: 768px) { .cta-section { padding: 60px 32px; } }
+        @media (max-width: 480px) { .cta-section { padding: 40px 24px; } }
+        .cta-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E"); }
+        .cta-title { font-size: 40px; font-weight: 800; color: white; margin-bottom: 20px; position: relative; z-index: 1; }
+        @media (max-width: 768px) { .cta-title { font-size: 32px; } }
+        @media (max-width: 480px) { .cta-title { font-size: 24px; } }
+        .cta-text { font-size: 18px; color: rgba(255, 255, 255, 0.9); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+        @media (max-width: 480px) { .cta-text { font-size: 16px; } }
+        .cta-button { padding: 18px 40px; background: white; color: var(--primary); border: none; border-radius: var(--radius-lg); font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; transition: all var(--transition); position: relative; z-index: 1; }
+        @media (max-width: 480px) { .cta-button { padding: 14px 28px; font-size: 15px; } }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2); }
+
+        /* ===== ПОДВАЛ ===== */
+        footer { background: var(--bg-light); padding: 64px 0 32px; margin-top: 80px; }
+        body.dark-mode footer { background: #111111; }
+        .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 64px; margin-bottom: 64px; }
+        @media (max-width: 1024px) { .footer-inner { grid-template-columns: 1fr 1fr; gap: 48px; } }
+        @media (max-width: 768px) { .footer-inner { grid-template-columns: 1fr; gap: 40px; } }
+        .footer-brand { max-width: 400px; }
+        .footer-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .footer-logo-icon { width: 48px; height: 48px; border-radius: var(--radius-md); overflow: hidden; flex-shrink: 0; }
+        .footer-logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .footer-logo-text { font-size: 28px; font-weight: 700; color: var(--text-dark); }
+        body.dark-mode .footer-logo-text { color: #F3F4F6; }
+        .footer-logo-text span { background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .footer-description { font-size: 15px; color: var(--text-gray); margin-bottom: 32px; }
+        body.dark-mode .footer-description { color: var(--text-light); }
+        .footer-links h4, .footer-contact h4 { font-size: 18px; font-weight: 600; margin-bottom: 24px; color: var(--text-dark); }
+        body.dark-mode .footer-links h4, body.dark-mode .footer-contact h4 { color: #F3F4F6; }
+        .footer-links ul, .footer-contact ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+        .footer-links a, .footer-contact a { font-size: 15px; color: var(--text-gray); text-decoration: none; transition: color var(--transition); }
+        body.dark-mode .footer-links a, body.dark-mode .footer-contact a { color: var(--text-light); }
+        .footer-links a:hover, .footer-contact a:hover { color: var(--primary); }
+        .footer-bottom { padding-top: 32px; border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+        body.dark-mode .footer-bottom { border-top-color: var(--border-dark); }
+        .copyright { font-size: 14px; color: var(--text-gray); }
+        body.dark-mode .copyright { color: var(--text-light); }
+        .footer-social { display: flex; gap: 16px; }
+        .social-link { width: 44px; height: 44px; border-radius: 50%; background: var(--bg-white); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all var(--transition); }
+        body.dark-mode .social-link { background: var(--bg-card-dark); }
+        .social-link:hover { background: var(--primary); transform: translateY(-2px); }
+        .social-link i { font-size: 20px; color: var(--primary); transition: color var(--transition); }
+        .social-link:hover i { color: white; }
+
+        /* ===== НОВАЯ ИНТЕРАКТИВНАЯ СЕКЦИЯ (ПУСТОЙ КОНТЕЙНЕР ПОД ИЗОБРАЖЕНИЕ) ===== */
+        .interactive-section { padding: 80px 0; }
+        @media (max-width: 768px) { .interactive-section { padding: 60px 0; } }
+        .interactive-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+        @media (max-width: 1024px) { .interactive-inner { grid-template-columns: 1fr; gap: 40px; } }
+
+        /* Контейнер для твоего изображения */
+        .mockup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .mockup-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-lg); /* Немного скруглим, если нужно. Можешь убрать или изменить */
+            box-shadow: var(--shadow-lg); /* Лёгкая тень для объёма */
+            transition: transform var(--transition);
+        }
+
+        .mockup-image:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Блок преимуществ (остаётся без изменений) */
+        .benefits-block {
+            background: var(--bg-white);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        body.dark-mode .benefits-block {
+            background: var(--bg-card-dark);
+        }
+
+        .benefits-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .benefits-title {
+            color: #F3F4F6;
+        }
+
+        .benefits-title span {
+            color: var(--primary);
+        }
+
+        .benefits-subtitle {
+            font-size: 16px;
+            color: var(--text-gray);
+            margin-bottom: 32px;
+        }
+
+        body.dark-mode .benefits-subtitle {
+            color: var(--text-light);
+        }
+
+        .benefits-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .benefit-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--primary-soft);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        body.dark-mode .benefit-icon {
+            background: rgba(255, 107, 53, 0.2);
+        }
+
+        .benefit-icon i {
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .benefit-content h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .benefit-content h4 {
+            color: #F3F4F6;
+        }
+
+        .benefit-content p {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        body.dark-mode .benefit-content p {
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .benefits-block {
+                padding: 30px;
+            }
+            .benefits-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Основной контейнер страницы -->
+    <div class="page-wrapper">
+        <!-- Фоновый градиент -->
+        <div class="bg-gradient"></div>
+
+        <!-- ШАПКА САЙТА (без изменений) -->
+        <header>
+            <div class="container header-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <img src="logo_bg.png" alt="Bozorlik AI Logo">
+                    </div>
+                    <div class="logo-text">Bozorlik <span>AI</span></div>
+                </a>
+
+                <nav class="desktop-nav">
+                    <a href="team.html" class="nav-link" data-i18n="nav.team">Biz haqimizda</a>
+                    <a href="#faq" class="nav-link" data-i18n="nav.faq">FAQ</a>
+                    <a href="team.html#contact" class="nav-link" data-i18n="nav.contact">Bog'lanish</a>
+                </nav>
+
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle">
+                        <svg class="theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+
+                    <div class="lang-switcher">
+                        <button class="lang-btn" data-lang="ru">
+                            <span class="fi fi-ru flag-icon"></span> RU
+                        </button>
+                        <button class="lang-btn" data-lang="en">
+                            <span class="fi fi-gb flag-icon"></span> EN
+                        </button>
+                        <button class="lang-btn active" data-lang="uz">
+                            <span class="fi fi-uz flag-icon"></span> UZ
+                        </button>
+                    </div>
+
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- МОБИЛЬНОЕ МЕНЮ (без изменений) -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="mobile-logo">
+                    <div class="mobile-logo-icon">
+                        <img src="logo_bg.png" alt="Bozorlik AI Logo">
+                    </div>
+                    <div class="mobile-logo-text">Bozorlik <span>AI</span></div>
+                </div>
+                <button class="mobile-menu-close" id="mobileMenuClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="mobile-menu-nav">
+                <a href="team.html" class="mobile-nav-link" data-i18n="nav.team">Biz haqimizda</a>
+                <a href="#faq" class="mobile-nav-link" data-i18n="nav.faq">FAQ</a>
+                <a href="team.html#contact" class="mobile-nav-link" data-i18n="nav.contact">Bog'lanish</a>
+            </nav>
+            <div class="mobile-menu-controls">
+                <div class="mobile-theme-switcher">
+                    <span data-i18n="mobile.theme">Mavzu</span>
+                    <div class="mobile-theme-toggle">
+                        <button class="mobile-theme-btn active" data-theme="light"><i class="fas fa-sun"></i><span data-i18n="mobile.theme.light">Yorqin</span></button>
+                        <button class="mobile-theme-btn" data-theme="dark"><i class="fas fa-moon"></i><span data-i18n="mobile.theme.dark">Qorong'u</span></button>
+                    </div>
+                </div>
+                <div class="mobile-lang-selector">
+                    <button class="mobile-lang-btn" id="mobileLangBtn">
+                        <div class="mobile-lang-btn-content">
+                            <span class="fi fi-uz mobile-lang-flag" id="mobileLangFlag"></span>
+                            <span id="mobileLangText">O'zbekcha</span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="mobile-lang-dropdown" id="mobileLangDropdown">
+                        <button class="mobile-lang-option" data-lang="ru"><span class="fi fi-ru mobile-lang-flag"></span>Русский</button>
+                        <button class="mobile-lang-option" data-lang="en"><span class="fi fi-gb mobile-lang-flag"></span>English</button>
+                        <button class="mobile-lang-option" data-lang="uz"><span class="fi fi-uz mobile-lang-flag"></span>O'zbekcha</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-overlay" id="menuOverlay"></div>
+
+        <!-- ГЛАВНАЯ СЕКЦИЯ (HERO) (без изменений) -->
+        <section class="hero">
+            <div class="container hero-inner">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="hero-badge-dot"></span>
+                        <span class="hero-badge-text" data-i18n="hero.badge">AI Yordamchi</span>
+                    </div>
+                    <h1 class="hero-title" data-i18n="hero.title">Bozorlik AI — Oziq-ovqat xaridlari uchun Aqlli AI Yordamchi</h1>
+                    <p class="hero-subtitle" data-i18n="hero.subtitle">U avtomatik ravishda xaridlar ro'yxatini yaratadi, xarajatlarni hisoblaydi va bozor va supermarketlar uchun xarajatlarni nazorat qilishga yordam beradi.</p>
+
+                    <div class="hero-actions">
+                        <a href="https://t.me/BozorlikAI_bot" class="btn-primary" data-i18n="hero.cta1">Demo</a>
+                        <a href="#interactive" class="btn-secondary" data-i18n="hero.cta2">Qanday ishlaydi</a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="stat-item"><div class="stat-value">95%</div><div class="stat-label" data-i18n="hero.stat1">Vaqtni Tejash</div></div>
+                        <div class="stat-item"><div class="stat-value">24/7</div><div class="stat-label" data-i18n="hero.stat2">Mavjudlik</div></div>
+                        <div class="stat-item"><div class="stat-value">AI</div><div class="stat-label" data-i18n="hero.stat3">Aqlli Tahlil</div></div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <div class="card-content">
+                            <h3 class="card-title" data-i18n="hero.card.title">Aqlli Xaridlar Ro'yxati</h3>
+                            <ul class="card-list">
+                                <li class="card-list-item"><div class="card-list-icon"><i class="fas fa-check"></i></div><span data-i18n="hero.card.item1">Ovoz orqali ro'yxat kiritish</span></li>
+                                <li class="card-list-item"><div class="card-list-icon"><i class="fas fa-check"></i></div><span data-i18n="hero.card.item2">Avtomatik kategorizatsiya</span></li>
+                                <li class="card-list-item"><div class="card-list-icon"><i class="fas fa-check"></i></div><span data-i18n="hero.card.item3">Xarajatlarni hisoblash</span></li>
+                                <li class="card-list-item"><div class="card-list-icon"><i class="fas fa-check"></i></div><span data-i18n="hero.card.item4">Byudjet nazorati</span></li>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-label" data-i18n="hero.card.label">Hozir Mavjud</div>
+                            <div class="card-status"><div class="status-dot"></div><div class="status-text" data-i18n="hero.card.status">Faol Ishlanmoqda</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ "ПРОБЛЕМА" (ОБНОВЛЕННАЯ НУМЕРАЦИЯ) -->
+        <section id="problem">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="section.problem.label">01 — Muammo</div>
+                    <h2 class="section-title" data-i18n="section.problem.title">Bozor xaridlarini rejalashtirishdagi muammolar</h2>
+                    <p class="section-subtitle" data-i18n="section.problem.subtitle">Kundalik oziq-ovqat xaridlari hisobga olinmagan xarajatlar va yo'qotilgan vaqt bilan rutinaga aylanadi.</p>
+                </div>
+                <div class="problem-grid">
+                    <div class="problem-card">
+                        <div class="card-icon"><i class="fas fa-clock"></i></div>
+                        <div class="card-content">
+                            <h3 data-i18n="problem.card1.title">Ro'yxatlarni rejalashtirishning noqulayligi</h3>
+                            <ul class="feature-list">
+                                <li data-i18n="problem.card1.item1">Daftarda yoki qog'ozda ro'yxat tuzish</li>
+                                <li data-i18n="problem.card1.item2">Kerakli mahsulotlarni unutish oson</li>
+                                <li data-i18n="problem.card1.item3">Ro'yxat yo'qolishi yoki yirtilishi mumkin</li>
+                                <li data-i18n="problem.card1.item4">Tarkib va kategorizatsiya yo'q</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="problem-card">
+                        <div class="card-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        <div class="card-content">
+                            <h3 data-i18n="problem.card2.title">Xarajatlarni hisobga olish yo'q</h3>
+                            <ul class="feature-list">
+                                <li data-i18n="problem.card2.item1">Sotib olingan tovarlarning aniq narxlarini eslay olmaysiz</li>
+                                <li data-i18n="problem.card2.item2">Sarflangan pulning umumiy miqdorini bilmaysiz</li>
+                                <li data-i18n="problem.card2.item3">Xarajatlarni toifalarga bo'yicha tahlili yo'q</li>
+                                <li data-i18n="problem.card2.item4">Byudjetni nazorat qilish qiyin</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="problem-card">
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="card-content">
+                            <h3 data-i18n="problem.card3.title">Noma'lum byudjet</h3>
+                            <ul class="feature-list">
+                                <li data-i18n="problem.card3.item1">Bozor narxlari har kuni o'zgaradi</li>
+                                <li data-i18n="problem.card3.item2">O'zingiz bilan qancha pul olishingizni bilmaysiz</li>
+                                <li data-i18n="problem.card3.item3">Mavsumiy narx o'zgarishlari</li>
+                                <li data-i18n="problem.card3.item4">Xarid paytida pul yetishmasligi xavfi</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ "РЕШЕНИЕ" (ОБНОВЛЕННАЯ НУМЕРАЦИЯ) -->
+        <section id="solution">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="section.solution.label">02 — Yechim</div>
+                    <h2 class="section-title" data-i18n="section.solution.title">Bozorlik AI Barcha Xarid Rejalashtirish Muammolarini Hal Qiladi</h2>
+                    <p class="section-subtitle" data-i18n="section.solution.subtitle">Sun'iy intellekt yordamida oziq-ovqat xaridlari uchun zamonaviy yondashuv.</p>
+                </div>
+                <div class="problem-grid">
+                    <div class="solution-card">
+                        <div class="card-icon"><i class="fas fa-microphone-alt"></i></div>
+                        <div class="card-content">
+                            <h3 data-i18n="solution.card1.title">Ovozli Ro'yxat Yaratish</h3>
+                            <ul class="feature-list">
+                                <li data-i18n="solution.card1.item1">Sotib olishingiz kerak bo'lgan narsalarni oddiygina ayting</li>
+                                <li data-i18n="solution.card1.item2">AI ro'yxatni avtomatik tartiblaydi</li>
+                                <li data-i18n="solution.card1.item3">Mahsulot turlari bo'yicha kategorizatsiya</li>
+                                <li data-i18n="solution.card1.item4">Doimo mavjud raqamli ro'yxat</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="solution-card">
+                        <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
+                        <div class="card-content">
+                            <h3 data-i18n="solution.card2.title">Tahliliy Xarajatlar Hisobi</h3>
+                            <ul class="feature-list">
+                                <li data-i18n="solution.card2.item1">Barcha xaridlar va narxlarni aniq hisoblash</li>
+                                <li data-i18n="solution.card2.item2">Xarajatlarni diagrammalarda vizuallashtirish</li>
+                                <li data-i18n="solution.card2.item3">Mahsulot toifalari bo'yicha xarajatlar tahlili</li>
+                                <li data-i18n="solution.card2.item4">Haqiqiy vaqt rejimida byudjet nazorati</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="solution-card">
+                        <div class="card-icon"><i class="fas fa-calculator"></i></div>
+                        <div class="card-content">
+                            <h3 data-i18n="solution.card3.title">Oldindan Byudjet Hisoblash</h3>
+                            <ul class="feature-list">
+                                <li data-i18n="solution.card3.item1">Bozor ma'lumotlari asosida taxminiy narxlar</li>
+                                <li data-i18n="solution.card3.item2">Bozorga borishdan oldin umumiy summani hisoblash</li>
+                                <li data-i18n="solution.card3.item3">Mavsumiy narx o'zgarishlarini hisobga olish</li>
+                                <li data-i18n="solution.card3.item4">Kerakli summa haqida aniq tushuncha</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ОБНОВЛЁННАЯ ИНТЕРАКТИВНАЯ СЕКЦИЯ (ТЕПЕРЬ "03 — QANDAY ISHLAYDI") -->
+        <section class="interactive-section" id="interactive">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="section.howitworks.label">03 — Qanday ishlaydi</div>
+                    <h2 class="section-title" data-i18n="section.howitworks.title">Bozorlik AI qanday ishlaydi</h2>
+                    <p class="section-subtitle" data-i18n="section.howitworks.subtitle">Bir necha qadamda aqlli xaridlar</p>
+                </div>
+                <div class="interactive-inner">
+                    <!-- Левая часть: контейнер для твоего изображения (image.png) -->
+                    <div class="mockup-container">
+                        <!--
+                            ЗДЕСЬ ТЫ ВСТАВИШЬ СВОЁ ИЗОБРАЖЕНИЕ.
+                            Просто сохрани свой скриншот как "image.png" в той же папке, что и index.html.
+                            Если имя другое или путь другой - измени src.
+                        -->
+                        <img src="image.png" alt="Bozorlik AI App Screenshot" class="mockup-image">
+                    </div>
+
+                    <!-- Правая часть: преимущества приложения (полностью переведены) -->
+                    <div class="benefits-block">
+                        <h2 class="benefits-title"><span data-i18n="benefits.title1">Foydalanish qulayligi</span> <span data-i18n="benefits.title2">Bozorlik AI</span></h2>
+                        <p class="benefits-subtitle" data-i18n="benefits.subtitle">Bozor va supermarketda aqlli xarid qilish uchun kerak bo'lgan hamma narsa</p>
+
+                        <ul class="benefits-list">
+                            <li class="benefit-item">
+                                <div class="benefit-icon"><i class="fas fa-check"></i></div>
+                                <div class="benefit-content">
+                                    <h4 data-i18n="benefit1.title">Tezkor bozor ro'yxatini tuzish</h4>
+                                    <p data-i18n="benefit1.desc">Mahsulotlarni ovoz yoki matn orqali qo'shing — ro'yxat soniyalarda tayyor</p>
+                                </div>
+                            </li>
+                            <li class="benefit-item">
+                                <div class="benefit-icon"><i class="fas fa-check"></i></div>
+                                <div class="benefit-content">
+                                    <h4 data-i18n="benefit2.title">Aqlli kategorizatsiya</h4>
+                                    <p data-i18n="benefit2.desc">Mahsulotlarni avtomatik ravishda toifalarga ajratadi: sabzavotlar, mevalar, sut mahsulotlari va boshqalar.</p>
+                                </div>
+                            </li>
+                            <li class="benefit-item">
+                                <div class="benefit-icon"><i class="fas fa-check"></i></div>
+                                <div class="benefit-content">
+                                    <h4 data-i18n="benefit3.title">Byudjetni rejalashtirish</h4>
+                                    <p data-i18n="benefit3.desc">Barcha xaridlarning taxminiy narxini oldindan hisoblab beradi</p>
+                                </div>
+                            </li>
+                            <li class="benefit-item">
+                                <div class="benefit-icon"><i class="fas fa-check"></i></div>
+                                <div class="benefit-content">
+                                    <h4 data-i18n="benefit4.title">Xarajatlar kuzatuvchisi</h4>
+                                    <p data-i18n="benefit4.desc">Sarflangan mablag'lar hisobini yuriting va pullaringiz qayerga ketayotganini tahlil qiling</p>
+                                </div>
+                            </li>
+                            <li class="benefit-item">
+                                <div class="benefit-icon"><i class="fas fa-check"></i></div>
+                                <div class="benefit-content">
+                                    <h4 data-i18n="benefit5.title">Bozor narxlarini nazorat qilish</h4>
+                                    <p data-i18n="benefit5.desc">Sizning hududingizdagi bozor ma'lumotlariga asoslangan joriy narxlar</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ FAQ (ОБНОВЛЕННАЯ НУМЕРАЦИЯ) -->
+        <section id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="section.faq.label">04 — FAQ</div>
+                    <h2 class="section-title" data-i18n="section.faq.title">Tez-tez So'raladigan Savollar</h2>
+                    <p class="section-subtitle" data-i18n="section.faq.subtitle">Bozorlik AI haqidagi eng mashhur savollarga javoblar</p>
+                </div>
+                <div class="faq-container">
+                    <div class="faq-item"><div class="faq-question" data-i18n="faq.1.question">Bozorlik AI nima?<div class="faq-toggle"></div></div><div class="faq-answer" data-i18n="faq.1.answer">Bozorlik AI — bu xaridlar ro'yxatini tuzish, oldindan byudjetni hisoblash va xarajatlarni tahliliy tarzda yuritishga yordam beradigan aqlli AI yordamchi.</div></div>
+                    <div class="faq-item"><div class="faq-question" data-i18n="faq.2.question">Qanday ishlaydi?<div class="faq-toggle"></div></div><div class="faq-answer" data-i18n="faq.2.answer">Siz mahsulotlarni matn yoki ovoz orqali kiritasiz. Bozorlik AI ro'yxatni tartiblaydi, taxminiy narxni hisoblaydi va xarajatlarni kuzatadi.</div></div>
+                    <div class="faq-item"><div class="faq-question" data-i18n="faq.3.question">Oddiy xaridlar ro'yxatidan qanday yaxshiroq?<div class="faq-toggle"></div></div><div class="faq-answer" data-i18n="faq.3.answer">Oddiy ro'yxatdan farqli ravishda, Bozorlik AI narxlarni, umumiy byudjetni va xarajatlar qayerga ketayotganini ko'rsatadi.</div></div>
+                    <div class="faq-item"><div class="faq-question" data-i18n="faq.4.question">Narxlar qayerdan olinadi?<div class="faq-toggle"></div></div><div class="faq-answer" data-i18n="faq.4.answer">Narxlar mamlakat bo'yicha bozorlar va supermarketlarning o'rtacha ma'lumotlari asosida olinadi va taxminiy hisob uchun ishlatiladi.</div></div>
+                    <div class="faq-item"><div class="faq-question" data-i18n="faq.5.question">Bozorlik AI bepulmi?<div class="faq-toggle"></div></div><div class="faq-answer" data-i18n="faq.5.answer">Hozirda Bozorlik AI bepul. Kelajakda kengaytirilgan va premium funksiyalar qo'shilishi mumkin.</div></div>
+                    <div class="faq-item"><div class="faq-question" data-i18n="faq.6.question">Xizmatdan qayerda foydalanish mumkin?<div class="faq-toggle"></div></div><div class="faq-answer" data-i18n="faq.6.answer">Bozorlik AI veb-sayt va Telegram bot orqali mavjud bo'lib, qulay formatda foydalanish imkonini beradi.</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ CTA (без изменений) -->
+        <section class="cta-section">
+            <div class="container">
+                <h2 class="cta-title" data-i18n="cta.title">Bozorlik AI bilan Aqlli Xaridlarni Bugundan Boshlang</h2>
+                <p class="cta-text" data-i18n="cta.subtitle">Aqlli xaridlarning kelajagiga qo'shiling. Vaqt tejang, byudjetingizni nazorat qiling va xarid qilishdan zavqlaning.</p>
+                <a href="https://t.me/BozorlikAI_bot" class="cta-button" data-i18n="cta.button">Bepul Sinab Ko'ring</a>
+            </div>
+        </section>
+
+        <!-- ПОДВАЛ (без изменений) -->
+        <footer>
+            <div class="container">
+                <div class="footer-inner">
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <div class="footer-logo-icon"><img src="logo_bg.png" alt="Bozorlik AI Logo"></div>
+                            <div class="footer-logo-text">Bozorlik <span>AI</span></div>
+                        </div>
+                        <p class="footer-description" data-i18n="footer.description">Oziq-ovqat xaridlari uchun AI yordamchi. Xaridlar ro'yxatini avtomatlashtiring, byudjetingizni nazorat qiling va vaqt tejang.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4 data-i18n="footer.links.title">Navigatsiya</h4>
+                        <ul>
+                            <li><a href="team.html" data-i18n="nav.team">Biz haqimizda</a></li>
+                            <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+                            <li><a href="team.html#contact" data-i18n="nav.contact">Bog'lanish</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-contact">
+                        <h4 data-i18n="footer.contact.title">Aloqalar</h4>
+                        <ul>
+                            <li><a href="mailto:bozorlikai@gmail.com">bozorlikai@gmail.com</a></li>
+                            <li><a href="https://t.me/BozorlikAI_bot" target="_blank" data-i18n="footer.contact.telegram">Telegram Bot</a></li>
+                            <li><a href="https://t.me/BozorlikAI" target="_blank" data-i18n="footer.contact.channel">Telegram Kanal</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="copyright" data-i18n="footer.copyright">© 2026 Bozorlik AI. Barcha huquqlar himoyalangan.</div>
+                    <div class="footer-social">
+                        <a href="https://t.me/BozorlikAI" target="_blank" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="https://instagram.com/bozorlik_ai" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/bozorlik-ai" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript (ПОЛНОСТЬЮ ОБНОВЛЕН ДЛЯ НУМЕРАЦИИ И УЗБЕКСКОГО ПО УМОЛЧАНИЮ) -->
+    <script>
+        // Словарь переводов (ПОЛНЫЙ, со всеми новыми ключами для трёх языков, с исправленной нумерацией)
+        const translations = {
+            ru: {
+                "nav.team": "О нас",
+                "nav.faq": "FAQ",
+                "nav.contact": "Связаться",
+                "mobile.theme": "Тема",
+                "mobile.theme.light": "Светлая",
+                "mobile.theme.dark": "Темная",
+                "hero.badge": "AI помощник",
+                "hero.title": "Bozorlik AI — умный AI-помощник для покупок продуктов",
+                "hero.subtitle": "Он автоматически составляет список покупок, считает примерную стоимость и помогает контролировать расходы на базар и супермаркеты.",
+                "hero.cta1": "Демо",
+                "hero.cta2": "Как это работает",
+                "hero.stat1": "Экономия времени",
+                "hero.stat2": "Доступность",
+                "hero.stat3": "Умный анализ",
+                "hero.card.title": "Умный список покупок",
+                "hero.card.item1": "Голосовой ввод списка",
+                "hero.card.item2": "Автоматическая категоризация",
+                "hero.card.item3": "Расчет примерной стоимости",
+                "hero.card.item4": "Контроль бюджета",
+                "hero.card.label": "Доступно сейчас",
+                "hero.card.status": "В активной разработке",
+                "section.problem.label": "01 — Проблема",
+                "section.problem.title": "Проблемы при планировании покупок на базаре",
+                "section.problem.subtitle": "Ежедневные покупки продуктов превращаются в рутину с неучтёнными расходами и потерянным временем.",
+                "problem.card1.title": "Неудобное планирование списков",
+                "problem.card1.item1": "Составление списка в тетради или на листке бумаги",
+                "problem.card1.item2": "Легко забыть нужные продукты",
+                "problem.card1.item3": "Список может потеряться или порваться",
+                "problem.card1.item4": "Нет структуры и категоризации",
+                "problem.card2.title": "Отсутствие учета расходов",
+                "problem.card2.item1": "Не помните точные цены купленных товаров",
+                "problem.card2.item2": "Не знаете общую сумму потраченных денег",
+                "problem.card2.item3": "Нет анализа расходов по категориям",
+                "problem.card2.item4": "Трудно контролировать бюджет",
+                "problem.card3.title": "Неизвестный бюджет",
+                "problem.card3.item1": "Цены на базаре меняются каждый день",
+                "problem.card3.item2": "Не знаете сколько денег взять с собой",
+                "problem.card3.item3": "Сезонные колебания цен",
+                "problem.card3.item4": "Риск нехватки денег при покупках",
+                "section.solution.label": "02 — Решение",
+                "section.solution.title": "Bozorlik AI решает все проблемы планирования покупок",
+                "section.solution.subtitle": "Современный подход к покупкам продуктов с помощью искусственного интеллекта.",
+                "solution.card1.title": "Голосовое создание списков",
+                "solution.card1.item1": "Просто говорите что нужно купить",
+                "solution.card1.item2": "AI автоматически структурирует список",
+                "solution.card1.item3": "Разделение по категориям продуктов",
+                "solution.card1.item4": "Всегда доступный цифровой список",
+                "solution.card2.title": "Аналитический учет расходов",
+                "solution.card2.item1": "Точный учет всех покупок и цен",
+                "solution.card2.item2": "Визуализация расходов в диаграммах",
+                "solution.card2.item3": "Анализ трат по категориям продуктов",
+                "solution.card2.item4": "Контроль бюджета в реальном времени",
+                "solution.card3.title": "Предварительный расчет бюджета",
+                "solution.card3.item1": "Примерные цены на основе рыночных данных",
+                "solution.card3.item2": "Расчет общей суммы перед походом на базар",
+                "solution.card3.item3": "Учет сезонных колебаний цен",
+                "solution.card3.item4": "Точное понимание необходимой суммы",
+                // Новая секция "03 - Как это работает"
+                "section.howitworks.label": "03 — Как это работает",
+                "section.howitworks.title": "Как работает Bozorlik AI",
+                "section.howitworks.subtitle": "Умные покупки в несколько шагов",
+                "section.faq.label": "04 — FAQ",
+                "section.faq.title": "Часто задаваемые вопросы",
+                "section.faq.subtitle": "Ответы на самые популярные вопросы о Bozorlik AI",
+                "faq.1.question": "Что такое Bozorlik AI?",
+                "faq.1.answer": "Bozorlik AI — это умный AI-помощник, который помогает создавать список покупок, заранее рассчитывает бюджет и аналитически вести учёт расходов.",
+                "faq.2.question": "Как это работает?",
+                "faq.2.answer": "Вы добавляете товары текстом или голосом. Bozorlik AI автоматически структурирует список, рассчитывает примерную стоимость и помогает отслеживать расходы.",
+                "faq.3.question": "Чем это лучше обычного списка покупок?",
+                "faq.3.answer": "В отличие от обычного списка, Bozorlik AI показывает примерные цены, общий бюджет и даёт понимание, на что уходят деньги.",
+                "faq.4.question": "Откуда берутся цены?",
+                "faq.4.answer": "Цены формируются на основе средних данных рынков и супермаркетов по стране и используются для ориентировочных расчётов.",
+                "faq.5.question": "Bozorlik AI бесплатный?",
+                "faq.5.answer": "Сейчас Bozorlik AI доступен бесплатно. В будущем могут появиться расширенные функции и премиум-возможности.",
+                "faq.6.question": "Где можно пользоваться сервисом?",
+                "faq.6.answer": "Bozorlik AI доступен через веб-сайт и Telegram-бот, что позволяет пользоваться сервисом в удобном формате.",
+                "cta.title": "Начните умные покупки с Bozorlik AI уже сегодня",
+                "cta.subtitle": "Присоединяйтесь к будущему умных покупок. Экономьте время, контролируйте бюджет и получайте удовольствие от шопинга.",
+                "cta.button": "Попробовать бесплатно",
+                "footer.description": "AI-помощник для умных покупок продуктов. Автоматизируйте списки покупок, контролируйте бюджет и экономьте время.",
+                "footer.links.title": "Навигация",
+                "footer.contact.title": "Контакты",
+                "footer.contact.telegram": "Telegram Bot",
+                "footer.contact.channel": "Telegram Канал",
+                "footer.copyright": "© 2026 Bozorlik AI. Все права защищены.",
+                // НОВЫЕ КЛЮЧИ ДЛЯ ПРЕИМУЩЕСТВ
+                "benefits.title1": "Удобство использования",
+                "benefits.title2": "Bozorlik AI",
+                "benefits.subtitle": "Всё, что нужно для умных покупок на базаре и в супермаркете",
+                "benefit1.title": "Быстрое составление списка базара",
+                "benefit1.desc": "Добавляйте продукты голосом или текстом — список готов за секунды",
+                "benefit2.title": "Умная категоризация",
+                "benefit2.desc": "Автоматически распределяет продукты по категориям: овощи, фрукты, молочное и т.д.",
+                "benefit3.title": "Планирование бюджета",
+                "benefit3.desc": "Заранее рассчитывает примерную стоимость всех покупок",
+                "benefit4.title": "Трекер расходов",
+                "benefit4.desc": "Ведите учёт потраченных средств и анализируйте, куда уходят деньги",
+                "benefit5.title": "Контроль цен на базаре",
+                "benefit5.desc": "Актуальные цены на основе рыночных данных вашего региона"
+            },
+            en: {
+                "nav.team": "About Us",
+                "nav.faq": "FAQ",
+                "nav.contact": "Contact",
+                "mobile.theme": "Theme",
+                "mobile.theme.light": "Light",
+                "mobile.theme.dark": "Dark",
+                "hero.badge": "AI Assistant",
+                "hero.title": "Bozorlik AI — Smart AI Assistant for Grocery Shopping",
+                "hero.subtitle": "It automatically creates shopping lists, estimates costs, and helps control expenses for markets and supermarkets.",
+                "hero.cta1": "Demo",
+                "hero.cta2": "How it works",
+                "hero.stat1": "Time Saving",
+                "hero.stat2": "24/7 Availability",
+                "hero.stat3": "Smart Analysis",
+                "hero.card.title": "Smart Shopping List",
+                "hero.card.item1": "Voice input for lists",
+                "hero.card.item2": "Automatic categorization",
+                "hero.card.item3": "Cost estimation",
+                "hero.card.item4": "Budget control",
+                "hero.card.label": "Available Now",
+                "hero.card.status": "In Active Development",
+                "section.problem.label": "01 — Problem",
+                "section.problem.title": "Problems with Market Shopping Planning",
+                "section.problem.subtitle": "Daily grocery shopping becomes a routine with unaccounted expenses and wasted time.",
+                "problem.card1.title": "Inconvenient List Planning",
+                "problem.card1.item1": "Making lists in notebooks or on paper",
+                "problem.card1.item2": "Easy to forget needed products",
+                "problem.card1.item3": "Lists can get lost or torn",
+                "problem.card1.item4": "No structure and categorization",
+                "problem.card2.title": "No Expense Tracking",
+                "problem.card2.item1": "Don't remember exact prices of purchased goods",
+                "problem.card2.item2": "Don't know total amount spent",
+                "problem.card2.item3": "No expense analysis by categories",
+                "problem.card2.item4": "Hard to control budget",
+                "problem.card3.title": "Unknown Budget",
+                "problem.card3.item1": "Market prices change every day",
+                "problem.card3.item2": "Don't know how much money to take",
+                "problem.card3.item3": "Seasonal price fluctuations",
+                "problem.card3.item4": "Risk of running out of money while shopping",
+                "section.solution.label": "02 — Solution",
+                "section.solution.title": "Bozorlik AI Solves All Shopping Planning Problems",
+                "section.solution.subtitle": "Modern approach to grocery shopping with artificial intelligence.",
+                "solution.card1.title": "Voice List Creation",
+                "solution.card1.item1": "Simply say what you need to buy",
+                "solution.card1.item2": "AI automatically structures the list",
+                "solution.card1.item3": "Categorization by product types",
+                "solution.card1.item4": "Always available digital list",
+                "solution.card2.title": "Analytical Expense Tracking",
+                "solution.card2.item1": "Accurate tracking of all purchases and prices",
+                "solution.card2.item2": "Visualization of expenses in charts",
+                "solution.card2.item3": "Analysis of spending by product categories",
+                "solution.card2.item4": "Real-time budget control",
+                "solution.card3.title": "Budget Pre-calculation",
+                "solution.card3.item1": "Estimated prices based on market data",
+                "solution.card3.item2": "Total amount calculation before going to market",
+                "solution.card3.item3": "Accounting for seasonal price fluctuations",
+                "solution.card3.item4": "Clear understanding of required amount",
+                // New section "03 - How it works"
+                "section.howitworks.label": "03 — How it works",
+                "section.howitworks.title": "How Bozorlik AI works",
+                "section.howitworks.subtitle": "Smart shopping in a few steps",
+                "section.faq.label": "04 — FAQ",
+                "section.faq.title": "Frequently Asked Questions",
+                "section.faq.subtitle": "Answers to the most popular questions about Bozorlik AI",
+                "faq.1.question": "What is Bozorlik AI?",
+                "faq.1.answer": "Bozorlik AI is a smart AI assistant that helps create shopping lists, estimate budgets in advance, and analytically track expenses.",
+                "faq.2.question": "How does it work?",
+                "faq.2.answer": "You add products by text or voice. Bozorlik AI structures the list, estimates the cost, and helps track your spending.",
+                "faq.3.question": "How is this better than a regular shopping list?",
+                "faq.3.answer": "Unlike a regular list, Bozorlik AI shows estimated prices, total budget, and insights into your spending.",
+                "faq.4.question": "Where do prices come from?",
+                "faq.4.answer": "Prices are based on average data from markets and supermarkets across the country and are used for estimation.",
+                "faq.5.question": "Is Bozorlik AI free?",
+                "faq.5.answer": "Bozorlik AI is currently free to use. Advanced and premium features may be introduced later.",
+                "faq.6.question": "Where can I use the service?",
+                "faq.6.answer": "Bozorlik AI is available via the website and Telegram bot, allowing flexible and convenient use.",
+                "cta.title": "Start Smart Shopping with Bozorlik AI Today",
+                "cta.subtitle": "Join the future of smart shopping. Save time, control your budget, and enjoy shopping.",
+                "cta.button": "Try for Free",
+                "footer.description": "AI assistant for smart grocery shopping. Automate shopping lists, control your budget, and save time.",
+                "footer.links.title": "Navigation",
+                "footer.contact.title": "Contacts",
+                "footer.contact.telegram": "Telegram Bot",
+                "footer.contact.channel": "Telegram Channel",
+                "footer.copyright": "© 2026 Bozorlik AI. All rights reserved.",
+                // NEW KEYS
+                "benefits.title1": "Ease of Use",
+                "benefits.title2": "Bozorlik AI",
+                "benefits.subtitle": "Everything you need for smart shopping at the market and supermarket",
+                "benefit1.title": "Quick bazaar list creation",
+                "benefit1.desc": "Add products by voice or text — the list is ready in seconds",
+                "benefit2.title": "Smart categorization",
+                "benefit2.desc": "Automatically sorts products into categories: vegetables, fruits, dairy, etc.",
+                "benefit3.title": "Budget planning",
+                "benefit3.desc": "Calculates the estimated cost of all purchases in advance",
+                "benefit4.title": "Expense tracker",
+                "benefit4.desc": "Keep track of spent money and analyze where your money goes",
+                "benefit5.title": "Market price control",
+                "benefit5.desc": "Current prices based on market data from your region"
+            },
+            uz: {
+                "nav.team": "Biz haqimizda",
+                "nav.faq": "FAQ",
+                "nav.contact": "Bog'lanish",
+                "mobile.theme": "Mavzu",
+                "mobile.theme.light": "Yorqin",
+                "mobile.theme.dark": "Qorong'u",
+                "hero.badge": "AI Yordamchi",
+                "hero.title": "Bozorlik AI — Oziq-ovqat xaridlari uchun Aqlli AI Yordamchi",
+                "hero.subtitle": "U avtomatik ravishda xaridlar ro'yxatini yaratadi, xarajatlarni hisoblaydi va bozor va supermarketlar uchun xarajatlarni nazorat qilishga yordam beradi.",
+                "hero.cta1": "Demo",
+                "hero.cta2": "Qanday ishlaydi",
+                "hero.stat1": "Vaqtni Tejash",
+                "hero.stat2": "24/7 Mavjudlik",
+                "hero.stat3": "Aqlli Tahlil",
+                "hero.card.title": "Aqlli Xaridlar Ro'yxati",
+                "hero.card.item1": "Ovoz orqali ro'yxat kiritish",
+                "hero.card.item2": "Avtomatik kategorizatsiya",
+                "hero.card.item3": "Xarajatlarni hisoblash",
+                "hero.card.item4": "Byudjet nazorati",
+                "hero.card.label": "Hozir Mavjud",
+                "hero.card.status": "Faol Ishlanmoqda",
+                "section.problem.label": "01 — Muammo",
+                "section.problem.title": "Bozor xaridlarini rejalashtirishdagi muammolar",
+                "section.problem.subtitle": "Kundalik oziq-ovqat xaridlari hisobga olinmagan xarajatlar va yo'qotilgan vaqt bilan rutinaga aylanadi.",
+                "problem.card1.title": "Ro'yxatlarni rejalashtirishning noqulayligi",
+                "problem.card1.item1": "Daftarda yoki qog'ozda ro'yxat tuzish",
+                "problem.card1.item2": "Kerakli mahsulotlarni unutish oson",
+                "problem.card1.item3": "Ro'yxat yo'qolishi yoki yirtilishi mumkin",
+                "problem.card1.item4": "Tarkib va kategorizatsiya yo'q",
+                "problem.card2.title": "Xarajatlarni hisobga olish yo'q",
+                "problem.card2.item1": "Sotib olingan tovarlarning aniq narxlarini eslay olmaysiz",
+                "problem.card2.item2": "Sarflangan pulning umumiy miqdorini bilmaysiz",
+                "problem.card2.item3": "Xarajatlarni toifalarga bo'yicha tahlili yo'q",
+                "problem.card2.item4": "Byudjetni nazorat qilish qiyin",
+                "problem.card3.title": "Noma'lum byudjet",
+                "problem.card3.item1": "Bozor narxlari har kuni o'zgaradi",
+                "problem.card3.item2": "O'zingiz bilan qancha pul olishingizni bilmaysiz",
+                "problem.card3.item3": "Mavsumiy narx o'zgarishlari",
+                "problem.card3.item4": "Xarid paytida pul yetishmasligi xavfi",
+                "section.solution.label": "02 — Yechim",
+                "section.solution.title": "Bozorlik AI Barcha Xarid Rejalashtirish Muammolarini Hal Qiladi",
+                "section.solution.subtitle": "Sun'iy intellekt yordamida oziq-ovqat xaridlari uchun zamonaviy yondashuv.",
+                "solution.card1.title": "Ovozli Ro'yxat Yaratish",
+                "solution.card1.item1": "Sotib olishingiz kerak bo'lgan narsalarni oddiygina ayting",
+                "solution.card1.item2": "AI ro'yxatni avtomatik tartiblaydi",
+                "solution.card1.item3": "Mahsulot turlari bo'yicha kategorizatsiya",
+                "solution.card1.item4": "Doimo mavjud raqamli ro'yxat",
+                "solution.card2.title": "Tahliliy Xarajatlar Hisobi",
+                "solution.card2.item1": "Barcha xaridlar va narxlarni aniq hisoblash",
+                "solution.card2.item2": "Xarajatlarni diagrammalarda vizuallashtirish",
+                "solution.card2.item3": "Mahsulot toifalari bo'yicha xarajatlar tahlili",
+                "solution.card2.item4": "Haqiqiy vaqt rejimida byudjet nazorati",
+                "solution.card3.title": "Oldindan Byudjet Hisoblash",
+                "solution.card3.item1": "Bozor ma'lumotlari asosida taxminiy narxlar",
+                "solution.card3.item2": "Bozorga borishdan oldin umumiy summani hisoblash",
+                "solution.card3.item3": "Mavsumiy narx o'zgarishlarini hisobga olish",
+                "solution.card3.item4": "Kerakli summa haqida aniq tushuncha",
+                // Yangi sektsiya "03 - Qanday ishlaydi"
+                "section.howitworks.label": "03 — Qanday ishlaydi",
+                "section.howitworks.title": "Bozorlik AI qanday ishlaydi",
+                "section.howitworks.subtitle": "Bir necha qadamda aqlli xaridlar",
+                "section.faq.label": "04 — FAQ",
+                "section.faq.title": "Tez-tez So'raladigan Savollar",
+                "section.faq.subtitle": "Bozorlik AI haqidagi eng mashhur savollarga javoblar",
+                "faq.1.question": "Bozorlik AI nima?",
+                "faq.1.answer": "Bozorlik AI — bu xaridlar ro'yxatini tuzish, oldindan byudjetni hisoblash va xarajatlarni tahliliy tarzda yuritishga yordam beradigan aqlli AI yordamchi.",
+                "faq.2.question": "Qanday ishlaydi?",
+                "faq.2.answer": "Siz mahsulotlarni matn yoki ovoz orqali kiritasiz. Bozorlik AI ro'yxatni tartiblaydi, taxminiy narxni hisoblaydi va xarajatlarni kuzatadi.",
+                "faq.3.question": "Oddiy xaridlar ro'yxatidan qanday yaxshiroq?",
+                "faq.3.answer": "Oddiy ro'yxatdan farqli ravishda, Bozorlik AI narxlarni, umumiy byudjetni va xarajatlar qayerga ketayotganini ko'rsatadi.",
+                "faq.4.question": "Narxlar qayerdan olinadi?",
+                "faq.4.answer": "Narxlar mamlakat bo'yicha bozorlar va supermarketlarning o'rtacha ma'lumotlari asosida olinadi va taxminiy hisob uchun ishlatiladi.",
+                "faq.5.question": "Bozorlik AI bepulmi?",
+                "faq.5.answer": "Hozirda Bozorlik AI bepul. Kelajakda kengaytirilgan va premium funksiyalar qo'shilishi mumkin.",
+                "faq.6.question": "Xizmatdan qayerda foydalanish mumkin?",
+                "faq.6.answer": "Bozorlik AI veb-sayt va Telegram bot orqali mavjud bo'lib, qulay formatda foydalanish imkonini beradi.",
+                "cta.title": "Bozorlik AI bilan Aqlli Xaridlarni Bugundan Boshlang",
+                "cta.subtitle": "Aqlli xaridlarning kelajagiga qo'shiling. Vaqt tejang, byudjetingizni nazorat qiling va xarid qilishdan zavqlaning.",
+                "cta.button": "Bepul Sinab Ko'ring",
+                "footer.description": "Oziq-ovqat xaridlari uchun AI yordamchi. Xaridlar ro'yxatini avtomatlashtiring, byudjetingizni nazorat qiling va vaqt tejang.",
+                "footer.links.title": "Navigatsiya",
+                "footer.contact.title": "Aloqalar",
+                "footer.contact.telegram": "Telegram Bot",
+                "footer.contact.channel": "Telegram Kanal",
+                "footer.copyright": "© 2026 Bozorlik AI. Barcha huquqlar himoyalangan.",
+                // NEW KEYS
+                "benefits.title1": "Foydalanish qulayligi",
+                "benefits.title2": "Bozorlik AI",
+                "benefits.subtitle": "Bozor va supermarketda aqlli xarid qilish uchun kerak bo'lgan hamma narsa",
+                "benefit1.title": "Tezkor bozor ro'yxatini tuzish",
+                "benefit1.desc": "Mahsulotlarni ovoz yoki matn orqali qo'shing — ro'yxat soniyalarda tayyor",
+                "benefit2.title": "Aqlli kategorizatsiya",
+                "benefit2.desc": "Mahsulotlarni avtomatik ravishda toifalarga ajratadi: sabzavotlar, mevalar, sut mahsulotlari va boshqalar.",
+                "benefit3.title": "Byudjetni rejalashtirish",
+                "benefit3.desc": "Barcha xaridlarning taxminiy narxini oldindan hisoblab beradi",
+                "benefit4.title": "Xarajatlar kuzatuvchisi",
+                "benefit4.desc": "Sarflangan mablag'lar hisobini yuriting va pullaringiz qayerga ketayotganini tahlil qiling",
+                "benefit5.title": "Bozor narxlarini nazorat qilish",
+                "benefit5.desc": "Sizning hududingizdagi bozor ma'lumotlariga asoslangan joriy narxlar"
+            }
+        };
+
+        // ===== ПЕРЕКЛЮЧЕНИЕ ТЕМЫ =====
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const mobileThemeButtons = document.querySelectorAll('.mobile-theme-btn');
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>`;
+                mobileThemeButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.theme === 'dark') btn.classList.add('active');
+                });
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>`;
+                mobileThemeButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.theme === 'light') btn.classList.add('active');
+                });
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.contains('dark-mode');
+            setTheme(isDark ? 'light' : 'dark');
+        });
+
+        mobileThemeButtons.forEach(btn => {
+            btn.addEventListener('click', () => setTheme(btn.dataset.theme));
+        });
+
+        // ===== ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА =====
+        const langButtons = document.querySelectorAll('.lang-btn');
+        const mobileLangBtn = document.getElementById('mobileLangBtn');
+        const mobileLangDropdown = document.getElementById('mobileLangDropdown');
+        const mobileLangOptions = document.querySelectorAll('.mobile-lang-option');
+        const mobileLangFlag = document.getElementById('mobileLangFlag');
+        const mobileLangText = document.getElementById('mobileLangText');
+
+        function setLanguage(lang) {
+            const dict = translations[lang];
+            if (!dict) return;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = dict[key];
+                    } else {
+                        el.textContent = dict[key];
+                    }
+                }
+            });
+
+            langButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+
+            const langNames = { 'ru': 'Русский', 'en': 'English', 'uz': 'O\'zbekcha' };
+            const flagClasses = { 'ru': 'fi fi-ru', 'en': 'fi fi-gb', 'uz': 'fi fi-uz' };
+
+            if (mobileLangFlag && mobileLangText) {
+                mobileLangFlag.className = flagClasses[lang] + ' mobile-lang-flag';
+                mobileLangText.textContent = langNames[lang];
+            }
+
+            document.documentElement.lang = lang;
+            localStorage.setItem('language', lang);
+            if (mobileLangDropdown) mobileLangDropdown.classList.remove('active');
+        }
+
+        langButtons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+        mobileLangOptions.forEach(option => option.addEventListener('click', () => setLanguage(option.dataset.lang)));
+
+        if (mobileLangBtn && mobileLangDropdown) {
+            mobileLangBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileLangDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', (e) => {
+                if (!mobileLangBtn.contains(e.target) && !mobileLangDropdown.contains(e.target)) {
+                    mobileLangDropdown.classList.remove('active');
+                }
+            });
+        }
+
+        // ===== МОБИЛЬНОЕ МЕНЮ =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            if (mobileLangDropdown) mobileLangDropdown.classList.remove('active');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileMenuClose.addEventListener('click', toggleMobileMenu);
+        menuOverlay.addEventListener('click', toggleMobileMenu);
+        document.querySelectorAll('.mobile-nav-link').forEach(link => link.addEventListener('click', toggleMobileMenu));
+
+        // ===== ПЛАВНАЯ ПРОКРУТКА =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ===== FAQ АККОРДЕОН =====
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                item.classList.toggle('active');
+            });
+        });
+
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            setTheme(theme);
+
+            // Язык по умолчанию теперь узбекский ('uz')
+            const savedLang = localStorage.getItem('language') || 'uz';
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>

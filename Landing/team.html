@@ -1,0 +1,2690 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biz haqimizda — Bozorlik AI</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flag Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            /* Цветовая палитра */
+            --primary: #FF6B35;
+            /* Основной оранжевый */
+            --primary-light: #FF8E53;
+            /* Светлый оранжевый */
+            --primary-soft: #FFF3E8;
+            /* Мягкий оранжевый фон */
+
+            /* Цвета текста для светлой темы */
+            --text-dark: #111827;
+            --text-gray: #6B7280;
+            --text-light: #9CA3AF;
+
+            /* Фоны для светлой темы - приятный жемчужный белый */
+            --bg-white: #FAFAFA;
+            --bg-light: #F5F5F7;
+
+            /* Фоны для темной темы */
+            --bg-dark: #0F0F0F;
+            --bg-card-dark: #1A1A1A;
+
+            /* Границы */
+            --border-light: #E5E7EB;
+            --border-dark: #333333;
+
+            /* Тени */
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
+
+            /* Радиусы скругления */
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --radius-full: 999px;
+
+            /* Анимации */
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== БАЗОВЫЕ СТИЛИ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            /* Плавная прокрутка */
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            transition: background-color var(--transition), color var(--transition);
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Темная тема */
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: #F3F4F6;
+        }
+
+        /* ===== ЛЕЙАУТ ===== */
+        .page-wrapper {
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Фоновый градиент */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 142, 83, 0.1) 0%, transparent 50%);
+        }
+
+        body.dark-mode .bg-gradient {
+            background: radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 142, 83, 0.15) 0%, transparent 50%);
+        }
+
+        /* Контейнер с максимальной шириной */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+        }
+
+        /* ===== ШАПКА САЙТА ===== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            /* Размытие фона */
+            background: rgba(250, 250, 250, 0.9);
+            /* Жемчужный белый с прозрачностью */
+            border-bottom: 1px solid var(--border-light);
+            transition: all var(--transition);
+        }
+
+        body.dark-mode header {
+            background: rgba(15, 15, 15, 0.9);
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        /* Одинаковый размер хедера как в index.html */
+        @media (max-width: 1024px) {
+            .header-inner {
+                height: 80px; /* Одинаковая высота как в index.html */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                height: 80px; /* Одинаковая высота как в index.html */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-inner {
+                height: 70px; /* Одинаковая высота как в index.html */
+            }
+        }
+
+        /* Логотип */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        .logo-icon img {
+            width: 135%; /* Адаптация под стиль index.html */
+            height: 135%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 20px;
+            }
+        }
+
+        body.dark-mode .logo-text {
+            color: #F3F4F6;
+        }
+
+        .logo-text span {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* ===== НАВИГАЦИЯ ДЛЯ ДЕСКТОПА ===== */
+        .desktop-nav {
+            display: flex;
+            gap: 32px;
+        }
+
+        @media (max-width: 1024px) {
+            .desktop-nav {
+                display: none;
+            }
+        }
+
+        .nav-link {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-gray);
+            text-decoration: none;
+            padding: 8px 0;
+            position: relative;
+            transition: color var(--transition);
+        }
+
+        body.dark-mode .nav-link {
+            color: var(--text-light);
+        }
+
+        /* Подчеркивание при наведении */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
+            transition: width var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .nav-link:hover {
+            color: #F3F4F6;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* ===== ЭЛЕМЕНТЫ УПРАВЛЕНИЯ В ШАПКЕ ===== */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Кнопка переключения темы */
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        body.dark-mode .theme-toggle {
+            border-color: var(--border-dark);
+            background: var(--bg-card-dark);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .theme-icon {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-gray);
+            transition: stroke var(--transition);
+        }
+
+        body.dark-mode .theme-icon {
+            stroke: var(--text-light);
+        }
+
+        /* Переключатель языка - СКРЫТ НА МОБИЛЬНЫХ */
+        .lang-switcher {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+        }
+
+        @media (max-width: 1024px) {
+            .lang-switcher {
+                display: none;
+            }
+        }
+
+        body.dark-mode .lang-switcher {
+            background: var(--bg-card-dark);
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .lang-btn {
+            color: var(--text-light);
+        }
+
+        .lang-btn.active {
+            background: var(--bg-white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-mode .lang-btn.active {
+            background: var(--bg-dark);
+            color: var(--primary);
+        }
+
+        /* Флаги из библиотеки flag-icons */
+        .flag-icon {
+            font-size: 16px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        /* Кнопка мобильного меню */
+        .mobile-menu-btn {
+            display: none;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+            z-index: 1001;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        body.dark-mode .mobile-menu-btn {
+            border-color: var(--border-dark);
+            background: var(--bg-card-dark);
+        }
+
+        .mobile-menu-btn span {
+            width: 20px;
+            height: 2px;
+            background: var(--text-gray);
+            transition: all var(--transition);
+            border-radius: 2px;
+        }
+
+        body.dark-mode .mobile-menu-btn span {
+            background: var(--text-light);
+        }
+
+        /* Анимация гамбургера в крестик */
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(250, 250, 250, 0.98);
+            backdrop-filter: blur(30px);
+            z-index: 1000;
+            padding: 32px;
+            transition: all var(--transition);
+            overflow-y: auto;
+            transform: translateX(-100%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu {
+                padding: 24px;
+            }
+        }
+
+        body.dark-mode .mobile-menu {
+            background: rgba(15, 15, 15, 0.98);
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu-header {
+                margin-bottom: 32px;
+                padding-bottom: 16px;
+            }
+        }
+
+        body.dark-mode .mobile-menu-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .mobile-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Увеличиваем размер логотипа в мобильном меню */
+        .mobile-logo-icon {
+            width: 40px; /* Увеличено с 32px */
+            height: 40px; /* Увеличено с 32px */
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .mobile-logo-text {
+            font-size: 22px; /* Увеличено с 20px */
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-logo-text {
+                font-size: 20px; /* Увеличено с 18px */
+            }
+        }
+
+        body.dark-mode .mobile-logo-text {
+            color: #F3F4F6;
+        }
+
+        .mobile-logo-text span {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .mobile-menu-close {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu-close {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        body.dark-mode .mobile-menu-close {
+            border-color: var(--border-dark);
+            background: var(--bg-card-dark);
+        }
+
+        .mobile-menu-close:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-close i {
+            font-size: 20px;
+            color: var(--text-gray);
+        }
+
+        body.dark-mode .mobile-menu-close i {
+            color: var(--text-light);
+        }
+
+        .mobile-menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu-nav {
+                margin-bottom: 32px;
+            }
+        }
+
+        .mobile-nav-link {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 16px 0;
+            transition: color var(--transition);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-nav-link {
+                font-size: 16px;
+                padding: 14px 0;
+            }
+        }
+
+        body.dark-mode .mobile-nav-link {
+            color: #F3F4F6;
+            border-bottom-color: var(--border-dark);
+        }
+
+        .mobile-nav-link:hover {
+            color: var(--primary);
+        }
+
+        .mobile-menu-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: auto;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu-controls {
+                padding-top: 32px;
+                gap: 20px;
+            }
+        }
+
+        body.dark-mode .mobile-menu-controls {
+            border-top-color: var(--border-dark);
+        }
+
+        .mobile-theme-switcher {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mobile-theme-switcher span {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-theme-switcher span {
+                font-size: 15px;
+            }
+        }
+
+        body.dark-mode .mobile-theme-switcher span {
+            color: #F3F4F6;
+        }
+
+        .mobile-theme-toggle {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+            background: var(--bg-light);
+            border-radius: var(--radius-lg);
+        }
+
+        body.dark-mode .mobile-theme-toggle {
+            background: var(--bg-card-dark);
+        }
+
+        .mobile-theme-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .mobile-theme-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+
+        body.dark-mode .mobile-theme-btn {
+            color: var(--text-light);
+        }
+
+        .mobile-theme-btn.active {
+            background: var(--bg-white);
+            color: var(--primary);
+        }
+
+        body.dark-mode .mobile-theme-btn.active {
+            background: var(--bg-dark);
+            color: var(--primary);
+        }
+
+        .mobile-lang-selector {
+            position: relative;
+        }
+
+        .mobile-lang-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-lang-btn {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+
+        body.dark-mode .mobile-lang-btn {
+            background: var(--bg-card-dark);
+            border-color: var(--border-dark);
+            color: #F3F4F6;
+        }
+
+        .mobile-lang-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .mobile-lang-btn-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-lang-flag {
+            font-size: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .mobile-lang-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 8px;
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        body.dark-mode .mobile-lang-dropdown {
+            background: var(--bg-card-dark);
+            border-color: var(--border-dark);
+        }
+
+        .mobile-lang-dropdown.active {
+            display: flex;
+        }
+
+        .mobile-lang-option {
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .mobile-lang-option {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+        }
+
+        body.dark-mode .mobile-lang-option {
+            color: var(--text-light);
+        }
+
+        .mobile-lang-option:hover {
+            background: var(--bg-light);
+            color: var(--primary);
+        }
+
+        body.dark-mode .mobile-lang-option:hover {
+            background: var(--bg-dark);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition);
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== СЕКЦИИ ===== */
+        section {
+            padding: 80px 0;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            section {
+                padding: 40px 0;
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 64px;
+        }
+
+        @media (max-width: 768px) {
+            .section-header {
+                margin-bottom: 48px;
+            }
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 28px;
+            }
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-gray);
+        }
+
+        @media (max-width: 768px) {
+            .section-subtitle {
+                font-size: 16px;
+            }
+        }
+
+        body.dark-mode .section-subtitle {
+            color: var(--text-light);
+        }
+
+        /* ===== СЕКЦИЯ "О НАС" ===== */
+        .about-mission {
+            background: var(--primary-soft);
+            border-radius: var(--radius-xl);
+            padding: 80px;
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 1024px) {
+            .about-mission {
+                padding: 60px 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-mission {
+                padding: 48px 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-mission {
+                padding: 40px 24px;
+                margin-bottom: 60px;
+            }
+        }
+
+        .mission-title {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 768px) {
+            .mission-title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mission-title {
+                font-size: 28px;
+            }
+        }
+
+        body.dark-mode .mission-title {
+            color: #F3F4F6;
+        }
+
+        .mission-title span {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .mission-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            max-width: 800px;
+        }
+
+        @media (max-width: 768px) {
+            .mission-text {
+                font-size: 16px;
+            }
+        }
+
+        body.dark-mode .mission-text {
+            color: var(--text-light);
+        }
+
+        /* ===== СЕКЦИЯ "НАША ИСТОРИЯ" ===== */
+        .story-section {
+            padding: 100px 0;
+        }
+
+        @media (max-width: 768px) {
+            .story-section {
+                padding: 80px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .story-section {
+                padding: 60px 0;
+            }
+        }
+
+        .story-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .story-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-gray);
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .story-text {
+                font-size: 16px;
+            }
+        }
+
+        body.dark-mode .story-text {
+            color: var(--text-light);
+        }
+
+        /* ===== СЕКЦИЯ "НАША КОМАНДА" ===== */
+        .team-section {
+            background: var(--bg-light);
+        }
+
+        body.dark-mode .team-section {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        .team-member {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .team-member {
+                padding: 24px;
+            }
+        }
+
+        body.dark-mode .team-member {
+            background: var(--bg-card-dark);
+        }
+
+        .team-member:hover {
+            transform: translateY(-8px);
+        }
+
+        /* Увеличил размер фото члена команды */
+        .member-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            overflow: hidden;
+            border: 4px solid var(--primary-soft);
+            position: relative;
+            background-color: var(--bg-light);
+        }
+
+        @media (max-width: 480px) {
+            .member-photo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        .member-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition);
+        }
+
+        .member-photo:hover img {
+            transform: scale(1.05);
+        }
+
+        .member-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 480px) {
+            .member-photo-placeholder {
+                font-size: 36px;
+            }
+        }
+
+        .member-role {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .member-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .member-name {
+                font-size: 20px;
+            }
+        }
+
+        body.dark-mode .member-name {
+            color: #F3F4F6;
+        }
+
+        .member-desc {
+            font-size: 15px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .member-desc {
+                font-size: 14px;
+            }
+        }
+
+        body.dark-mode .member-desc {
+            color: var(--text-light);
+        }
+
+        .member-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .skill-tag {
+            padding: 6px 12px;
+            background: var(--bg-light);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-gray);
+        }
+
+        body.dark-mode .skill-tag {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .member-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .member-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .member-link {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        body.dark-mode .member-link {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .member-link:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Иконки Font Awesome */
+        .member-link i {
+            font-size: 18px;
+            color: var(--primary);
+            transition: color var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .member-link i {
+                font-size: 16px;
+            }
+        }
+
+        body.dark-mode .member-link i {
+            color: var(--text-light);
+        }
+
+        .member-link:hover i {
+            color: white;
+        }
+
+        /* ===== СЕКЦИЯ "НАШИ СОВЕТНИКИ" ===== */
+        .mentors-section {
+            padding: 100px 0;
+        }
+
+        @media (max-width: 768px) {
+            .mentors-section {
+                padding: 80px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mentors-section {
+                padding: 60px 0;
+            }
+        }
+
+        .mentors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .mentors-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+        }
+
+        .mentor-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition);
+        }
+
+        @media (max-width: 768px) {
+            .mentor-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mentor-card {
+                padding: 24px;
+            }
+        }
+
+        body.dark-mode .mentor-card {
+            background: var(--bg-card-dark);
+        }
+
+        .mentor-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Увеличил размер фото ментора */
+        .mentor-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 4px solid var(--primary-soft);
+            background-color: var(--bg-light);
+        }
+
+        @media (max-width: 480px) {
+            .mentor-photo {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        .mentor-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition);
+        }
+
+        .mentor-photo:hover img {
+            transform: scale(1.05);
+        }
+
+        .mentor-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 480px) {
+            .mentor-photo-placeholder {
+                font-size: 28px;
+            }
+        }
+
+        .mentor-info {
+            flex: 1;
+        }
+
+        .mentor-role {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mentor-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .mentor-name {
+                font-size: 20px;
+            }
+        }
+
+        body.dark-mode .mentor-name {
+            color: #F3F4F6;
+        }
+
+        .mentor-desc {
+            font-size: 15px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .mentor-desc {
+                font-size: 14px;
+            }
+        }
+
+        body.dark-mode .mentor-desc {
+            color: var(--text-light);
+        }
+
+        /* LinkedIn иконка вместо текста */
+        .mentor-linkedin {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition);
+        }
+
+        .mentor-linkedin:hover {
+            transform: translateY(-2px);
+            color: var(--primary-light);
+        }
+
+        .mentor-linkedin i {
+            font-size: 24px;
+            color: var(--primary);
+            transition: color var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .mentor-linkedin i {
+                font-size: 20px;
+            }
+        }
+
+        .mentor-linkedin:hover i {
+            color: var(--primary-light);
+        }
+
+        /* ===== СЕКЦИЯ "КОНТАКТЫ" ===== */
+        .contact-section {
+            background: var(--bg-light);
+            padding: 100px 0;
+        }
+
+        @media (max-width: 768px) {
+            .contact-section {
+                padding: 80px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-section {
+                padding: 60px 0;
+            }
+        }
+
+        body.dark-mode .contact-section {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        .contact-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .contact-card {
+                padding: 32px 24px;
+            }
+        }
+
+        body.dark-mode .contact-card {
+            background: var(--bg-card-dark);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .contact-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-soft);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        @media (max-width: 480px) {
+            .contact-icon {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .contact-icon i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        @media (max-width: 480px) {
+            .contact-icon i {
+                font-size: 24px;
+            }
+        }
+
+        .contact-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .contact-title {
+                font-size: 18px;
+            }
+        }
+
+        body.dark-mode .contact-title {
+            color: #F3F4F6;
+        }
+
+        .contact-info {
+            font-size: 16px;
+            color: var(--text-gray);
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 480px) {
+            .contact-info {
+                font-size: 15px;
+            }
+        }
+
+        body.dark-mode .contact-info {
+            color: var(--text-light);
+        }
+
+        .contact-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-link:hover {
+            gap: 12px;
+            color: var(--primary-light);
+        }
+
+        /* ===== ПОДВАЛ ===== */
+        footer {
+            background: var(--bg-light);
+            padding: 64px 0 32px;
+            margin-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding: 48px 0 24px;
+                margin-top: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            footer {
+                padding: 40px 0 20px;
+                margin-top: 40px;
+            }
+        }
+
+        body.dark-mode footer {
+            background: #111111;
+        }
+
+        .footer-inner {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 64px;
+            margin-bottom: 64px;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+                gap: 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Уменьшен gap с 12px до 8px */
+            margin-bottom: 20px;
+        }
+
+        .footer-logo-icon {
+            width: 48px; /* Увеличено с 40px до 48px */
+            height: 48px; /* Увеличено с 40px до 48px */
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .footer-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-logo-text {
+            font-size: 28px; /* Увеличено с 24px до 28px */
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .footer-logo-text {
+                font-size: 20px;
+            }
+        }
+
+        body.dark-mode .footer-logo-text {
+            color: #F3F4F6;
+        }
+
+        .footer-logo-text span {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .footer-description {
+            font-size: 15px;
+            color: var(--text-gray);
+            margin-bottom: 32px;
+        }
+
+        body.dark-mode .footer-description {
+            color: var(--text-light);
+        }
+
+        .footer-links h4,
+        .footer-contact h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 480px) {
+            .footer-links h4,
+            .footer-contact h4 {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+        }
+
+        body.dark-mode .footer-links h4,
+        body.dark-mode .footer-contact h4 {
+            color: #F3F4F6;
+        }
+
+        .footer-links ul,
+        .footer-contact ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @media (max-width: 480px) {
+            .footer-links ul,
+            .footer-contact ul {
+                gap: 12px;
+            }
+        }
+
+        .footer-links a,
+        .footer-contact a {
+            font-size: 15px;
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .footer-links a,
+            .footer-contact a {
+                font-size: 14px;
+            }
+        }
+
+        body.dark-mode .footer-links a,
+        body.dark-mode .footer-contact a {
+            color: var(--text-light);
+        }
+
+        .footer-links a:hover,
+        .footer-contact a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        body.dark-mode .footer-bottom {
+            border-top-color: var(--border-dark);
+        }
+
+        .copyright {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        body.dark-mode .copyright {
+            color: var(--text-light);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .social-link {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        body.dark-mode .social-link {
+            background: var(--bg-card-dark);
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .social-link i {
+            font-size: 20px;
+            color: var(--primary);
+            transition: color var(--transition);
+        }
+
+        @media (max-width: 480px) {
+            .social-link i {
+                font-size: 18px;
+            }
+        }
+
+        .social-link:hover i {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Основной контейнер страницы -->
+    <div class="page-wrapper">
+        <!-- Фоновый градиент -->
+        <div class="bg-gradient"></div>
+
+        <!-- Шапка сайта -->
+        <header>
+            <div class="container header-inner">
+                <!-- Логотип -->
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <!-- Замените logo.png на вашу иконку -->
+                        <img src="logo_bg.png" alt="Bozorlik AI Logo">
+                    </div>
+                    <div class="logo-text">Bozorlik <span>AI</span></div>
+                </a>
+
+                <!-- Навигация для десктопа -->
+                <nav class="desktop-nav">
+                    <a href="index.html" class="nav-link" data-i18n="nav.home">Bosh sahifa</a>
+                    <a href="#team" class="nav-link" data-i18n="nav.team">Jamoa</a>
+                    <a href="#mentors" class="nav-link" data-i18n="nav.mentors">Maslahatchilar</a>
+                    <a href="#contact" class="nav-link" data-i18n="nav.contact">Bog'lanish</a>
+                </nav>
+
+                <!-- Элементы управления в шапке -->
+                <div class="header-controls">
+                    <!-- Кнопка переключения темы -->
+                    <button class="theme-toggle" id="themeToggle">
+                        <svg class="theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+
+                    <!-- Переключатель языка (скрыт на мобильных) -->
+                    <div class="lang-switcher">
+                        <button class="lang-btn" data-lang="ru">
+                            <span class="fi fi-ru flag-icon"></span>
+                            RU
+                        </button>
+                        <button class="lang-btn" data-lang="en">
+                            <span class="fi fi-gb flag-icon"></span>
+                            EN
+                        </button>
+                        <button class="lang-btn active" data-lang="uz">
+                            <span class="fi fi-uz flag-icon"></span>
+                            UZ
+                        </button>
+                    </div>
+
+                    <!-- Кнопка мобильного меню -->
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Мобильное меню -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="mobile-logo">
+                    <div class="mobile-logo-icon">
+                        <!-- Замените logo.png на вашу иконку -->
+                        <img src="logo_bg.png" alt="Bozorlik AI Logo">
+                    </div>
+                    <div class="mobile-logo-text">Bozorlik <span>AI</span></div>
+                </div>
+                <button class="mobile-menu-close" id="mobileMenuClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="mobile-menu-nav">
+                <a href="index.html" class="mobile-nav-link" data-i18n="nav.home">Bosh sahifa</a>
+                <a href="#team" class="mobile-nav-link" data-i18n="nav.team">Jamoa</a>
+                <a href="#mentors" class="mobile-nav-link" data-i18n="nav.mentors">Maslahatchilar</a>
+                <a href="#contact" class="mobile-nav-link" data-i18n="nav.contact">Bog'lanish</a>
+            </nav>
+
+            <div class="mobile-menu-controls">
+                <!-- Переключатель темы в мобильном меню -->
+                <div class="mobile-theme-switcher">
+                    <span data-i18n="mobile.theme">Mavzu</span>
+                    <div class="mobile-theme-toggle">
+                        <button class="mobile-theme-btn active" data-theme="light">
+                            <i class="fas fa-sun"></i>
+                            <span data-i18n="mobile.theme.light">Yorqin</span>
+                        </button>
+                        <button class="mobile-theme-btn" data-theme="dark">
+                            <i class="fas fa-moon"></i>
+                            <span data-i18n="mobile.theme.dark">Qorong'u</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Выбор языка в мобильном меню -->
+                <div class="mobile-lang-selector">
+                    <button class="mobile-lang-btn" id="mobileLangBtn">
+                        <div class="mobile-lang-btn-content">
+                            <span class="fi fi-uz mobile-lang-flag" id="mobileLangFlag"></span>
+                            <span id="mobileLangText">O'zbekcha</span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="mobile-lang-dropdown" id="mobileLangDropdown">
+                        <button class="mobile-lang-option" data-lang="ru">
+                            <span class="fi fi-ru mobile-lang-flag"></span>
+                            Русский
+                        </button>
+                        <button class="mobile-lang-option" data-lang="en">
+                            <span class="fi fi-gb mobile-lang-flag"></span>
+                            English
+                        </button>
+                        <button class="mobile-lang-option" data-lang="uz">
+                            <span class="fi fi-uz mobile-lang-flag"></span>
+                            O'zbekcha
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-overlay" id="menuOverlay"></div>
+
+        <!-- Секция "Наша история" -->
+        <section class="story-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="story.label">01 — Bizning tariximiz</div>
+                    <h2 class="section-title" data-i18n="story.title">Bozorlik AI qanday paydo bo'ldi</h2>
+                    <p class="section-subtitle" data-i18n="story.subtitle">Kundalik xaridlarga yondashuvni o'zgartiruvchi loyihani yaratish tarixi</p>
+                </div>
+
+                <div class="story-content">
+                    <p class="story-text" data-i18n="story.text1">Bozorlik AI g'oyasi oilamizning kundalik hayotidan tug'ildi. Biz doimo qog'oz varag'iga bozor ro'yxatini yozib, ularni yo'qotib qo'yardik. Supermarketda muhim narsalarni unutib qo'yardik, kassada esa rejalashtirganimizdan ko'proq sarflaganimizni aniqlardik.</p>
+
+                    <p class="story-text" data-i18n="story.text2">Biz bu rutindan charchadik va yechim izlashni boshladik. Avval telefonlarga eslatmalar, keyin mavjud ilovalardan foydalanishga urinishlar. Lekin ularning hech biri mamlakatimiz bozorlari va bozorlarining o'ziga xos xususiyatlarini hisobga olmadi, tilimizda ovozli kirishni taklif qilmadi yoki byudjetni hisoblashda yordam bermadi.</p>
+
+                    <p class="story-text" data-i18n="story.text3">Va keyin biz tushundik - o'zimizning yechimimizni yaratish kerak. Shunday qilib Bozorlik AI paydo bo'ldi - qanday gapirishimizni tushunadigan, mahalliy narxlarni biladigan va nima sotib olishni eslab qolishga emas, balki qancha turishini hisoblashga yordam beradigan aqlli yordamchi.</p>
+
+                    <p class="story-text" data-i18n="story.text4">Keyin biz tushundikki, faqat bizning oilamiz emas, boshqa oilalar ham shunday muammoga duch keladi. Do'stlar, tanishlar fikrlari va keyin birinchi foydalanuvchilarimizning sharhlari tasdiqladi — Bozorlik AI ko'plab odamlar uchun zarur. Shu tarzda, shaxsiy loyiha barchaga o'z vaqtini va pulini qadrlaydiganlar uchun mahsulotga aylandi.</p>
+
+                    <p class="story-text" data-i18n="story.text5">Bugun biz Bozorlik AI ni rivojlantirishda davom etamiz, yangi funksiyalarni qo'shamiz, AI modellarini yaxshilaymiz va imkoniyatlarni kengaytiramiz. Maqsadimiz - mamlakatimizning har bir aholisi uchun xarid rejalashtirishni iloji boricha oddiy va samarali qilish.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция "Наша команда" -->
+        <section class="team-section" id="team">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="team.label">02 — Bizning jamoamiz</div>
+                    <h2 class="section-title" data-i18n="team.title">Bozorlik AI mutaxassislar jamoasi</h2>
+                    <p class="section-subtitle" data-i18n="team.subtitle">Biz AI, dasturlash va mahsulot sohasidagi eng yaxshi mutaxassislarni birlashtirdik</p>
+                </div>
+
+                <div class="team-grid">
+                    <!-- Член команды 1 -->
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="samir.jpg" alt="Tojiyev Samir" class="member-img" data-member="ts" onerror="this.style.display='none'; this.parentElement.querySelector('.member-photo-placeholder').style.display='flex';">
+                            <div class="member-photo-placeholder" style="display: none;">ТС</div>
+                        </div>
+                        <div class="member-role" data-i18n="team.member1.role">CEO / Product Manager</div>
+                        <h3 class="member-name" data-i18n="team.member1.name">Tojiyev Samir</h3>
+                        <p class="member-desc" data-i18n="team.member1.desc">Product vision, Management, Agile & Scrum, UX, Git, JSON</p>
+
+                        <div class="member-skills">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Aiogram</span>
+                            <span class="skill-tag">FastAPI</span>
+                            <span class="skill-tag">AI integrations</span>
+                        </div>
+
+                        <div class="member-links">
+                            <a href="https://t.me/stdxrk" target="_blank" class="member-link">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://github.com/stdxrk" target="_blank" class="member-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/samir-tojiev-ab676b289/" target="_blank" class="member-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Член команды 2 -->
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="umid.jpg" alt="Usmonov Umid" class="member-img" data-member="uu" onerror="this.style.display='none'; this.parentElement.querySelector('.member-photo-placeholder').style.display='flex';">
+                            <div class="member-photo-placeholder" style="display: none;">УУ</div>
+                        </div>
+                        <div class="member-role" data-i18n="team.member2.role">COO / PM Assistant</div>
+                        <h3 class="member-name" data-i18n="team.member2.name">Usmonov Umid</h3>
+                        <p class="member-desc" data-i18n="team.member2.desc">Python, AI, Java, Product Management</p>
+
+                        <div class="member-skills">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Java</span>
+                            <span class="skill-tag">Gemini</span>
+                        </div>
+
+                        <div class="member-links">
+                            <a href="https://t.me/umidusmonov1" target="_blank" class="member-link">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://github.com/Um1d13" target="_blank" class="member-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/umid-usmonov-4aa751308/" target="_blank" class="member-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Член команды 3 -->
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="asad.jpg" alt="Maxsetov Asad" class="member-img" data-member="ma" onerror="this.style.display='none'; this.parentElement.querySelector('.member-photo-placeholder').style.display='flex';">
+                            <div class="member-photo-placeholder" style="display: none;">МА</div>
+                        </div>
+                        <div class="member-role" data-i18n="team.member3.role">Backend Developer</div>
+                        <h3 class="member-name" data-i18n="team.member3.name">Maxsetov Asad</h3>
+                        <p class="member-desc" data-i18n="team.member3.desc">UX, Python, Backend Development</p>
+
+                        <div class="member-skills">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Aiogram</span>
+                            <span class="skill-tag">FlaskAPI</span>
+                            <span class="skill-tag">Django</span>
+                        </div>
+
+                        <div class="member-links">
+                            <a href="https://t.me/asadmaxsetov" target="_blank" class="member-link">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://github.com/Assa1d" target="_blank" class="member-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/makhsetov-asad" target="_blank" class="member-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Член команды 4 -->
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="feruzbek.jpg" alt="Quranboyev Feruzbek" class="member-img" data-member="kf" onerror="this.style.display='none'; this.parentElement.querySelector('.member-photo-placeholder').style.display='flex';">
+                            <div class="member-photo-placeholder" style="display: none;">КФ</div>
+                        </div>
+                        <div class="member-role" data-i18n="team.member4.role">Backend Developer</div>
+                        <h3 class="member-name" data-i18n="team.member4.name">Quranboyev Feruzbek</h3>
+                        <p class="member-desc" data-i18n="team.member4.desc">C#, .NET, Python, SQL, Git, Testing, Deployment</p>
+
+                        <div class="member-skills">
+                            <span class="skill-tag">.NET</span>
+                            <span class="skill-tag">SQL</span>
+                            <span class="skill-tag">Django</span>
+                            <span class="skill-tag">LLM</span>
+                        </div>
+
+                        <div class="member-links">
+                            <a href="https://t.me/Feruzbek_nk" target="_blank" class="member-link">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://github.com/codeDriven18" target="_blank" class="member-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/kuranboev-feruzbek" target="_blank" class="member-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Член команды 5 -->
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="amin.jpg" alt="Kasumov Amin" class="member-img" data-member="ka" onerror="this.style.display='none'; this.parentElement.querySelector('.member-photo-placeholder').style.display='flex';">
+                            <div class="member-photo-placeholder" style="display: none;">КА</div>
+                        </div>
+                        <div class="member-role" data-i18n="team.member5.role">DevOps Engineer</div>
+                        <h3 class="member-name" data-i18n="team.member5.name">Kasumov Amin</h3>
+                        <p class="member-desc" data-i18n="team.member5.desc">Cybersecurity, Python, CI/CD, Golang, Infrastructure</p>
+
+                        <div class="member-skills">
+                            <span class="skill-tag">CI/CD</span>
+                            <span class="skill-tag">Golang</span>
+                            <span class="skill-tag">Cybersecurity</span>
+                            <span class="skill-tag">Docker</span>
+                        </div>
+
+                        <div class="member-links">
+                            <a href="https://t.me/Amm_iinnn" target="_blank" class="member-link">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://github.com/Amin-devops1" target="_blank" class="member-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/posts/amin-kasumov-a0779a310_cyberguard2025-ctf-cybersecurity-activity-7409304687277125632-e7Fh?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAE8jdicB7oto0NgUFw_ELK6Rgdaf7jPcQyQ" target="_blank" class="member-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция "Наши советники" -->
+        <section class="mentors-section" id="mentors">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="mentors.label">03 — Bizning maslahatchilarimiz</div>
+                    <h2 class="section-title" data-i18n="mentors.title">Bizning o'sishimizga yordam beradigan mutaxassislar</h2>
+                    <p class="section-subtitle" data-i18n="mentors.subtitle">Tajribali murabbiylar o'z bilim va tajribalarini baham ko'rishadi</p>
+                </div>
+
+                <div class="mentors-grid">
+                    <!-- Советник 1 -->
+                    <div class="mentor-card">
+                        <div class="mentor-photo">
+                            <img src="mentor.jpg" alt="Usmon Rakhimjanov" class="mentor-img" data-mentor="ur" onerror="this.style.display='none'; this.parentElement.querySelector('.mentor-photo-placeholder').style.display='flex';">
+                            <div class="mentor-photo-placeholder" style="display: none;">УР</div>
+                        </div>
+                        <div class="mentor-info">
+                            <div class="mentor-role" data-i18n="mentors.mentor1.role">Startap ekotizimini rivojlantirish bo'limi bosh menejeri</div>
+                            <h3 class="mentor-name" data-i18n="mentors.mentor1.name">Usmon Rahimjanov</h3>
+                            <p class="mentor-desc" data-i18n="mentors.mentor1.desc">Usmon Rahimjanov — IT Park Uzbekistanda startap ekotizimi va venchur sarmoyalashni rivojlantirish bo'yicha bosh menejer. Avval "Startap tashabbuslari" dasturini muvofiqlashtirgan, USAID va BMTTD (UNDP) loyihalarida rahbar lavozimlarda ishlagan, startaplar bo'yicha mentor va ekspert.</p>
+                            <a href="https://linkedin.com/in/usmon-rakhimjanov-69a4a82" target="_blank" class="mentor-linkedin">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция "Контакты" -->
+        <section class="contact-section" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label" data-i18n="contact.label">04 — Aloqalar</div>
+                    <h2 class="section-title" data-i18n="contact.title">Biz bilan bog'laning</h2>
+                    <p class="section-subtitle" data-i18n="contact.subtitle">Savollaringiz yoki takliflaringiz bormi? Biz har doim aloqadamiz</p>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Контакт 1 -->
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3 class="contact-title" data-i18n="contact.email.title">Elektron pochta</h3>
+                        <p class="contact-info" data-i18n="contact.email.info">Har qanday savollar uchun bizga yozing</p>
+                        <a href="mailto:bozorlikaiuz@gmail.com" class="contact-link">bozorlikaiuz@gmail.com</a>
+                    </div>
+
+                    <!-- Контакт 2 -->
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h3 class="contact-title" data-i18n="contact.phone.title">Telefon</h3>
+                        <p class="contact-info" data-i18n="contact.phone.info">Shoshilinch masalalar uchun</p>
+                        <a href="tel:+998971786961" class="contact-link">+998 (97) 178-69-61</a>
+                    </div>
+
+                    <!-- Контакт 3 - ОБНОВЛЕН НА БОТ ПОДДЕРЖКИ -->
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <h3 class="contact-title" data-i18n="contact.telegram.title">Support</h3>
+                        <p class="contact-info" data-i18n="contact.telegram.info">Messenger orqali tez aloqa</p>
+                        <a href="https://t.me/bozorlikai_support_bot" target="_blank" class="contact-link">@bozorlikai_support_bot</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Подвал сайта -->
+        <footer>
+            <div class="container">
+                <div class="footer-inner">
+                    <!-- Блок с логотипом и описанием -->
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <div class="footer-logo-icon">
+                                <!-- Замените logo.png на вашу иконку -->
+                                <img src="logo_bg.png" alt="Bozorlik AI Logo">
+                            </div>
+                            <div class="footer-logo-text">Bozorlik <span>AI</span></div>
+                        </div>
+                        <p class="footer-description" data-i18n="footer.description">Oziq-ovqat xaridlari uchun AI yordamchi. Xaridlar ro'yxatini avtomatlashtiring, byudjetingizni nazorat qiling va vaqt tejang.</p>
+                    </div>
+
+                    <!-- Навигационные ссылки -->
+                    <div class="footer-links">
+                        <h4 data-i18n="footer.links.title">Navigatsiya</h4>
+                        <ul>
+                            <li><a href="index.html" data-i18n="nav.home">Bosh sahifa</a></li>
+                            <li><a href="#team" data-i18n="nav.team">Jamoa</a></li>
+                            <li><a href="#mentors" data-i18n="nav.mentors">Maslahatchilar</a></li>
+                            <li><a href="#contact" data-i18n="nav.contact">Bog'lanish</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Контактная информация -->
+                    <div class="footer-contact">
+                        <h4 data-i18n="footer.contact.title">Aloqalar</h4>
+                        <ul>
+                            <li><a href="mailto:bozorlikaiuz@gmail.com">bozorlikai@gmail.com</a></li>
+                            <li><a href="https://t.me/BozorlikAI_bot" target="_blank">Telegram Bot</a></li>
+                            <li><a href="https://t.me/bozorlikai_support_bot" target="_blank">Support Bot</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Нижняя часть подвала -->
+                <div class="footer-bottom">
+                    <div class="copyright" data-i18n="footer.copyright">© 2026 Bozorlik AI. Barcha huquqlar himoyalangan.</div>
+                    <div class="footer-social">
+                        <a href="https://t.me/BozorlikAI" target="_blank" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://instagram.com/bozorlik_ai" target="_blank" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/bozorlik-ai" target="_blank" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // Словарь переводов для трех языков
+        const translations = {
+            ru: {
+                // Навигация
+                "nav.home": "Главная",
+                "nav.team": "Команда",
+                "nav.mentors": "Советники",
+                "nav.contact": "Связаться",
+
+                // Мобильное меню
+                "mobile.theme": "Тема",
+                "mobile.theme.light": "Светлая",
+                "mobile.theme.dark": "Темная",
+
+                // Заголовки
+                "story.label": "01 — Наша история",
+                "story.title": "Как появился Bozorlik AI",
+                "story.subtitle": "История создания проекта, который меняет подход к повседневным покупкам",
+                "story.text1": "Идея Bozorlik AI родилась из нашей повседневной жизни в семье. Мы каждый раз писали список базара на листочках бумаги, которые постоянно терялись. В супермаркете мы забывали купить что-то важное, а на кассе обнаруживали, что потратили больше, чем планировали.",
+                "story.text2": "Мы устали от этой рутины и начали искать решение. Сначала это были заметки в телефоне, потом попытки использовать существующие приложения. Но ни одно из них не учитывало особенности рынков и базаров нашей страны, не предлагало голосовой ввод на нашем языке и не помогало с расчетом бюджета.",
+                "story.text3": "И тогда мы поняли — нужно создать собственное решение. Так появился Bozorlik AI — умный помощник, который понимает, как мы говорим, знает местные цены и помогает не только запомнить, что купить, но и сколько это будет стоить.",
+                "story.text4": "Позже мы поняли, что не одна семья сталкивается с такой же проблемой, как у нас. Отзывы друзей, знакомых, а потом и первых пользователей подтвердили — Bozorlik AI нужен многим. Так личный проект стал продуктом для всех, кто ценит свое время и деньги.",
+                "story.text5": "Сегодня мы продолжаем развивать Bozorlik AI, добавляя новые функции, улучшая AI-модели и расширяя возможности. Наша цель — сделать планирование покупок максимально простым и эффективным для каждого жителя нашей страны.",
+
+                "team.label": "02 — Наша команда",
+                "team.title": "Команда экспертов Bozorlik AI",
+                "team.subtitle": "Мы объединили лучших специалистов в области AI, разработки и продукта",
+
+                // Команда
+                "team.member1.role": "CEO / Product Manager",
+                "team.member1.name": "Тожиев Самир",
+                "team.member1.desc": "Product vision, Management, Agile & Scrum, UX, Git, JSON",
+
+                "team.member2.role": "COO / PM Assistant",
+                "team.member2.name": "Усмонов Умид",
+                "team.member2.desc": "Python, AI, Java, Product Management",
+
+                "team.member3.role": "Backend Developer",
+                "team.member3.name": "Махсетов Асад",
+                "team.member3.desc": "UX, Python, Backend Development",
+
+                "team.member4.role": "CTO",
+                "team.member4.name": "Куранбоев Ферузбек",
+                "team.member4.desc": "C#, .NET, Python, SQL, Git, Testing, Deployment",
+
+                "team.member5.role": "DevOps Engineer",
+                "team.member5.name": "Касумов Амин",
+                "team.member5.desc": "Cybersecurity, Python, CI/CD, Golang, Infrastructure",
+
+                "mentors.label": "03 — Наши советники",
+                "mentors.title": "Эксперты, которые помогают нам расти",
+                "mentors.subtitle": "Опытные менторы делятся своими знаниями и опытом",
+
+                // Советник
+                "mentors.mentor1.role": "Главный менеджер отдела развития стартап-экосистемы",
+                "mentors.mentor1.name": "Усмон Рахимджанов",
+                "mentors.mentor1.desc": "Усмон Рахимджанов — главный менеджер по развитию стартап-экосистемы и венчурного инвестирования IT Park Uzbekistan. Ранее координировал программу поддержки «Стартап-инициативы», занимал руководящие позиции в проектах USAID и ПРООН (ООН), ментор и эксперт по развитию стартапов.",
+
+                "contact.label": "04 — Контакты",
+                "contact.title": "Свяжитесь с нами",
+                "contact.subtitle": "Есть вопросы или предложения? Мы всегда на связи",
+                "contact.email.title": "Электронная почта",
+                "contact.email.info": "Пишите нам по любым вопросам",
+                "contact.phone.title": "Телефон",
+                "contact.phone.info": "Для срочных вопросов",
+                "contact.telegram.title": "Support",
+                "contact.telegram.info": "Быстрая связь через мессенджер",
+
+                // Подвал
+                "footer.description": "AI-помощник для умных покупок продуктов. Автоматизируйте списки покупок, контролируйте бюджет и экономьте время.",
+                "footer.links.title": "Навигация",
+                "footer.contact.title": "Контакты",
+                "footer.copyright": "© 2026 Bozorlik AI. Все права защищены."
+            },
+            en: {
+                // Navigation
+                "nav.home": "Home",
+                "nav.team": "Team",
+                "nav.mentors": "Mentors",
+                "nav.contact": "Contact",
+
+                // Mobile menu
+                "mobile.theme": "Theme",
+                "mobile.theme.light": "Light",
+                "mobile.theme.dark": "Dark",
+
+                // Headers
+                "story.label": "01 — Our Story",
+                "story.title": "How Bozorlik AI Was Born",
+                "story.subtitle": "The story of creating a project that changes the approach to everyday shopping",
+                "story.text1": "The idea of Bozorlik AI was born from our daily family life. We kept writing shopping lists on pieces of paper that kept getting lost. At the supermarket, we would forget to buy something important, and at the checkout, we'd discover we spent more than planned.",
+                "story.text2": "We got tired of this routine and started looking for a solution. First, it was notes on the phone, then attempts to use existing apps. But none of them considered the specifics of our country's markets and bazaars, offered voice input in our language, or helped with budget calculation.",
+                "story.text3": "And then we realized - we need to create our own solution. That's how Bozorlik AI appeared - a smart assistant that understands how we speak, knows local prices, and helps not only remember what to buy but also how much it will cost.",
+                "story.text4": "Later, we realized that not just one family faces the same problem as we do. Feedback from friends, acquaintances, and then first users confirmed - Bozorlik AI is needed by many. So a personal project became a product for everyone who values their time and money.",
+                "story.text5": "Today we continue to develop Bozorlik AI, adding new features, improving AI models, and expanding capabilities. Our goal is to make shopping planning as simple and effective as possible for every resident of our country.",
+
+                "team.label": "02 — Our Team",
+                "team.title": "Bozorlik AI Expert Team",
+                "team.subtitle": "We've brought together the best specialists in AI, development, and product",
+
+                // Team
+                "team.member1.role": "CEO / Product Manager",
+                "team.member1.name": "Tojiyev Samir",
+                "team.member1.desc": "Product vision, Management, Agile & Scrum, UX, Git, JSON",
+
+                "team.member2.role": "COO / PM Assistant",
+                "team.member2.name": "Usmonov Umid",
+                "team.member2.desc": "Python, AI, Java, Product Management",
+
+                "team.member3.role": "Backend Developer",
+                "team.member3.name": "Maxsetov Asad",
+                "team.member3.desc": "UX, Python, Backend Development",
+
+                "team.member4.role": "CTO",
+                "team.member4.name": "Quranboyev Feruzbek",
+                "team.member4.desc": "C#, .NET, Python, SQL, Git, Testing, Deployment",
+
+                "team.member5.role": "DevOps Engineer",
+                "team.member5.name": "Kasumov Amin",
+                "team.member5.desc": "Cybersecurity, Python, CI/CD, Golang, Infrastructure",
+
+                "mentors.label": "03 — Our Mentors",
+                "mentors.title": "Experts Who Help Us Grow",
+                "mentors.subtitle": "Experienced mentors share their knowledge and experience",
+
+                // Mentor
+                "mentors.mentor1.role": "Head Manager of Startup Ecosystem Development Department",
+                "mentors.mentor1.name": "Usmon Rahimjanov",
+                "mentors.mentor1.desc": "Usmon Rahimjanov is the Head Manager for Startup Ecosystem Development and Venture Investment at IT Park Uzbekistan. Previously, he coordinated the \"Startup Initiatives\" support program and held leadership roles in USAID and UNDP (UN) projects. He is a mentor and expert in startup development.",
+
+                "contact.label": "04 — Contacts",
+                "contact.title": "Contact Us",
+                "contact.subtitle": "Have questions or suggestions? We're always in touch",
+                "contact.email.title": "Email",
+                "contact.email.info": "Write to us with any questions",
+                "contact.phone.title": "Phone",
+                "contact.phone.info": "For urgent matters",
+                "contact.telegram.title": "Support",
+                "contact.telegram.info": "Quick communication via messenger",
+
+                // Footer
+                "footer.description": "AI assistant for smart grocery shopping. Automate shopping lists, control your budget, and save time.",
+                "footer.links.title": "Navigation",
+                "footer.contact.title": "Contacts",
+                "footer.copyright": "© 2026 Bozorlik AI. All rights reserved."
+            },
+            uz: {
+                // Navigation
+                "nav.home": "Bosh sahifa",
+                "nav.team": "Jamoa",
+                "nav.mentors": "Maslahatchilar",
+                "nav.contact": "Bog'lanish",
+
+                // Mobile menu
+                "mobile.theme": "Mavzu",
+                "mobile.theme.light": "Yorqin",
+                "mobile.theme.dark": "Qorong'u",
+
+                // Headers
+                "story.label": "01 — Bizning tariximiz",
+                "story.title": "Bozorlik AI qanday paydo bo'ldi",
+                "story.subtitle": "Kundalik xaridlarga yondashuvni o'zgartiruvchi loyihani yaratish tarixi",
+                "story.text1": "Bozorlik AI g'oyasi oilamizning kundalik hayotidan tug'ildi. Biz doimo qog'oz varag'iga bozor ro'yxatini yozib, ularni yo'qotib qo'yardik. Supermarketda muhim narsalarni unutib qo'yardik, kassada esa rejalashtirganimizdan ko'proq sarflaganimizni aniqlardik.",
+                "story.text2": "Biz bu rutindan charchadik va yechim izlashni boshladik. Avval telefonlarga eslatmalar, keyin mavjud ilovalardan foydalanishga urinishlar. Lekin ularning hech biri mamlakatimiz bozorlari va bozorlarining o'ziga xos xususiyatlarini hisobga olmadi, tilimizda ovozli kirishni taklif qilmadi yoki byudjetni hisoblashda yordam bermadi.",
+                "story.text3": "Va keyin biz tushundik - o'zimizning yechimimizni yaratish kerak. Shunday qilib Bozorlik AI paydo bo'ldi - qanday gapirishimizni tushunadigan, mahalliy narxlarni biladigan va nima sotib olishni eslab qolishga emas, balki qancha turishini hisoblashga yordam beradigan aqlli yordamchi.",
+                "story.text4": "Keyin biz tushundikki, faqat bizning oilamiz emas, boshqa oilalar ham shunday muammoga duch keladi. Do'stlar, tanishlar fikrlari va keyin birinchi foydalanuvchilarimizning sharhlari tasdiqladi — Bozorlik AI ko'plab odamlar uchun zarur. Shu tarzda, shaxsiy loyiha barchaga o'z vaqtini va pulini qadrlaydiganlar uchun mahsulotga aylandi.",
+                "story.text5": "Bugun biz Bozorlik AI ni rivojlantirishda davom etamiz, yangi funksiyalarni qo'shamiz, AI modellarini yaxshilaymiz va imkoniyatlarni kengaytiramiz. Maqsadimiz - mamlakatimizning har bir aholisi uchun xarid rejalashtirishni iloji boricha oddiy va samarali qilish.",
+
+                "team.label": "02 — Bizning jamoamiz",
+                "team.title": "Bozorlik AI mutaxassislar jamoasi",
+                "team.subtitle": "Biz AI, dasturlash va mahsulot sohasidagi eng yaxshi mutaxassislarni birlashtirdik",
+
+                // Jamoa
+                "team.member1.role": "CEO / Product Manager",
+                "team.member1.name": "Tojiyev Samir",
+                "team.member1.desc": "Product vision, Management, Agile & Scrum, UX, Git, JSON",
+
+                "team.member2.role": "COO / PM Assistant",
+                "team.member2.name": "Usmonov Umid",
+                "team.member2.desc": "Python, AI, Java, Product Management",
+
+                "team.member3.role": "Backend Developer",
+                "team.member3.name": "Maxsetov Asad",
+                "team.member3.desc": "UX, Python, Backend Development",
+
+                "team.member4.role": "CTO",
+                "team.member4.name": "Quranboyev Feruzbek",
+                "team.member4.desc": "C#, .NET, Python, SQL, Git, Testing, Deployment",
+
+                "team.member5.role": "DevOps Engineer",
+                "team.member5.name": "Kasumov Amin",
+                "team.member5.desc": "Cybersecurity, Python, CI/CD, Golang, Infrastructure",
+
+                "mentors.label": "03 — Bizning maslahatchilarimiz",
+                "mentors.title": "Bizning o'sishimizga yordam beradigan mutaxassislar",
+                "mentors.subtitle": "Tajribali murabbiylar o'z bilim va tajribalarini baham ko'rishadi",
+
+                // Maslahatchi
+                "mentors.mentor1.role": "Startap ekotizimini rivojlantirish bo'limi bosh menejeri",
+                "mentors.mentor1.name": "Usmon Rahimjanov",
+                "mentors.mentor1.desc": "Usmon Rahimjanov — IT Park Uzbekistanda startap ekotizimi va venchur sarmoyalashni rivojlantirish bo'yicha bosh menejer. Avval \"Startap tashabbuslari\" dasturini muvofiqlashtirgan, USAID va BMTTD (UNDP) loyihalarida rahbar lavozimlarda ishlagan, startaplar bo'yicha mentor va ekspert.",
+
+                "contact.label": "04 — Aloqalar",
+                "contact.title": "Biz bilan bog'laning",
+                "contact.subtitle": "Savollaringiz yoki takliflaringiz bormi? Biz har doim aloqadamiz",
+                "contact.email.title": "Elektron pochta",
+                "contact.email.info": "Har qanday savollar uchun bizga yozing",
+                "contact.phone.title": "Telefon",
+                "contact.phone.info": "Shoshilinch masalalar uchun",
+                "contact.telegram.title": "Support",
+                "contact.telegram.info": "Messenger orqali tez aloqa",
+
+                // Подвал
+                "footer.description": "Oziq-ovqat xaridlari uchun AI yordamchi. Xaridlar ro'yxatini avtomatlashtiring, byudjetingizni nazorat qiling va vaqt tejang.",
+                "footer.links.title": "Navigatsiya",
+                "footer.contact.title": "Aloqalar",
+                "footer.copyright": "© 2026 Bozorlik AI. Barcha huquqlar himoyalangan."
+            }
+        };
+
+        // ===== ПЕРЕКЛЮЧЕНИЕ ТЕМЫ =====
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const mobileThemeButtons = document.querySelectorAll('.mobile-theme-btn');
+
+        // Функция установки темы
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                // Устанавливаем темную тему
+                document.body.classList.add('dark-mode');
+                // Меняем иконку на солнце (светлая тема)
+                themeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>`;
+
+                // Обновляем кнопки в мобильном меню
+                mobileThemeButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.theme === 'dark') {
+                        btn.classList.add('active');
+                    }
+                });
+
+                localStorage.setItem('theme', 'dark');
+            } else {
+                // Устанавливаем светлую тему
+                document.body.classList.remove('dark-mode');
+                // Меняем иконку на луну (темная тема)
+                themeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>`;
+
+                // Обновляем кнопки в мобильном меню
+                mobileThemeButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.theme === 'light') {
+                        btn.classList.add('active');
+                    }
+                });
+
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Обработчик клика по кнопке темы в хедере
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.contains('dark-mode');
+            setTheme(isDark ? 'light' : 'dark');
+        });
+
+        // Обработчики кликов по кнопкам темы в мобильном меню
+        mobileThemeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTheme(btn.dataset.theme);
+            });
+        });
+
+        // ===== ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА =====
+        const langButtons = document.querySelectorAll('.lang-btn');
+        const mobileLangBtn = document.getElementById('mobileLangBtn');
+        const mobileLangDropdown = document.getElementById('mobileLangDropdown');
+        const mobileLangOptions = document.querySelectorAll('.mobile-lang-option');
+        const mobileLangFlag = document.getElementById('mobileLangFlag');
+        const mobileLangText = document.getElementById('mobileLangText');
+
+        // Функция установки языка
+        function setLanguage(lang) {
+            const dict = translations[lang];
+            if (!dict) return;
+
+            // Обновляем все элементы с атрибутом data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = dict[key];
+                    } else {
+                        el.textContent = dict[key];
+                    }
+                }
+            });
+
+            // Обновляем активную кнопку языка в хедере
+            langButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            // Обновляем выбранный язык в мобильном меню
+            const langNames = {
+                'ru': 'Русский',
+                'en': 'English',
+                'uz': 'O\'zbekcha'
+            };
+
+            const flagClasses = {
+                'ru': 'fi fi-ru',
+                'en': 'fi fi-gb',
+                'uz': 'fi fi-uz'
+            };
+
+            if (mobileLangFlag && mobileLangText) {
+                mobileLangFlag.className = flagClasses[lang] + ' mobile-lang-flag';
+                mobileLangText.textContent = langNames[lang];
+            }
+
+            // Обновляем атрибут lang у html
+            document.documentElement.lang = lang;
+
+            // Сохраняем в localStorage
+            localStorage.setItem('language', lang);
+
+            // Закрываем выпадающий список
+            if (mobileLangDropdown) {
+                mobileLangDropdown.classList.remove('active');
+            }
+        }
+
+        // Обработчики кликов по кнопкам языка в хедере
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.dataset.lang);
+            });
+        });
+
+        // Обработчики кликов по вариантам языка в мобильном меню
+        mobileLangOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                setLanguage(option.dataset.lang);
+            });
+        });
+
+        // Открытие/закрытие выпадающего списка языков в мобильном меню
+        if (mobileLangBtn && mobileLangDropdown) {
+            mobileLangBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileLangDropdown.classList.toggle('active');
+            });
+
+            // Закрытие выпадающего списка при клике вне его
+            document.addEventListener('click', (e) => {
+                if (!mobileLangBtn.contains(e.target) && !mobileLangDropdown.contains(e.target)) {
+                    mobileLangDropdown.classList.remove('active');
+                }
+            });
+        }
+
+        // ===== МОБИЛЬНОЕ МЕНЮ =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        // Функция переключения мобильного меню
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+
+            // Закрываем выпадающий список языков при закрытии меню
+            if (mobileLangDropdown) {
+                mobileLangDropdown.classList.remove('active');
+            }
+        }
+
+        // Обработчики событий для мобильного меню
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileMenuClose.addEventListener('click', toggleMobileMenu);
+        menuOverlay.addEventListener('click', toggleMobileMenu);
+
+        // Закрываем мобильное меню при клике на ссылки
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', toggleMobileMenu);
+        });
+
+        // ===== ПЛАВНАЯ ПРОКРУТКА =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Отступ для фиксированной шапки
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Устанавливаем тему из localStorage или системных предпочтений
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            setTheme(theme);
+
+            // Устанавливаем язык из localStorage или по умолчанию узбекский
+            const savedLang = localStorage.getItem('language') || 'uz';
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+
+</html>
