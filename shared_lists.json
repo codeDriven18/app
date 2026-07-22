@@ -1,0 +1,411 @@
+{
+  "version": 1,
+  "shared_lists": {
+    "pZFrpogCFFkocm": {
+      "token": "pZFrpogCFFkocm",
+      "owner_id": 241863,
+      "lang": "ru",
+      "created_at": "2026-05-07T16:27:33.659492",
+      "expires_at": "2026-05-14T16:27:33.659497",
+      "storage_type": "json",
+      "storage_version": 1,
+      "list_data": {
+        "categories": {
+          "🥕 Овощи": [
+            {
+              "name": "Картошка",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Овощи",
+              "estimated_price": 8000,
+              "user_specified_quantity": false
+            },
+            {
+              "name": "Лук",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Овощи",
+              "estimated_price": 2000,
+              "user_specified_quantity": false
+            },
+            {
+              "name": "Морковь",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Овощи",
+              "estimated_price": 6000,
+              "user_specified_quantity": false
+            }
+          ]
+        },
+        "items": [
+          {
+            "name": "Картошка",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Овощи",
+            "estimated_price": 8000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Лук",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Овощи",
+            "estimated_price": 2000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Морковь",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Овощи",
+            "estimated_price": 6000,
+            "user_specified_quantity": false
+          }
+        ],
+        "total_items": 3,
+        "purchased_items": 0,
+        "total_estimated_price": 16000,
+        "list_id": "12d2542aa6c60ec1",
+        "created_at": "2026-05-07T16:27:25.327851",
+        "all_purchased": false,
+        "original_text": "картошка лук морковь",
+        "needs_confirmation": false,
+        "localization": {
+          "kg": "кг",
+          "g": "г",
+          "l": "л",
+          "ml": "мл",
+          "pcs": "шт",
+          "currency": "сум",
+          "total_items": "Всего товаров:",
+          "purchased": "Куплено:",
+          "estimated_total": "Примерная сумма:",
+          "share": "Поделиться",
+          "clear": "Очистить",
+          "quick_add": "Быстрое добавление",
+          "quick_add_placeholder": "Название товара...",
+          "quick_add_quantity": "Количество",
+          "quick_add_button": "Добавить",
+          "quick_add_hint": "AI определит категорию и рассчитает цену",
+          "category_total": "Итого по категории:",
+          "shared_list_title": "Общий список покупок",
+          "shared_list_from": "Список от пользователя",
+          "add_to_my_list": "Добавить в мой список"
+        },
+        "owner_id": 241863,
+        "updated_at": "2026-05-07T16:27:25.328696",
+        "is_shared_snapshot": true,
+        "original_owner_id": 241863,
+        "shared_token": "pZFrpogCFFkocm"
+      }
+    },
+    "KfNO2uhVpB6MByq": {
+      "token": "KfNO2uhVpB6MByq",
+      "owner_id": 936574,
+      "lang": "uz",
+      "created_at": "2026-05-07T16:30:51.456752",
+      "expires_at": "2026-05-14T16:30:51.456770",
+      "storage_type": "json",
+      "storage_version": 1,
+      "list_data": {
+        "categories": {
+          "🥕 Sabzavotlar": [
+            {
+              "name": "Kartoshka",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Sabzavotlar",
+              "estimated_price": 8000,
+              "user_specified_quantity": false
+            },
+            {
+              "name": "Piyoz",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Sabzavotlar",
+              "estimated_price": 2000,
+              "user_specified_quantity": false
+            }
+          ],
+          "🥛 Sut mahsulotlari": [
+            {
+              "name": "Sut",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥛 Sut mahsulotlari",
+              "estimated_price": 14000,
+              "user_specified_quantity": false
+            }
+          ]
+        },
+        "items": [
+          {
+            "name": "Kartoshka",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Sabzavotlar",
+            "estimated_price": 8000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Piyoz",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Sabzavotlar",
+            "estimated_price": 2000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Sut",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥛 Sut mahsulotlari",
+            "estimated_price": 14000,
+            "user_specified_quantity": false
+          }
+        ],
+        "total_items": 3,
+        "purchased_items": 0,
+        "total_estimated_price": 24000,
+        "list_id": "f55704871edea0b0",
+        "created_at": "2026-05-07T16:00:40.560583",
+        "all_purchased": false,
+        "original_text": "kartoshka piyoz sut",
+        "needs_confirmation": false,
+        "localization": {
+          "kg": "kg",
+          "g": "g",
+          "l": "l",
+          "ml": "ml",
+          "pcs": "dona",
+          "currency": "so'm",
+          "total_items": "Jami mahsulotlar:",
+          "purchased": "Xarid qilingan:",
+          "estimated_total": "Taxminiy summa:",
+          "share": "Ulashish",
+          "clear": "Tozalash",
+          "quick_add": "Tez qo'shish",
+          "quick_add_placeholder": "Mahsulot nomi...",
+          "quick_add_quantity": "Miqdori",
+          "quick_add_button": "Qo'shish",
+          "quick_add_hint": "AI kategoriya va narxni aniqlaydi",
+          "category_total": "Kategoriya summasi:",
+          "shared_list_title": "Umumiy xaridlar ro'yxati",
+          "shared_list_from": "Foydalanuvchi ro'yxati",
+          "add_to_my_list": "Mening ro'yxatimga qo'shish"
+        },
+        "owner_id": 936574,
+        "updated_at": "2026-05-07T16:00:40.567387",
+        "is_shared_snapshot": true,
+        "original_owner_id": 936574,
+        "shared_token": "KfNO2uhVpB6MByq"
+      }
+    },
+    "H2kFX7Yw8ljNuT12": {
+      "token": "H2kFX7Yw8ljNuT12",
+      "owner_id": 936574,
+      "lang": "uz",
+      "created_at": "2026-05-07T16:33:28.949042",
+      "expires_at": "2026-05-14T16:33:28.949056",
+      "storage_type": "json",
+      "storage_version": 1,
+      "list_data": {
+        "categories": {
+          "🥕 Sabzavotlar": [
+            {
+              "name": "Kartoshka",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Sabzavotlar",
+              "estimated_price": 8000,
+              "user_specified_quantity": false
+            },
+            {
+              "name": "Piyoz",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Sabzavotlar",
+              "estimated_price": 2000,
+              "user_specified_quantity": false
+            }
+          ],
+          "🥛 Sut mahsulotlari": [
+            {
+              "name": "Sut",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥛 Sut mahsulotlari",
+              "estimated_price": 14000,
+              "user_specified_quantity": false
+            }
+          ]
+        },
+        "items": [
+          {
+            "name": "Kartoshka",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Sabzavotlar",
+            "estimated_price": 8000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Piyoz",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Sabzavotlar",
+            "estimated_price": 2000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Sut",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥛 Sut mahsulotlari",
+            "estimated_price": 14000,
+            "user_specified_quantity": false
+          }
+        ],
+        "total_items": 3,
+        "purchased_items": 0,
+        "total_estimated_price": 24000,
+        "list_id": "f55704871edea0b0",
+        "created_at": "2026-05-07T16:00:40.560583",
+        "all_purchased": false,
+        "original_text": "kartoshka piyoz sut",
+        "needs_confirmation": false,
+        "localization": {
+          "kg": "kg",
+          "g": "g",
+          "l": "l",
+          "ml": "ml",
+          "pcs": "dona",
+          "currency": "so'm",
+          "total_items": "Jami mahsulotlar:",
+          "purchased": "Xarid qilingan:",
+          "estimated_total": "Taxminiy summa:",
+          "share": "Ulashish",
+          "clear": "Tozalash",
+          "quick_add": "Tez qo'shish",
+          "quick_add_placeholder": "Mahsulot nomi...",
+          "quick_add_quantity": "Miqdori",
+          "quick_add_button": "Qo'shish",
+          "quick_add_hint": "AI kategoriya va narxni aniqlaydi",
+          "category_total": "Kategoriya summasi:",
+          "shared_list_title": "Umumiy xaridlar ro'yxati",
+          "shared_list_from": "Foydalanuvchi ro'yxati",
+          "add_to_my_list": "Mening ro'yxatimga qo'shish"
+        },
+        "owner_id": 936574,
+        "updated_at": "2026-05-07T16:00:40.567387",
+        "is_shared_snapshot": true,
+        "original_owner_id": 936574,
+        "shared_token": "H2kFX7Yw8ljNuT12"
+      }
+    },
+    "xTNEyiW1a0bQzpyF": {
+      "token": "xTNEyiW1a0bQzpyF",
+      "owner_id": 936574,
+      "lang": "uz",
+      "created_at": "2026-05-07T16:35:40.446162",
+      "expires_at": "2026-05-14T16:35:40.446175",
+      "storage_type": "json",
+      "storage_version": 1,
+      "list_data": {
+        "categories": {
+          "🥕 Sabzavotlar": [
+            {
+              "name": "Kartoshka",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Sabzavotlar",
+              "estimated_price": 8000,
+              "user_specified_quantity": false
+            },
+            {
+              "name": "Piyoz",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥕 Sabzavotlar",
+              "estimated_price": 2000,
+              "user_specified_quantity": false
+            }
+          ],
+          "🥛 Sut mahsulotlari": [
+            {
+              "name": "Sut",
+              "quantity": "",
+              "purchased": false,
+              "category": "🥛 Sut mahsulotlari",
+              "estimated_price": 14000,
+              "user_specified_quantity": false
+            }
+          ]
+        },
+        "items": [
+          {
+            "name": "Kartoshka",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Sabzavotlar",
+            "estimated_price": 8000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Piyoz",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥕 Sabzavotlar",
+            "estimated_price": 2000,
+            "user_specified_quantity": false
+          },
+          {
+            "name": "Sut",
+            "quantity": "",
+            "purchased": false,
+            "category": "🥛 Sut mahsulotlari",
+            "estimated_price": 14000,
+            "user_specified_quantity": false
+          }
+        ],
+        "total_items": 3,
+        "purchased_items": 0,
+        "total_estimated_price": 24000,
+        "list_id": "f55704871edea0b0",
+        "created_at": "2026-05-07T16:00:40.560583",
+        "all_purchased": false,
+        "original_text": "kartoshka piyoz sut",
+        "needs_confirmation": false,
+        "localization": {
+          "kg": "kg",
+          "g": "g",
+          "l": "l",
+          "ml": "ml",
+          "pcs": "dona",
+          "currency": "so'm",
+          "total_items": "Jami mahsulotlar:",
+          "purchased": "Xarid qilingan:",
+          "estimated_total": "Taxminiy summa:",
+          "share": "Ulashish",
+          "clear": "Tozalash",
+          "quick_add": "Tez qo'shish",
+          "quick_add_placeholder": "Mahsulot nomi...",
+          "quick_add_quantity": "Miqdori",
+          "quick_add_button": "Qo'shish",
+          "quick_add_hint": "AI kategoriya va narxni aniqlaydi",
+          "category_total": "Kategoriya summasi:",
+          "shared_list_title": "Umumiy xaridlar ro'yxati",
+          "shared_list_from": "Foydalanuvchi ro'yxati",
+          "add_to_my_list": "Mening ro'yxatimga qo'shish"
+        },
+        "owner_id": 936574,
+        "updated_at": "2026-05-07T16:00:40.567387",
+        "is_shared_snapshot": true,
+        "original_owner_id": 936574,
+        "shared_token": "xTNEyiW1a0bQzpyF"
+      }
+    }
+  }
+}

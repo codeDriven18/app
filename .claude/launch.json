@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "bozorlik",
+      "runtimeExecutable": ".venv\\Scripts\\python.exe",
+      "runtimeArgs": ["run_local.py"],
+      "port": 8000,
+      "autoPort": true
+    }
+  ]
+}

@@ -1,0 +1,1393 @@
+{
+  "currency": "UZS",
+  "location": "Tashkent",
+  "updated_at": "2026-03-06",
+  "categories": [
+    {
+      "name": {
+        "ru": "Овощи",
+        "uz": "Sabzavotlar"
+      },
+      "items": [
+        {
+          "ru": "Картошка красная",
+          "uz": "Qizil kartoshka",
+          "quantity": "1 кг",
+          "price": 8790
+        },
+        {
+          "ru": "Картошка",
+          "uz": "Kartoshka",
+          "quantity": "1 кг",
+          "price": 8000
+        },
+        {
+          "ru": "Лук",
+          "uz": "Piyoz",
+          "quantity": "1 кг",
+          "price": 2000
+        },
+        {
+          "ru": "Красный лук",
+          "uz": "Qizil piyoz",
+          "quantity": "1 кг",
+          "price": 10000
+        },
+        {
+          "ru": "Белый лук",
+          "uz": "Oq piyoz",
+          "quantity": "1 кг",
+          "price": 9990
+        },
+        {
+          "ru": "Чеснок",
+          "uz": "Sarimsoq",
+          "quantity": "5 шт",
+          "price": 11000
+        },
+        {
+          "ru": "Помидоры",
+          "uz": "Pomidor",
+          "quantity": "1 кг",
+          "price": 38000
+        },
+        {
+          "ru": "Помидоры розовые",
+          "uz": "Pushti pomidor",
+          "quantity": "1 кг",
+          "price": 45000
+        },
+        {
+          "ru": "Огурец",
+          "uz": "Bodring",
+          "quantity": "1 кг",
+          "price": 36000
+        },
+        {
+          "ru": "Перец болгарский зеленый",
+          "uz": "Yashil bulg‘or qalampiri",
+          "quantity": "1 кг",
+          "price": 89000
+        },
+        {
+          "ru": "Красный болгарский перец",
+          "uz": "Qizil bulg‘or qalampiri",
+          "quantity": "1 кг",
+          "price": 59000
+        },
+        {
+          "ru": "Болгарский перец большой красный",
+          "uz": "Katta qizil bulg‘or qalampiri",
+          "quantity": "1 кг",
+          "price": 80000
+        },
+        {
+          "ru": "Болгарский перец зеленый большой",
+          "uz": "Katta yashil bulg‘or qalampiri",
+          "quantity": "1 кг",
+          "price": 80000
+        },
+        {
+          "ru": "Болгарский перец большой желтый",
+          "uz": "Katta sariq bulg‘or qalampiri",
+          "quantity": "1 кг",
+          "price": 80000
+        },
+        {
+          "ru": "Острый перец зеленый",
+          "uz": "Yashil achchiq qalampir",
+          "quantity": "1 кг",
+          "price": 160000
+        },
+        {
+          "ru": "Морковь красная",
+          "uz": "Qizil sabzi",
+          "quantity": "1 кг",
+          "price": 6000
+        },
+        {
+          "ru": "Желтая морковь",
+          "uz": "Sariq sabzi",
+          "quantity": "1 кг",
+          "price": 6000
+        },
+        {
+          "ru": "Редиска",
+          "uz": "Turp",
+          "quantity": "1 кг",
+          "price": 6000
+        },
+        {
+          "ru": "Имбирь",
+          "uz": "Zanjabil",
+          "quantity": "1 кг",
+          "price": 57000
+        },
+        {
+          "ru": "Кабачок",
+          "uz": "Qovoqcha",
+          "quantity": "1 кг",
+          "price": 59000
+        },
+        {
+          "ru": "Желтая репа",
+          "uz": "Sariq sholg'om",
+          "quantity": "1 кг",
+          "price": 12000
+        },
+        {
+          "ru": "Красная репа",
+          "uz": "Qizil sholg'om",
+          "quantity": "1 кг",
+          "price": 12000
+        },
+        {
+          "ru": "Зелень укроп",
+          "uz": "Ukrop ko'kat",
+          "quantity": "1 шт",
+          "price": 2500
+        },
+        {
+          "ru": "Кинза",
+          "uz": "Kashnich",
+          "quantity": "1 шт",
+          "price": 2500
+        },
+        {
+          "ru": "Петрушка",
+          "uz": "Petrushka",
+          "quantity": "1 шт",
+          "price": 2500
+        },
+        {
+          "ru": "Зеленый лук",
+          "uz": "Ko‘k piyoz",
+          "quantity": "1 шт",
+          "price": 2700
+        },
+        {
+          "ru": "Красный салатный лист",
+          "uz": "Qizil salat bargi",
+          "quantity": "1 шт",
+          "price": 5000
+        },
+        {
+          "ru": "Зеленый лист салата",
+          "uz": "Yashil salat bargi",
+          "quantity": "1 шт",
+          "price": 5000
+        }
+      ]
+    },
+    {
+      "name": {
+        "ru": "Фрукты",
+        "uz": "Mevalar"
+      },
+      "items": [
+        {
+          "ru": "Яблоки красные",
+          "uz": "Qizil olma",
+          "quantity": "1 кг",
+          "price": 29000
+        },
+        {
+          "ru": "Яблоко",
+          "uz": "Olma",
+          "quantity": "1 кг",
+          "price": 28000
+        },
+        {
+          "ru": "Груша",
+          "uz": "Nok",
+          "quantity": "1 кг",
+          "price": 19900
+        },
+        {
+          "ru": "Гранат",
+          "uz": "Anor",
+          "quantity": "1 кг",
+          "price": 35000
+        },
+        {
+          "ru": "Айва",
+          "uz": "Behi",
+          "quantity": "1 кг",
+          "price": 48000
+        },
+        {
+          "ru": "Мандарин",
+          "uz": "Mandarin",
+          "quantity": "1 кг",
+          "price": 24990
+        },
+        {
+          "ru": "Китайский мандарин",
+          "uz": "Xitoy mandarini",
+          "quantity": "1 кг",
+          "price": 24990
+        },
+        {
+          "ru": "Китайский мандарин маленький",
+          "uz": "Kichik xitoy mandarini",
+          "quantity": "1 кг",
+          "price": 27990
+        },
+        {
+          "ru": "Мандарин Пакистан",
+          "uz": "Pokiston mandarini",
+          "quantity": "1 кг",
+          "price": 19990
+        },
+        {
+          "ru": "Апельсин",
+          "uz": "Apelsin",
+          "quantity": "1 кг",
+          "price": 28990
+        },
+        {
+          "ru": "Апельсин Иран",
+          "uz": "Eron apelsini",
+          "quantity": "1 кг",
+          "price": 19990
+        },
+        {
+          "ru": "Киви",
+          "uz": "Kivi",
+          "quantity": "1 кг",
+          "price": 29000
+        },
+        {
+          "ru": "Лимон",
+          "uz": "Limon",
+          "quantity": "1 кг",
+          "price": 47000
+        },
+        {
+          "ru": "Банан",
+          "uz": "Banan",
+          "quantity": "1 кг",
+          "price": 24000
+        },
+        {
+          "ru": "Ананас",
+          "uz": "Ananas",
+          "quantity": "1 кг",
+          "price": 25000
+        }
+      ]
+    },
+    {
+      "name": {
+        "ru": "Бакалея",
+        "uz": "Oziq-ovqat"
+      },
+      "items": [
+        {
+          "ru": "Подсолнечное масло Масленица",
+          "uz": "Kungaboqar yog‘i Maslenitsa",
+          "quantity": "1 л",
+          "price": 27990
+        },
+        {
+          "ru": "Хлеб",
+          "uz": "Non",
+          "quantity": "1 шт",
+          "price": 5000
+        },
+        {
+          "ru": "Подсолнечное масло Затея",
+          "uz": "Kungaboqar yog‘i Zateya",
+          "quantity": "1 л",
+          "price": 28990
+        },
+        {
+          "ru": "Подсолнечное масло Олейна",
+          "uz": "Kungaboqar yog‘i Oleyina",
+          "quantity": "1 л",
+          "price": 28000
+        },
+        {
+          "ru": "Подсолнечное масло Олейна",
+          "uz": "Kungaboqar yog‘i Oleyina",
+          "quantity": "2 л",
+          "price": 57000
+        },
+        {
+          "ru": "Подсолнечное масло Олейна",
+          "uz": "Kungaboqar yog‘i Oleyina",
+          "quantity": "5 л",
+          "price": 140000
+        },
+        {
+          "ru": "Подсолнечное масло Милтор",
+          "uz": "Kungaboqar yog‘i Mil'tor",
+          "quantity": "1 л",
+          "price": 25990
+        },
+        {
+          "ru": "Подсолнечное масло Алина",
+          "uz": "Kungaboqar yog‘i Alina",
+          "quantity": "5 л",
+          "price": 125000
+        },
+        {
+          "ru": "Подсолнечное масло Милтор",
+          "uz": "Kungaboqar yog‘i Mil'tor",
+          "quantity": "5 л",
+          "price": 999999
+        },
+        {
+          "ru": "Подсолнечное масло Затея",
+          "uz": "Kungaboqar yog‘i Zateya",
+          "quantity": "5 л",
+          "price": 140000
+        },
+        {
+          "ru": "Яйца",
+          "uz": "Tuxum",
+          "quantity": "30 шт",
+          "price": 48000
+        },
+        {
+          "ru": "Яйца",
+          "uz": "Tuxum",
+          "quantity": "18 шт",
+          "price": 28000
+        },
+        {
+          "ru": "Яйца",
+          "uz": "Tuxum",
+          "quantity": "12 шт",
+          "price": 19000
+        },
+        {
+          "ru": "Яйца",
+          "uz": "Tuxum",
+          "quantity": "10 шт",
+          "price": 15500
+        },
+        {
+          "ru": "Яйца (за 1 шт)",
+          "uz": "Tuxum (1 dona)",
+          "quantity": "1 шт",
+          "price": 1600
+        },
+        {
+          "ru": "Перепелиные яйца",
+          "uz": "Bedana tuxumi",
+          "quantity": "20 шт",
+          "price": 20000
+        },
+        {
+          "ru": "Молоко Lactel 1%",
+          "uz": "Sut Lactel 1%",
+          "quantity": "1 л",
+          "price": 14000
+        },
+        {
+          "ru": "Молоко Lactel 2%",
+          "uz": "Sut Lactel 2%",
+          "quantity": "1 л",
+          "price": 14990
+        },
+        {
+          "ru": "Молоко Lactel 3,2%",
+          "uz": "Sut Lactel 3,2%",
+          "quantity": "1 л",
+          "price": 15790
+        },
+        {
+          "ru": "Молоко Lactel 6%",
+          "uz": "Sut Lactel 6%",
+          "quantity": "1 л",
+          "price": 18000
+        },
+        {
+          "ru": "Сгущенное молоко",
+          "uz": "Quyultirilgan sut",
+          "quantity": "350 г",
+          "price": 12990
+        },
+        {
+          "ru": "Сгущенное молоко Сгущенка",
+          "uz": "Quyultirilgan sut",
+          "quantity": "1 шт",
+          "price": 18990
+        },
+        {
+          "ru": "Сгущенное молоко",
+          "uz": "Quyultirilgan sut",
+          "quantity": "1 л",
+          "price": 32000
+        },
+        {
+          "ru": "Сгущенное молоко",
+          "uz": "Quyultirilgan sut",
+          "quantity": "1,5 л",
+          "price": 42000
+        },
+        {
+          "ru": "Кетчуп Махеев Шашлычный",
+          "uz": "Ketchup Maheev Shashlik",
+          "quantity": "1 шт",
+          "price": 20000
+        },
+        {
+          "ru": "Кетчуп Махеев Чили",
+          "uz": "Ketchup Maheev Chili",
+          "quantity": "1 шт",
+          "price": 19990
+        },
+        {
+          "ru": "Кетчуп Махеев Томатный",
+          "uz": "Ketchup Maheev Pomidor",
+          "quantity": "1 шт",
+          "price": 19990
+        },
+        {
+          "ru": "Майонез с лимонным соком",
+          "uz": "Mayonez limon sharbati bilan",
+          "quantity": "1 шт",
+          "price": 21990
+        },
+        {
+          "ru": "Майонез Махеев Перепелиное яйцо",
+          "uz": "Mayonez Maheev Bedana tuxumi",
+          "quantity": "1 шт",
+          "price": 21990
+        },
+        {
+          "ru": "Майонез Махеевъ Провансаль",
+          "uz": "Mayonez Maheev Provansal",
+          "quantity": "1 шт",
+          "price": 21990
+        },
+        {
+          "ru": "Майонез Махеевъ перепелиное яйцо",
+          "uz": "Mayonez Maheev Bedana tuxumi",
+          "quantity": "800 г",
+          "price": 42990
+        },
+        {
+          "ru": "Томатная паста",
+          "uz": "Pomidor pastasi",
+          "quantity": "1 л",
+          "price": 35000
+        },
+        {
+          "ru": "Томатная паста",
+          "uz": "Pomidor pastasi",
+          "quantity": "0,5 л",
+          "price": 20000
+        },
+        {
+          "ru": "Соль",
+          "uz": "Tuz",
+          "quantity": "1 пачка",
+          "price": 4000
+        },
+        {
+          "ru": "Пищевая сода",
+          "uz": "Osh sodasi",
+          "quantity": "1 шт",
+          "price": 7990
+        },
+        {
+          "ru": "Спички",
+          "uz": "Gugurt",
+          "quantity": "10 шт",
+          "price": 5000
+        },
+        {
+          "ru": "Соленый огурец большой",
+          "uz": "Katta tuzlangan bodring",
+          "quantity": "1 банка",
+          "price": 19990
+        },
+        {
+          "ru": "Маринованные овощи ассорти",
+          "uz": "Turli xil marinadlangan sabzavotlar",
+          "quantity": "1 л",
+          "price": 19990
+        },
+        {
+          "ru": "Маленькие соленые огурцы",
+          "uz": "Kichik tuzlangan bodringlar",
+          "quantity": "1 банка",
+          "price": 15990
+        },
+        {
+          "ru": "Маринованные овощи ассорти",
+          "uz": "Turli xil marinadlangan sabzavotlar",
+          "quantity": "1 л",
+          "price": 15990
+        },
+        {
+          "ru": "Макароны пружинка",
+          "uz": "Makaron prujinka",
+          "quantity": "700 г",
+          "price": 16990
+        },
+        {
+          "ru": "Макароны перья",
+          "uz": "Makaron patlar",
+          "quantity": "700 г",
+          "price": 16990
+        },
+        {
+          "ru": "Макароны спираль",
+          "uz": "Makaron spiral",
+          "quantity": "700 г",
+          "price": 16990
+        },
+        {
+          "ru": "Макароны рожки",
+          "uz": "Makaron shoxchalar",
+          "quantity": "700 г",
+          "price": 16990
+        },
+        {
+          "ru": "Макароны фетучини",
+          "uz": "Fettuchine makaron",
+          "quantity": "500 г",
+          "price": 17990
+        },
+        {
+          "ru": "Макароны спагетти",
+          "uz": "Spagetti makaron",
+          "quantity": "450 г",
+          "price": 17990
+        },
+        {
+          "ru": "Мука",
+          "uz": "Un",
+          "quantity": "1 кг",
+          "price": 14000
+        },
+        {
+          "ru": "Мука",
+          "uz": "Un",
+          "quantity": "2 кг",
+          "price": 27990
+        },
+        {
+          "ru": "Мука",
+          "uz": "Un",
+          "quantity": "3 кг",
+          "price": 42000
+        },
+        {
+          "ru": "Мука",
+          "uz": "Un",
+          "quantity": "5 кг",
+          "price": 65000
+        },
+        {
+          "ru": "Дрожжи",
+          "uz": "Xamirturush",
+          "quantity": "1 шт",
+          "price": 2890
+        },
+        {
+          "ru": "Рис лазер",
+          "uz": "Guruch lazer",
+          "quantity": "1 кг",
+          "price": 15990
+        },
+        {
+          "ru": "Рис харезом",
+          "uz": "Guruch harezom",
+          "quantity": "1 кг",
+          "price": 15000
+        },
+        {
+          "ru": "Рис авангард",
+          "uz": "Guruch avangard",
+          "quantity": "1 кг",
+          "price": 12990
+        },
+        {
+          "ru": "Рис нокус",
+          "uz": "Guruch nokus",
+          "quantity": "1 кг",
+          "price": 12000
+        },
+        {
+          "ru": "Маш",
+          "uz": "Mosh",
+          "quantity": "1 кг",
+          "price": 24990
+        },
+        {
+          "ru": "Гречка",
+          "uz": "Karabuğday",
+          "quantity": "1 кг",
+          "price": 11990
+        },
+        {
+          "ru": "Горох",
+          "uz": "No‘xat",
+          "quantity": "1 кг",
+          "price": 30000
+        },
+        {
+          "ru": "Хот Ланч",
+          "uz": "Hot Lunch",
+          "quantity": "90 г",
+          "price": 3990
+        },
+        {
+          "ru": "Биг бон",
+          "uz": "Big Bon",
+          "quantity": "75 г",
+          "price": 14490
+        },
+        {
+          "ru": "Фунчоза",
+          "uz": "Funchoza",
+          "quantity": "1 шт",
+          "price": 18500
+        }
+      ]
+    },
+    {
+      "name": {
+        "ru": "Напитки",
+        "uz": "Ichimliklar"
+      },
+      "items": [
+        {
+          "ru": "Кока кола",
+          "uz": "Coca cola",
+          "quantity": "500 мл",
+          "price": 6500
+        },
+        {
+          "ru": "Кока кола",
+          "uz": "Coca cola",
+          "quantity": "1 л",
+          "price": 10500
+        },
+        {
+          "ru": "Кока кола",
+          "uz": "Coca cola",
+          "quantity": "1,5 л",
+          "price": 14000
+        },
+        {
+          "ru": "Кока кола без сахара",
+          "uz": "Coca cola shakarsiz",
+          "quantity": "1 л",
+          "price": 10500
+        },
+        {
+          "ru": "Пепси",
+          "uz": "Pepsi",
+          "quantity": "500 мл",
+          "price": 6500
+        },
+        {
+          "ru": "Пепси",
+          "uz": "Pepsi",
+          "quantity": "1 л",
+          "price": 10490
+        },
+        {
+          "ru": "Пепси",
+          "uz": "Pepsi",
+          "quantity": "1,5 л",
+          "price": 14000
+        },
+        {
+          "ru": "Пепси",
+          "uz": "Pepsi",
+          "quantity": "2 л",
+          "price": 18690
+        },
+        {
+          "ru": "Пепси зеро без сахара",
+          "uz": "Pepsi zero shakarsiz",
+          "quantity": "500 мл",
+          "price": 5490
+        },
+        {
+          "ru": "Пепси зеро без сахара",
+          "uz": "Pepsi zero shakarsiz",
+          "quantity": "1,5 л",
+          "price": 13890
+        },
+        {
+          "ru": "Фанта",
+          "uz": "Fanta",
+          "quantity": "500 мл",
+          "price": 6490
+        },
+        {
+          "ru": "Фанта",
+          "uz": "Fanta",
+          "quantity": "1 л",
+          "price": 10690
+        },
+        {
+          "ru": "Фанта",
+          "uz": "Fanta",
+          "quantity": "1,5 л",
+          "price": 13890
+        },
+        {
+          "ru": "Фанта",
+          "uz": "Fanta",
+          "quantity": "2 л",
+          "price": 18690
+        },
+        {
+          "ru": "Флавис",
+          "uz": "Flavis",
+          "quantity": "500 мл",
+          "price": 5490
+        },
+        {
+          "ru": "Флавис",
+          "uz": "Flavis",
+          "quantity": "1 л",
+          "price": 10490
+        },
+        {
+          "ru": "Спрайт",
+          "uz": "Sprite",
+          "quantity": "500 мл",
+          "price": 6490
+        },
+        {
+          "ru": "Спрайт",
+          "uz": "Sprite",
+          "quantity": "1 л",
+          "price": 10790
+        },
+        {
+          "ru": "Спрайт",
+          "uz": "Sprite",
+          "quantity": "1,5 л",
+          "price": 13890
+        },
+        {
+          "ru": "Черноголовка Буратино",
+          "uz": "Chernogolovka Buratino",
+          "quantity": "1 шт",
+          "price": 9900
+        },
+        {
+          "ru": "Ред Булл",
+          "uz": "Red Bull",
+          "quantity": "250 мл",
+          "price": 19590
+        },
+        {
+          "ru": "Ред Булл",
+          "uz": "Red Bull",
+          "quantity": "355 мл",
+          "price": 26990
+        },
+        {
+          "ru": "Flash",
+          "uz": "Flash",
+          "quantity": "450 мл",
+          "price": 10890
+        },
+        {
+          "ru": "Gorilla",
+          "uz": "Gorilla",
+          "quantity": "450 мл",
+          "price": 12490
+        },
+        {
+          "ru": "18+ энергетик",
+          "uz": "18+ energetik",
+          "quantity": "450 мл",
+          "price": 12990
+        },
+        {
+          "ru": "Adrenaline Rush",
+          "uz": "Adrenaline Rush",
+          "quantity": "449 мл",
+          "price": 15990
+        },
+        {
+          "ru": "Мохито лайм",
+          "uz": "Mojito laym",
+          "quantity": "450 мл",
+          "price": 11490
+        },
+        {
+          "ru": "Мохито клубника",
+          "uz": "Mojito qulupnay",
+          "quantity": "450 мл",
+          "price": 11490
+        },
+        {
+          "ru": "Мохито гранат",
+          "uz": "Mojito anor",
+          "quantity": "450 мл",
+          "price": 11490
+        },
+        {
+          "ru": "Сок Bliss мультифрукт",
+          "uz": "Bliss sharbati multimevali",
+          "quantity": "1 л",
+          "price": 13990
+        },
+        {
+          "ru": "Сок Bliss персик",
+          "uz": "Bliss shaftoli sharbati",
+          "quantity": "1 л",
+          "price": 13990
+        },
+        {
+          "ru": "Сок Сочная Долина фруктовый",
+          "uz": "Sochnaya Dolina mevali sharbat",
+          "quantity": "1 л",
+          "price": 17490
+        },
+        {
+          "ru": "Сок Bliss смородина",
+          "uz": "Bliss qorag‘at sharbati",
+          "quantity": "1 л",
+          "price": 13990
+        },
+        {
+          "ru": "Сок вишня",
+          "uz": "Gilos sharbati",
+          "quantity": "1 л",
+          "price": 13990
+        },
+        {
+          "ru": "Сок яблочный",
+          "uz": "Olma sharbati",
+          "quantity": "1 л",
+          "price": 14390
+        },
+        {
+          "ru": "Dena",
+          "uz": "Dena",
+          "quantity": "1 л",
+          "price": 14390
+        },
+        {
+          "ru": "Lipton",
+          "uz": "Lipton",
+          "quantity": "1,5 л",
+          "price": 13990
+        },
+        {
+          "ru": "FuseTea",
+          "uz": "FuseTea",
+          "quantity": "1 л",
+          "price": 10890
+        },
+        {
+          "ru": "Lipton малина",
+          "uz": "Lipton malina",
+          "quantity": "1 л",
+          "price": 13690
+        },
+        {
+          "ru": "Ice Tea",
+          "uz": "Ice Tea",
+          "quantity": "1 л",
+          "price": 10890
+        },
+        {
+          "ru": "Вода с газом",
+          "uz": "Gazli suv",
+          "quantity": "1 л",
+          "price": 6000
+        },
+        {
+          "ru": "Вода без газа",
+          "uz": "Gazsiz suv",
+          "quantity": "0,5 л",
+          "price": 2500
+        },
+        {
+          "ru": "Вода с газом",
+          "uz": "Gazli suv",
+          "quantity": "0,5 л",
+          "price": 3890
+        }
+      ]
+    },
+    {
+      "name": {
+        "ru": "Чай и кофе",
+        "uz": "Choy va kofe"
+      },
+      "items": [
+        {
+          "ru": "Зеленый чай Ташкент 95",
+          "uz": "Ko‘k choy Toshkent 95",
+          "quantity": "400 г",
+          "price": 28990
+        },
+        {
+          "ru": "Зеленый чай Ташкент 110",
+          "uz": "Ko‘k choy Toshkent 110",
+          "quantity": "400 г",
+          "price": 28990
+        },
+        {
+          "ru": "Ahmad Tea зеленый чай",
+          "uz": "Ahmad Tea ko‘k choy",
+          "quantity": "100 г",
+          "price": 21990
+        },
+        {
+          "ru": "Зеленый чай Tess",
+          "uz": "Tess ko‘k choy",
+          "quantity": "100 г",
+          "price": 18990
+        },
+        {
+          "ru": "Черный чай Tess",
+          "uz": "Tess qora choy",
+          "quantity": "100 г",
+          "price": 18990
+        },
+        {
+          "ru": "Черный чай Tess",
+          "uz": "Tess qora choy",
+          "quantity": "20 пакетиков",
+          "price": 21990
+        },
+        {
+          "ru": "Tora Bika капучино",
+          "uz": "Tora Bika kapuchino",
+          "quantity": "1 шт",
+          "price": 3490
+        },
+        {
+          "ru": "MacCoffee",
+          "uz": "MacCoffee",
+          "quantity": "1 шт",
+          "price": 3490
+        },
+        {
+          "ru": "Nescafe",
+          "uz": "Nescafe",
+          "quantity": "47,5 г",
+          "price": 31990
+        },
+        {
+          "ru": "Nescafe 3 в 1",
+          "uz": "Nescafe 3 in 1",
+          "quantity": "1 шт",
+          "price": 2990
+        },
+        {
+          "ru": "Какао порошок",
+          "uz": "Kakao kukuni",
+          "quantity": "1 шт",
+          "price": 7990
+        }
+      ]
+    },
+    {
+      "name": {
+        "ru": "Приправы",
+        "uz": "Ziravorlar"
+      },
+      "items": [
+        {
+          "ru": "Приправа Zira",
+          "uz": "Zira ziravori",
+          "quantity": "1 шт",
+          "price": 3990
+        },
+        {
+          "ru": "Приправа для плова",
+          "uz": "Palov uchun ziravor",
+          "quantity": "1 шт",
+          "price": 2990
+        },
+        {
+          "ru": "Приправа для шашлыка",
+          "uz": "Shashlik uchun ziravor",
+          "quantity": "1 шт",
+          "price": 2990
+        },
+        {
+          "ru": "Приправа для самсы",
+          "uz": "Somsa uchun ziravor",
+          "quantity": "1 шт",
+          "price": 2990
+        },
+        {
+          "ru": "Приправа для фунчозы",
+          "uz": "Funchoza uchun ziravor",
+          "quantity": "1 шт",
+          "price": 2990
+        },
+        {
+          "ru": "Мак",
+          "uz": "Ko‘knor",
+          "quantity": "1 шт",
+          "price": 3490
+        },
+        {
+          "ru": "Лимонная кислота",
+          "uz": "Limon kislotasi",
+          "quantity": "1 шт",
+          "price": 3490
+        },
+        {
+          "ru": "Сахарная пудра",
+          "uz": "Shakar kukuni",
+          "quantity": "1 шт",
+          "price": 4500
+        },
+        {
+          "ru": "Черный перец",
+          "uz": "Qora murch",
+          "quantity": "1 шт",
+          "price": 4000
+        },
+        {
+          "ru": "Приправа красный перец",
+          "uz": "Qizil qalampir ziravori",
+          "quantity": "1 шт",
+          "price": 4990
+        },
+        {
+          "ru": "Паприка",
+          "uz": "Paprika",
+          "quantity": "1 шт",
+          "price": 3990
+        },
+        {
+          "ru": "Картофельный крахмал",
+          "uz": "Kartoshka kraxmali",
+          "quantity": "1 шт",
+          "price": 3990
+        }
+      ]
+    }
+  ],
+  "synonyms": {
+    "ru": {
+      "картофель": "vegetables",
+      "картошка": "vegetables",
+      "картошечка": "vegetables",
+      "картофан": "vegetables",
+      "лук": "vegetables",
+      "луковица": "vegetables",
+      "лучок": "vegetables",
+      "чеснок": "vegetables",
+      "чесночок": "vegetables",
+      "помидор": "vegetables",
+      "помидоры": "vegetables",
+      "томат": "vegetables",
+      "томаты": "vegetables",
+      "огурец": "vegetables",
+      "огурцы": "vegetables",
+      "огурчик": "vegetables",
+      "перец": "vegetables",
+      "перчик": "vegetables",
+      "болгарский перец": "vegetables",
+      "морковь": "vegetables",
+      "морковка": "vegetables",
+      "моркошка": "vegetables",
+      "редис": "vegetables",
+      "редиска": "vegetables",
+      "имбирь": "vegetables",
+      "кабачок": "vegetables",
+      "кабачки": "vegetables",
+      "репа": "vegetables",
+      "репка": "vegetables",
+      "укроп": "vegetables",
+      "укропчик": "vegetables",
+      "кинза": "vegetables",
+      "петрушка": "vegetables",
+      "петрушечка": "vegetables",
+      "салат": "vegetables",
+      "листья салата": "vegetables",
+      "яблоко": "fruits",
+      "яблочко": "fruits",
+      "яблоки": "fruits",
+      "яблочки": "fruits",
+      "груша": "fruits",
+      "грушка": "fruits",
+      "груши": "fruits",
+      "гранат": "fruits",
+      "гранаты": "fruits",
+      "айва": "fruits",
+      "айвовое": "fruits",
+      "мандарин": "fruits",
+      "мандаринка": "fruits",
+      "мандарины": "fruits",
+      "апельсин": "fruits",
+      "апельсинчик": "fruits",
+      "апельсины": "fruits",
+      "киви": "fruits",
+      "кивинка": "fruits",
+      "лимон": "fruits",
+      "лимончик": "fruits",
+      "лимоны": "fruits",
+      "банан": "fruits",
+      "бананчик": "fruits",
+      "бананы": "fruits",
+      "ананас": "fruits",
+      "ананасик": "fruits",
+      "масло": "groceries",
+      "маслице": "groceries",
+      "подсолнечное масло": "groceries",
+      "растительное масло": "groceries",
+      "яйцо": "groceries",
+      "яйца": "groceries",
+      "яички": "groceries",
+      "яйки": "groceries",
+      "молоко": "groceries",
+      "молочко": "groceries",
+      "сгущенка": "groceries",
+      "сгущёнка": "groceries",
+      "кетчуп": "groceries",
+      "кетчунек": "groceries",
+      "майонез": "groceries",
+      "мазик": "groceries",
+      "майонезка": "groceries",
+      "томатная паста": "groceries",
+      "томат": "groceries",
+      "соль": "groceries",
+      "солонка": "groceries",
+      "сода": "groceries",
+      "содиум": "groceries",
+      "спички": "groceries",
+      "спичечки": "groceries",
+      "огурцы соленые": "groceries",
+      "соленые огурцы": "groceries",
+      "маринованные огурцы": "groceries",
+      "маринады": "groceries",
+      "макароны": "groceries",
+      "макаронные изделия": "groceries",
+      "макарошки": "groceries",
+      "мука": "groceries",
+      "мучка": "groceries",
+      "мучица": "groceries",
+      "дрожжи": "groceries",
+      "дрожжы": "groceries",
+      "рис": "groceries",
+      "рисинка": "groceries",
+      "рисовый": "groceries",
+      "маш": "groceries",
+      "гречка": "groceries",
+      "греча": "groceries",
+      "гречневая": "groceries",
+      "горох": "groceries",
+      "горошек": "groceries",
+      "гороховый": "groceries",
+      "доширак": "groceries",
+      "дошик": "groceries",
+      "роллтон": "groceries",
+      "биг бон": "groceries",
+      "бигбон": "groceries",
+      "фунчоза": "groceries",
+      "лапша фунчоза": "groceries",
+      "кола": "drinks",
+      "кока-кола": "drinks",
+      "кокакола": "drinks",
+      "пепси-кола": "drinks",
+      "пепси": "drinks",
+      "фанта": "drinks",
+      "фантика": "drinks",
+      "спрайт": "drinks",
+      "спрайтик": "drinks",
+      "энергетик": "drinks",
+      "энергос": "drinks",
+      "редбулл": "drinks",
+      "ред булл": "drinks",
+      "сок": "drinks",
+      "сочок": "drinks",
+      "соки": "drinks",
+      "липтон": "drinks",
+      "липтончик": "drinks",
+      "фьюзти": "drinks",
+      "айс ти": "drinks",
+      "вода": "drinks",
+      "водичка": "drinks",
+      "водка": "drinks",
+      "газировка": "drinks",
+      "газированная вода": "drinks",
+      "чай": "tea_coffee",
+      "чаёк": "tea_coffee",
+      "зеленый чай": "tea_coffee",
+      "зеленый": "tea_coffee",
+      "черный чай": "tea_coffee",
+      "черный": "tea_coffee",
+      "кофе": "tea_coffee",
+      "кофей": "tea_coffee",
+      "кофеек": "tea_coffee",
+      "какао": "tea_coffee",
+      "какава": "tea_coffee",
+      "зира": "spices",
+      "кумин": "spices",
+      "приправа": "spices",
+      "приправка": "spices",
+      "специи": "spices",
+      "специя": "spices",
+      "пловная приправа": "spices",
+      "плов": "spices",
+      "шашлычная приправа": "spices",
+      "шашлык": "spices",
+      "самса приправа": "spices",
+      "самса": "spices",
+      "мак": "spices",
+      "мачок": "spices",
+      "лимонная кислота": "spices",
+      "кислота": "spices",
+      "сахарная пудра": "spices",
+      "пудра": "spices",
+      "перец": "spices",
+      "перчик": "spices",
+      "черный перец": "spices",
+      "чёрный перец": "spices",
+      "красный перец": "spices",
+      "красный": "spices",
+      "паприка": "spices",
+      "папричка": "spices",
+      "крахмал": "spices",
+      "крахмальчик": "spices"
+    },
+    "uz": {
+      "kartoshka": "vegetables",
+      "kartofel": "vegetables",
+      "karto'fka": "vegetables",
+      "piyoz": "vegetables",
+      "piyozi": "vegetables",
+      "piyozcha": "vegetables",
+      "sarimsoq": "vegetables",
+      "sarimsoqpiyoz": "vegetables",
+      "sarimsoq piyoz": "vegetables",
+      "pomidor": "vegetables",
+      "pomidorlar": "vegetables",
+      "pomidorchi": "vegetables",
+      "bodring": "vegetables",
+      "bodringlar": "vegetables",
+      "bodringcha": "vegetables",
+      "qalampir": "vegetables",
+      "bulg'or qalampiri": "vegetables",
+      "bulg'or": "vegetables",
+      "achchiq qalampir": "vegetables",
+      "sabzi": "vegetables",
+      "sabzich": "vegetables",
+      "qizil sabzi": "vegetables",
+      "sariq sabzi": "vegetables",
+      "turp": "vegetables",
+      "rediska": "vegetables",
+      "zanjabil": "vegetables",
+      "qovoqcha": "vegetables",
+      "sholg'om": "vegetables",
+      "sariq sholg'om": "vegetables",
+      "qizil sholg'om": "vegetables",
+      "ukrop": "vegetables",
+      "ko'kat": "vegetables",
+      "kashnich": "vegetables",
+      "petrushka": "vegetables",
+      "ko'k piyoz": "vegetables",
+      "salat bargi": "vegetables",
+      "salat": "vegetables",
+      "olma": "fruits",
+      "qizil olma": "fruits",
+      "olmalar": "fruits",
+      "nok": "fruits",
+      "noklar": "fruits",
+      "anor": "fruits",
+      "anorlar": "fruits",
+      "behi": "fruits",
+      "mandarin": "fruits",
+      "mandarinlar": "fruits",
+      "xitoy mandarini": "fruits",
+      "pokiston mandarini": "fruits",
+      "apelsin": "fruits",
+      "apelsinlar": "fruits",
+      "eron apelsini": "fruits",
+      "kivi": "fruits",
+      "kivilar": "fruits",
+      "limon": "fruits",
+      "limonlar": "fruits",
+      "banan": "fruits",
+      "bananlar": "fruits",
+      "ananas": "fruits",
+      "kungaboqar yog'i": "groceries",
+      "yog'": "groceries",
+      "o'simlik yog'i": "groceries",
+      "tuxum": "groceries",
+      "tuxumlar": "groceries",
+      "bedana tuxumi": "groceries",
+      "sut": "groceries",
+      "sut mahsulotlari": "groceries",
+      "quyultirilgan sut": "groceries",
+      "ketchup": "groceries",
+      "mayonez": "groceries",
+      "pomidor pastasi": "groceries",
+      "tuz": "groceries",
+      "osh sodasi": "groceries",
+      "gugurt": "groceries",
+      "tuzlangan bodring": "groceries",
+      "marinadlangan sabzavotlar": "groceries",
+      "makaron": "groceries",
+      "un": "groceries",
+      "xamirturush": "groceries",
+      "guruch": "groceries",
+      "mosh": "groceries",
+      "karabuğday": "groceries",
+      "no'xat": "groceries",
+      "hot lunch": "groceries",
+      "big bon": "groceries",
+      "funchoza": "groceries",
+      "coca cola": "drinks",
+      "cola": "drinks",
+      "pepsi": "drinks",
+      "fanta": "drinks",
+      "flavis": "drinks",
+      "sprite": "drinks",
+      "chernogolovka": "drinks",
+      "red bull": "drinks",
+      "flash": "drinks",
+      "gorilla": "drinks",
+      "adrenaline rush": "drinks",
+      "mojito": "drinks",
+      "sharbat": "drinks",
+      "olma sharbati": "drinks",
+      "gilos sharbati": "drinks",
+      "lipton": "drinks",
+      "fuse tea": "drinks",
+      "ice tea": "drinks",
+      "suv": "drinks",
+      "gazli suv": "drinks",
+      "gazsiz suv": "drinks",
+      "ko'k choy": "tea_coffee",
+      "choy": "tea_coffee",
+      "qora choy": "tea_coffee",
+      "kofe": "tea_coffee",
+      "kakao": "tea_coffee",
+      "zira": "spices",
+      "ziravor": "spices",
+      "ziravorlar": "spices",
+      "palov uchun ziravor": "spices",
+      "palov": "spices",
+      "shashlik uchun ziravor": "spices",
+      "shashlik": "spices",
+      "somsa uchun ziravor": "spices",
+      "somsa": "spices",
+      "funchoza uchun ziravor": "spices",
+      "ko'knor": "spices",
+      "limon kislotasi": "spices",
+      "shakar kukuni": "spices",
+      "qora murch": "spices",
+      "qora qalampir": "spices",
+      "qizil qalampir": "spices",
+      "qizil murch": "spices",
+      "paprika": "spices",
+      "kraxmal": "spices"
+    }
+  }
+}

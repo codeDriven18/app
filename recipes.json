@@ -1,0 +1,116 @@
+{
+  "plov": {
+    "aliases": ["плов", "плова", "плову", "пловом", "osh", "ош", "palov", "plov"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Рис лазер", "amount": 800, "unit": "г" },
+      { "name": "Говядина", "amount": 600, "unit": "г" },
+      { "name": "Морковь", "amount": 500, "unit": "г" },
+      { "name": "Лук", "amount": 300, "unit": "г" },
+      { "name": "Масло растительное", "amount": 200, "unit": "мл" },
+      { "name": "Чеснок", "amount": 2, "unit": "шт" },
+      { "name": "Зира", "amount": 10, "unit": "г" },
+      { "name": "Соль", "amount": 15, "unit": "г" }
+    ]
+  },
+  "manty": {
+    "aliases": ["манты", "мантов", "мантам", "манти", "manti", "manty", "mantu", "chuchvara katta"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Мука", "amount": 500, "unit": "г" },
+      { "name": "Говядина", "amount": 500, "unit": "г" },
+      { "name": "Лук", "amount": 400, "unit": "г" },
+      { "name": "Яйца", "amount": 1, "unit": "шт" },
+      { "name": "Вода", "amount": 200, "unit": "мл" },
+      { "name": "Сливочное масло", "amount": 50, "unit": "г" },
+      { "name": "Соль", "amount": 10, "unit": "г" },
+      { "name": "Перец черный", "amount": 5, "unit": "г" }
+    ]
+  },
+  "lagman": {
+    "aliases": ["лагман", "лагмана", "лагману", "лагманом", "lagmon", "lag'mon", "lagman"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Лапша", "amount": 500, "unit": "г" },
+      { "name": "Говядина", "amount": 400, "unit": "г" },
+      { "name": "Лук", "amount": 200, "unit": "г" },
+      { "name": "Морковь", "amount": 200, "unit": "г" },
+      { "name": "Болгарский перец", "amount": 200, "unit": "г" },
+      { "name": "Помидоры", "amount": 300, "unit": "г" },
+      { "name": "Картошка", "amount": 200, "unit": "г" },
+      { "name": "Чеснок", "amount": 4, "unit": "шт" },
+      { "name": "Масло растительное", "amount": 100, "unit": "мл" },
+      { "name": "Соль", "amount": 12, "unit": "г" }
+    ]
+  },
+  "shurpa": {
+    "aliases": ["шурпа", "шурпы", "шурпу", "шурпой", "sho'rva", "shorva", "shurpa"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Баранина", "amount": 600, "unit": "г" },
+      { "name": "Картошка", "amount": 500, "unit": "г" },
+      { "name": "Морковь", "amount": 300, "unit": "г" },
+      { "name": "Лук", "amount": 300, "unit": "г" },
+      { "name": "Помидоры", "amount": 200, "unit": "г" },
+      { "name": "Болгарский перец", "amount": 150, "unit": "г" },
+      { "name": "Зелень", "amount": 30, "unit": "г" },
+      { "name": "Соль", "amount": 15, "unit": "г" }
+    ]
+  },
+  "samsa": {
+    "aliases": ["самса", "самсы", "самсу", "самсой", "somsa", "samsa"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Мука", "amount": 600, "unit": "г" },
+      { "name": "Говядина", "amount": 400, "unit": "г" },
+      { "name": "Лук", "amount": 400, "unit": "г" },
+      { "name": "Сливочное масло", "amount": 100, "unit": "г" },
+      { "name": "Яйца", "amount": 1, "unit": "шт" },
+      { "name": "Кунжут", "amount": 10, "unit": "г" },
+      { "name": "Соль", "amount": 10, "unit": "г" }
+    ]
+  },
+  "dimlama": {
+    "aliases": ["димлама", "димламы", "димламу", "дымлама", "dimlama", "dimlama qilish"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Говядина", "amount": 500, "unit": "г" },
+      { "name": "Картошка", "amount": 600, "unit": "г" },
+      { "name": "Капуста", "amount": 400, "unit": "г" },
+      { "name": "Морковь", "amount": 300, "unit": "г" },
+      { "name": "Лук", "amount": 300, "unit": "г" },
+      { "name": "Помидоры", "amount": 300, "unit": "г" },
+      { "name": "Болгарский перец", "amount": 200, "unit": "г" },
+      { "name": "Чеснок", "amount": 1, "unit": "шт" },
+      { "name": "Масло растительное", "amount": 100, "unit": "мл" }
+    ]
+  },
+  "mastava": {
+    "aliases": ["мастава", "маставы", "маставу", "mastava", "moshxo'rda"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Рис", "amount": 200, "unit": "г" },
+      { "name": "Говядина", "amount": 400, "unit": "г" },
+      { "name": "Картошка", "amount": 300, "unit": "г" },
+      { "name": "Морковь", "amount": 200, "unit": "г" },
+      { "name": "Лук", "amount": 200, "unit": "г" },
+      { "name": "Помидоры", "amount": 200, "unit": "г" },
+      { "name": "Масло растительное", "amount": 80, "unit": "мл" },
+      { "name": "Соль", "amount": 12, "unit": "г" }
+    ]
+  },
+  "borsch": {
+    "aliases": ["борщ", "борща", "борщу", "борщом", "borsh", "borshch"],
+    "servings": 4,
+    "ingredients": [
+      { "name": "Говядина", "amount": 500, "unit": "г" },
+      { "name": "Свёкла", "amount": 300, "unit": "г" },
+      { "name": "Капуста", "amount": 300, "unit": "г" },
+      { "name": "Картошка", "amount": 400, "unit": "г" },
+      { "name": "Морковь", "amount": 150, "unit": "г" },
+      { "name": "Лук", "amount": 150, "unit": "г" },
+      { "name": "Томатная паста", "amount": 50, "unit": "г" },
+      { "name": "Масло растительное", "amount": 50, "unit": "мл" }
+    ]
+  }
+}

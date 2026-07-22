@@ -1,0 +1,12 @@
+2026-06-27 02:51:16,913 - app - INFO - Using SQLite (local dev) database backend: sqlite:///./local_dev.db
+2026-06-27 02:51:16,939 - app - INFO - Loaded 170 products from C:\Users\HP\Desktop\deploy_app\prices.json
+2026-06-27 02:51:17,353 - asyncio - DEBUG - Using proactor: IocpProactor
+INFO:     Started server process [12732]
+INFO:     Waiting for application startup.
+2026-06-27 02:51:17,425 - app - INFO - Starting Bozorlik AI Backend...
+INFO:     Application startup complete.
+ERROR:    [Errno 10048] error while attempting to bind on address ('127.0.0.1', 8000): обычно разрешается только одно использование адреса сокета (протокол/сетевой адрес/порт)
+INFO:     Waiting for application shutdown.
+2026-06-27 02:51:17,433 - app - INFO - Shutting down Bozorlik AI Backend...
+2026-06-27 02:51:17,437 - app - INFO - Shutdown complete
+INFO:     Application shutdown complete.

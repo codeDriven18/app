@@ -1,0 +1,9 @@
+.venv
+venv
+__pycache__
+.idea
+*.db
+server_out.log
+server_err.log
+*.pptx
+to-
